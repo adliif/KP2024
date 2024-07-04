@@ -3,8 +3,8 @@
 use Illuminate\Support\Facades\Route;
 
 
-Route::get('/login', function () {
-    return view('login', ['title' => 'Login']);
+Route::get('/', function () {
+    return view('index', ['title' => 'Login']);
 });
 
 /* Routes Role Admin
@@ -13,8 +13,8 @@ Route::get('/login', function () {
 
 // Routes Role Anggota
 
-Route::get('/', function () {
-    return view('index', ['title' => 'Dashboard']);
+Route::get('/dashboard', function () {
+    return view('/roleAnggota/dashboard', ['title' => 'Dashboard']);
 });
 
 Route::get('/tanggungan', function () {
