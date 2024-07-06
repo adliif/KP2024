@@ -1,38 +1,27 @@
 <?php
 
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AnggotaController;
 use Illuminate\Support\Facades\Route;
 
-
 Route::get('/', function () {
-    return view('index', ['title' => 'Login']);
+    return view('auth.login',  ['title' => 'Login']);
 });
+require __DIR__ . '/auth.php';
 
-/* Routes Role Admin
-    ------------ */
-
+// Routes Role Admin
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('adminDashboard', [AdminController::class, 'index']);
+});
 
 // Routes Role Anggota
+Route::middleware(['auth', 'user'])->group(function () {
+    Route::get('dashboard', [AnggotaController::class, 'index']);
+    Route::get('tanggungan', [AnggotaController::class, 'tanggungan']);
+    Route::get('history', [AnggotaController::class, 'history']);
+    Route::get('helpdesk', [AnggotaController::class, 'helpdesk']);
 
-Route::get('/dashboard', function () {
-    return view('/roleAnggota/dashboard', ['title' => 'Dashboard']);
-});
-
-Route::get('/tanggungan', function () {
-    return view('/roleAnggota/tanggungan', ['title' => 'Tanggungan']);
-});
-
-Route::get('/history', function () {
-    return view('/roleAnggota/history', ['title' => 'History']);
-});
-
-Route::get('/profile', function () {
-    return view('/roleAnggota/profile', ['title' => 'Profile']);
-});
-
-Route::get('/helpdesk', function () {
-    return view('/roleAnggota/helpdesk', ['title' => 'Helpdesk']);
-});
-
-Route::get('/logout', function () {
-    return view('/roleAnggota/logout', ['title' => 'Logout']);
+    Route::get('/profile', [AnggotaController::class, 'viewUser'])->name('profile.view');
+    Route::patch('/profile', [AnggotaController::class, 'updateUser'])->name('profile.update');
+    Route::delete('/profile', [AnggotaController::class, 'destroyUser'])->name('profile.destroy');
 });

@@ -28,6 +28,10 @@
   </script>
 
   <style>
+    .sm\\:rounded-lg {
+    border-radius: 15px; /* Anda bisa mengubah nilai ini sesuai keinginan */
+    }
+    
     #layoutAuthentication_content {
       width: 100%;
     }
