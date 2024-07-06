@@ -3,7 +3,7 @@
 
   <div class="wrapper">
     <!-- Sidebar -->
-    <x-sidebar></x-sidebar>
+    <x-sidebar-admin></x-sidebar-admin>
 
     <div class="main-panel">
       <!-- Navbar -->

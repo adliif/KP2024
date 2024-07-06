@@ -23,8 +23,8 @@
     <div class="sidebar-wrapper scrollbar scrollbar-inner">
         <div class="sidebar-content">
             <ul class="nav nav-secondary">
-                <li class="{{request()->is('dashboard') ? 'nav-item active' : 'nav-item'}}">
-                    <a href="/dashboard">
+                <li class="{{request()->is('adminDashboard') ? 'nav-item active' : 'nav-item'}}">
+                    <a href="/adminDashboard">
                         <i class="fas fa-home"></i>
                         <p>Dashboard</p>
                     </a>
@@ -34,30 +34,6 @@
                         <i class="fa fa-ellipsis-h"></i>
                     </span>
                     <h4 class="text-section">Components</h4>
-                </li>
-                <li class="{{request()->is('tanggungan') ? 'nav-item active' : 'nav-item'}}">
-                    <a href="/tanggungan">
-                        <i class="fas fa-hand-holding-usd"></i>
-                        <p>Tanggungan</p>
-                    </a>
-                </li>
-                <li class="{{request()->is('history') ? 'nav-item active' : 'nav-item'}}">
-                    <a href="/history">
-                        <i class="fas fa-history"></i>
-                        <p>History</p>
-                    </a>
-                </li>
-                <li class="{{request()->is('profile') ? 'nav-item active' : 'nav-item'}}">
-                    <a href="/profile">
-                        <i class="fas fa-user-tie"></i>
-                        <p>Profile</p>
-                    </a>
-                </li>
-                <li class="{{request()->is('helpdesk') ? 'nav-item active' : 'nav-item'}}">
-                    <a href="/helpdesk">
-                        <i class="fas fa-address-book"></i>
-                        <p>Helpdesk</p>
-                    </a>
                 </li>
                 <li class="{{request()->is('logout') ? 'nav-item active' : 'nav-item'}}">
                     <form method="POST" action="{{ route('logout') }}">

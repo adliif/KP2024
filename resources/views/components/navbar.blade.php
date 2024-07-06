@@ -67,7 +67,7 @@
                         </div>
                         <span class="profile-username">
                             <span class="op-7">Hi,</span>
-                            <span class="fw-bold">Ucup</span>
+                            <span class="fw-bold">{{ Auth::user()->name }}</span>
                         </span>
                     </a>
                     <ul class="dropdown-menu dropdown-user animated fadeIn">
@@ -79,15 +79,18 @@
                                             class="avatar-img rounded" />
                                     </div>
                                     <div class="u-text">
-                                        <h4>Ucup</h4>
-                                        <p class="text-muted">ucup@example.com</p>
+                                        <h4>{{ Auth::user()->name }}</h4>
+                                        <p class="text-muted">{{ Auth::user()->email }}</p>
                                     </div>
                                 </div>
                             </li>
                             <li>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">My Profile</a>
-                                <a class="dropdown-item" href="#">Logout</a>
+                                <a class="dropdown-item" href="profile">My Profile</a>
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                    <a class="dropdown-item" href="logout" onclick="event.preventDefault(); this.closest('form').submit();">Logout</a>
+                                </form>
                             </li>
                         </div>
                     </ul>
