@@ -33,7 +33,31 @@
                     <span class="sidebar-mini-icon">
                         <i class="fa fa-ellipsis-h"></i>
                     </span>
-                    <h4 class="text-section">Components</h4>
+                    <h4 class="text-section">Menu</h4>
+                </li>
+                <li class="{{request()->is('dataAnggota') ? 'nav-item active' : 'nav-item'}}">
+                    <a href="/dataAnggota">
+                        <i class="fas fa-hand-holding-usd"></i>
+                        <p>Data Anggota</p>
+                    </a>
+                </li>
+                <li class="{{request()->is('dataPinjaman') ? 'nav-item active' : 'nav-item'}}">
+                    <a href="/dataPinjaman">
+                        <i class="fas fa-hand-holding-usd"></i>
+                        <p>Data Pinjaman</p>
+                    </a>
+                </li>
+                <li class="{{request()->is('dataAngsuran') ? 'nav-item active' : 'nav-item'}}">
+                    <a href="/dataAngsuran">
+                        <i class="fas fa-hand-holding-usd"></i>
+                        <p>Data Angsuran</p>
+                    </a>
+                </li>
+                <li class="{{request()->is('dataSimpananPokok') ? 'nav-item active' : 'nav-item'}}">
+                    <a href="/dataSimpananPokok">
+                        <i class="fas fa-hand-holding-usd"></i>
+                        <p>Data Simpanan Pokok</p>
+                    </a>
                 </li>
                 <li class="{{request()->is('logout') ? 'nav-item active' : 'nav-item'}}">
                     <form method="POST" action="{{ route('logout') }}">

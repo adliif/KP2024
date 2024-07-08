@@ -4,19 +4,28 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AnggotaController;
 use Illuminate\Support\Facades\Route;
 
+require __DIR__ . '/auth.php';
+
 Route::get('/', function () {
     return view('auth.login',  ['title' => 'Login']);
 });
-require __DIR__ . '/auth.php';
 
 // Routes Role Admin
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('adminDashboard', [AdminController::class, 'index']);
+    Route::get('dataAnggota', [AdminController::class, 'dataAnggota']);
+    Route::get('dataPinjaman', [AdminController::class, 'dataPinjaman']);
+    Route::get('dataAngsuran', [AdminController::class, 'dataAngsuran']);
+    Route::get('dataSimpananPokok', [AdminController::class, 'dataSimpananPokok']);
+
+    Route::get('/profileAdmin', [AdminController::class, 'viewUser'])->name('profile.view');
+    Route::patch('/profileAdmin', [AdminController::class, 'updateUser'])->name('profile.update');
+    Route::delete('/profileAdmin', [AdminController::class, 'destroyUser'])->name('profile.destroy');
 });
 
 // Routes Role Anggota
 Route::middleware(['auth', 'user'])->group(function () {
-    Route::get('dashboard', [AnggotaController::class, 'index']);
+    Route::get('dashboard', [AnggotaController::class, 'index'])->name('dashboard');
     Route::get('tanggungan', [AnggotaController::class, 'tanggungan']);
     Route::get('history', [AnggotaController::class, 'history']);
     Route::get('helpdesk', [AnggotaController::class, 'helpdesk']);

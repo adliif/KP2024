@@ -7,7 +7,7 @@
 
     <div class="main-panel">
       <!-- Navbar -->
-      <x-navbar></x-navbar>
+      <x-nav-admin></x-nav-admin>
 
       <!-- Content -->
       <div class="container">
