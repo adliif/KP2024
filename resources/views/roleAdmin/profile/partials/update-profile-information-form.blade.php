@@ -8,10 +8,10 @@
         @method('patch')
 
         <div class="mb-3">
-            <x-input-label class="form-label" for="nama" :value="__('nama')" />
-            <x-text-input id="nama" name="nama" type="text" class="form-control" :value="old('nama', $user->nama)"
-                required autofocus autocomplete="nama" style="width: 400px;" />
-            <x-input-error class="mt-2" :messages="$errors->get('nama')" />
+            <x-input-label class="form-label" for="name" :value="__('Name')" />
+            <x-text-input id="name" name="name" type="text" class="form-control" :value="old('name', $user->name)"
+                required autofocus autocomplete="name" style="width: 400px;" />
+            <x-input-error class="mt-2" :messages="$errors->get('name')" />
         </div>
 
         <div class="mb-3">

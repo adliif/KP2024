@@ -79,14 +79,14 @@
                                             class="avatar-img rounded" />
                                     </div>
                                     <div class="u-text">
-                                        <h4>{{ Auth::user()->nama }}</h4>
+                                        <h4>{{ Auth::user()->name }}</h4>
                                         <p class="text-muted">{{ Auth::user()->email }}</p>
                                     </div>
                                 </div>
                             </li>
                             <li>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="profile">My Profile</a>
+                                <a class="dropdown-item" href="profileAdmin">My Profile</a>
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf
                                     <a class="dropdown-item" href="logout" onclick="event.preventDefault(); this.closest('form').submit();">Logout</a>
