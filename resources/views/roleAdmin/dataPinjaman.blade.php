@@ -107,25 +107,31 @@
                                         <table id="add-row" class="display table table-striped table-hover">
                                             <thead>
                                                 <tr>
-                                                    <th>Name</th>
-                                                    <th>Position</th>
-                                                    <th>Office</th>
+                                                    <th>No.</th>
+                                                    <th>Nama</th>
+                                                    <th>Total Pinjaman</th>
+                                                    <th>Tanggal Pinjaman</th>
+                                                    <th>Status Pinjaman</th>
                                                     <th style="width: 10%">Action</th>
                                                 </tr>
                                             </thead>
                                             <tfoot>
                                                 <tr>
-                                                    <th>Name</th>
-                                                    <th>Position</th>
-                                                    <th>Office</th>
-                                                    <th>Action</th>
+                                                    <th>No.</th>
+                                                    <th>Nama</th>
+                                                    <th>Total Pinjaman</th>
+                                                    <th>Tanggal Pinjaman</th>
+                                                    <th>Status Pinjaman</th>
                                                 </tr>
                                             </tfoot>
                                             <tbody>
+                                                @forelse ($pinjaman as $p)
                                                 <tr>
-                                                    <td>Tiger Nixon</td>
-                                                    <td>System Architect</td>
-                                                    <td>Edinburgh</td>
+                                                    <td>{{ $loop->iteration }}</td>
+                                                    <td>{{ $p->user->nama }}</td>
+                                                    <td>{{ $p->total_pinjaman }}</td>
+                                                    <td>{{ $p->tgl_pinjaman }}</td>
+                                                    <td>{{ $p->status_pinjaman }}</td>
                                                     <td>
                                                         <div class="form-button-action">
                                                             <button type="button" data-bs-toggle="tooltip" title=""
@@ -141,6 +147,9 @@
                                                         </div>
                                                     </td>
                                                 </tr>
+                                                @empty
+                                                    
+                                                @endforelse
                                             </tbody>
                                         </table>
                                     </div>

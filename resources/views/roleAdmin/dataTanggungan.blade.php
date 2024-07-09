@@ -1,4 +1,4 @@
-<x-layout>
+    <x-layout>
     <x-slot:title>{{$title}}</x-slot:title>
 
     <div class="wrapper">
@@ -107,25 +107,35 @@
                                         <table id="add-row" class="display table table-striped table-hover">
                                             <thead>
                                                 <tr>
-                                                    <th>Name</th>
-                                                    <th>Position</th>
-                                                    <th>Office</th>
+                                                    <th>Nama</th>
+                                                    <th>ID Pinjaman</th>
+                                                    <th>Bunga</th>
+                                                    <th>Iuran/Bulan</th>
+                                                    <th>Sisa Pinjaman</th>
+                                                    <th>Status Pinjaman</th>
                                                     <th style="width: 10%">Action</th>
                                                 </tr>
                                             </thead>
                                             <tfoot>
                                                 <tr>
-                                                    <th>Name</th>
-                                                    <th>Position</th>
-                                                    <th>Office</th>
+                                                    <th>Nama</th>
+                                                    <th>ID Pinjaman</th>
+                                                    <th>Bunga</th>
+                                                    <th>Iuran/Bulan</th>
+                                                    <th>Sisa Pinjaman</th>
+                                                    <th>Status Pinjaman</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </tfoot>
                                             <tbody>
+                                                @forelse ($tanggungan as $t)
                                                 <tr>
-                                                    <td>Tiger Nixon</td>
-                                                    <td>System Architect</td>
-                                                    <td>Edinburgh</td>
+                                                    <td>{{ $t->pinjaman->user->nama }}</td>
+                                                    <td>{{ $t->pinjaman->id_pinjaman }}</td>
+                                                    <td>{{ $t->bunga_pinjaman }}</td>
+                                                    <td>{{ $t->iuran_perBulan}}</td>
+                                                    <td>{{ $t->sisa_pinjaman }}</td>
+                                                    <td>{{ $t->status_pinjaman }}</td>
                                                     <td>
                                                         <div class="form-button-action">
                                                             <button type="button" data-bs-toggle="tooltip" title=""
@@ -141,6 +151,9 @@
                                                         </div>
                                                     </td>
                                                 </tr>
+                                                @empty
+                                                    
+                                                @endforelse
                                             </tbody>
                                         </table>
                                     </div>
