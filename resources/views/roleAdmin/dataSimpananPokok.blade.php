@@ -107,25 +107,29 @@
                                         <table id="add-row" class="display table table-striped table-hover">
                                             <thead>
                                                 <tr>
-                                                    <th>Name</th>
-                                                    <th>Position</th>
-                                                    <th>Office</th>
+                                                    <th>No.</th>
+                                                    <th>Nama</th>
+                                                    <th>Iuran</th>
+                                                    <th>Total Simpanan Pokok</th>
                                                     <th style="width: 10%">Action</th>
                                                 </tr>
                                             </thead>
                                             <tfoot>
                                                 <tr>
-                                                    <th>Name</th>
-                                                    <th>Position</th>
-                                                    <th>Office</th>
+                                                    <th>No.</th>
+                                                    <th>Nama</th>
+                                                    <th>Iuran</th>
+                                                    <th>Total Simpanan Pokok</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </tfoot>
                                             <tbody>
-                                                <tr>
-                                                    <td>Tiger Nixon</td>
-                                                    <td>System Architect</td>
-                                                    <td>Edinburgh</td>
+                                                @forelse ($simpanan as $simp)
+                                                    <tr>
+                                                    <td>{{ $loop->iteration }}</td>
+                                                    <td>{{ $simp->user->nama }}</td>
+                                                    <td>{{ $simp->iuran }}</td>
+                                                    <td>{{ $simp->total_simpanan_pokok }}</td>
                                                     <td>
                                                         <div class="form-button-action">
                                                             <button type="button" data-bs-toggle="tooltip" title=""
@@ -141,6 +145,10 @@
                                                         </div>
                                                     </td>
                                                 </tr>
+                                                @empty
+                                                    
+                                                @endforelse
+                                                
                                             </tbody>
                                         </table>
                                     </div>

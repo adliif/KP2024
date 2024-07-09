@@ -1,8 +1,9 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AnggotaController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\RegisteredUserController;
 
 require __DIR__ . '/auth.php';
 
@@ -13,9 +14,11 @@ Route::get('/', function () {
 // Routes Role Admin
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('adminDashboard', [AdminController::class, 'index']);
-    Route::get('dataAnggota', [AdminController::class, 'dataAnggota']);
+    Route::get('register', [RegisteredUserController::class, 'create'])->name('register');
+    Route::post('register', [RegisteredUserController::class, 'store']);    
+    Route::get('dataAnggota', [AdminController::class, 'dataAnggota'])->name('dataAnggota');
     Route::get('dataPinjaman', [AdminController::class, 'dataPinjaman']);
-    Route::get('dataAngsuran', [AdminController::class, 'dataAngsuran']);
+    Route::get('dataTanggungan', [AdminController::class, 'dataTanggungan']);
     Route::get('dataSimpananPokok', [AdminController::class, 'dataSimpananPokok']);
 
     Route::get('/profileAdmin', [AdminController::class, 'viewUser'])->name('profile.view');

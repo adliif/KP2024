@@ -35,27 +35,27 @@
                     </span>
                     <h4 class="text-section">Menu</h4>
                 </li>
-                <li class="{{request()->is('dataAnggota') ? 'nav-item active' : 'nav-item'}}">
+                <li class="{{request()->is('dataAnggota', 'register') ? 'nav-item active' : 'nav-item'}}">
                     <a href="/dataAnggota">
-                        <i class="fas fa-hand-holding-usd"></i>
+                        <i class="fas fa-address-book"></i>
                         <p>Data Anggota</p>
                     </a>
                 </li>
                 <li class="{{request()->is('dataPinjaman') ? 'nav-item active' : 'nav-item'}}">
                     <a href="/dataPinjaman">
-                        <i class="fas fa-hand-holding-usd"></i>
+                        <i class="fas fa-money-bill-alt"></i>
                         <p>Data Pinjaman</p>
                     </a>
                 </li>
-                <li class="{{request()->is('dataAngsuran') ? 'nav-item active' : 'nav-item'}}">
-                    <a href="/dataAngsuran">
+                <li class="{{request()->is('dataTanggungan') ? 'nav-item active' : 'nav-item'}}">
+                    <a href="/dataTanggungan">
                         <i class="fas fa-hand-holding-usd"></i>
-                        <p>Data Angsuran</p>
+                        <p>Data Tanggungan</p>
                     </a>
                 </li>
                 <li class="{{request()->is('dataSimpananPokok') ? 'nav-item active' : 'nav-item'}}">
                     <a href="/dataSimpananPokok">
-                        <i class="fas fa-hand-holding-usd"></i>
+                        <i class="fas fa-money-check-alt"></i>
                         <p>Data Simpanan Pokok</p>
                     </a>
                 </li>
