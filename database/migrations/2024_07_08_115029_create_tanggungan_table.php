@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreign('id_pinjaman')->references('id_pinjaman')->on('pinjaman');
             //foreign key
             $table->float('bunga_pinjaman')->default(0.08);
+            $table->float('total_pinjaman');
             $table->integer('iuran_perBulan');
             $table->integer('sisa_pinjaman');
             $table->string('status_pinjaman');
@@ -30,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('angsurans');
+        Schema::dropIfExists('tanggungan');
     }
 };

@@ -19,7 +19,6 @@ class SimpananPokokFactory extends Factory
     {
         return [
             'id_user' => User::Factory(),
-            'total_simpanan_pokok' => '1000000',
         ];
     }
 }

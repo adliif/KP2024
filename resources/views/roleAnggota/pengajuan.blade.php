@@ -3,17 +3,17 @@
 
     <div class="wrapper">
         <!-- Sidebar -->
-        <x-sidebar-admin></x-sidebar-admin>
+        <x-sidebar></x-sidebar>
 
         <div class="main-panel">
             <!-- Navbar -->
-            <x-nav-admin></x-nav-admin>
+            <x-navbar></x-navbar>
 
             <!-- Content -->
             <div class="container">
                 <div class="page-inner">
                     <div class="page-header">
-                        <h3 class="fw-bold mb-3">Data Pinjaman</h3>
+                        <h3 class="fw-bold mb-3">Pengajuan</h3>
                         <ul class="breadcrumbs mb-3">
                             <li class="nav-home">
                                 <a href="#">
@@ -24,7 +24,7 @@
                                 <i class="icon-arrow-right"></i>
                             </li>
                             <li class="nav-item">
-                                <a href="#">Pinjaman</a>
+                                <a href="#">Pengajuan</a>
                             </li>
                         </ul>
                     </div>
@@ -34,11 +34,13 @@
                             <div class="card">
                                 <div class="card-header">
                                     <div class="d-flex align-items-center">
-                                        <h4 class="card-title">Add Row</h4>
+                                        <div class="card-title">
+                                            <h4>History Pengajuan Peminjaman</h4>
+                                        </div>
                                         <button class="btn btn-primary btn-round ms-auto" data-bs-toggle="modal"
                                             data-bs-target="#addRowModal">
                                             <i class="fa fa-plus"></i>
-                                            Add Row
+                                            Ajuin Pinjaman
                                         </button>
                                     </div>
                                 </div>
@@ -51,53 +53,54 @@
                                                 <div class="modal-header border-0">
                                                     <h5 class="modal-title">
                                                         <span class="fw-mediumbold"> New</span>
-                                                        <span class="fw-light"> Row </span>
+                                                        <span class="fw-light"> Form </span>
                                                     </h5>
-                                                    <button type="button" class="close" data-dismiss="modal"
+                                                    <button type="button" class="close" data-bs-dismiss="modal"
                                                         aria-label="Close">
                                                         <span aria-hidden="true">&times;</span>
                                                     </button>
                                                 </div>
                                                 <div class="modal-body">
                                                     <p class="small">
-                                                        Create a new row using this form, make sure you
-                                                        fill them all
+                                                        Mari ajukan peminjaman sesuai dengan kebutuhan Anda...
                                                     </p>
-                                                    <form>
+                                                    <form id="form-pengajuan" method="POST"
+                                                        action="{{ route('pengajuan.create') }}">
+                                                        @csrf
                                                         <div class="row">
                                                             <div class="col-sm-12">
                                                                 <div class="form-group form-group-default">
-                                                                    <label>Name</label>
-                                                                    <input id="addName" type="text" class="form-control"
-                                                                        placeholder="fill name" />
+                                                                    <label>Tanggal Pengajuan</label>
+                                                                    <input name="tgl_pengajuan" id="addTgl" type="text"
+                                                                        class="form-control" readonly />
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-6 pe-0">
                                                                 <div class="form-group form-group-default">
-                                                                    <label>Position</label>
-                                                                    <input id="addPosition" type="text"
-                                                                        class="form-control"
-                                                                        placeholder="fill position" />
+                                                                    <label>Besar Pinjaman</label>
+                                                                    <input name="besar_pinjaman" id="addBesar"
+                                                                        type="text" class="form-control" />
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-6">
                                                                 <div class="form-group form-group-default">
-                                                                    <label>Office</label>
-                                                                    <input id="addOffice" type="text"
-                                                                        class="form-control"
-                                                                        placeholder="fill office" />
+                                                                    <label>Tenor Pinjaman</label>
+                                                                    <input name="tenor_pinjaman" id="addTenor"
+                                                                        type="text" class="form-control" />
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        <div class="modal-footer border-0">
+                                                            <button type="submit" class="btn btn-primary" id="addBtn">
+                                                                Add
+                                                            </button>
+
+                                                            <button type="button" class="btn btn-danger"
+                                                                data-bs-dismiss="modal">
+                                                                Close
+                                                            </button>
+                                                        </div>
                                                     </form>
-                                                </div>
-                                                <div class="modal-footer border-0">
-                                                    <button type="button" id="addRowButton" class="btn btn-primary">
-                                                        Add
-                                                    </button>
-                                                    <button type="button" class="btn btn-danger" data-dismiss="modal">
-                                                        Close
-                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
@@ -108,38 +111,34 @@
                                             <thead>
                                                 <tr>
                                                     <th>No.</th>
-                                                    <th>Nama</th>
                                                     <th>Tanggal Pengajuan</th>
                                                     <th>Besar Pinjaman</th>
                                                     <th>Tenor Pinjaman</th>
-                                                    <th style="width: 10%">Action</th>
+                                                    <th>Keterangan</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 @forelse ($pinjaman as $p)
-                                                <tr>
-                                                    <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ $p->user->nama }}</td>
-                                                    <td>{{ $p->tgl_pengajuan }}</td>
-                                                    <td>{{ $p->besar_pinjaman }}</td>
-                                                    <td>{{ $p->tenor_pinjaman }}</td>
-                                                    <td>
-                                                        <div class="form-button-action">
-                                                            <button type="button" data-bs-toggle="tooltip" title=""
-                                                                class="btn btn-link btn-primary btn-lg"
-                                                                data-original-title="Edit Task">
-                                                                <i class="fa fa-edit"></i>
-                                                            </button>
-                                                            <button type="button" data-bs-toggle="tooltip" title=""
-                                                                class="btn btn-link btn-danger"
-                                                                data-original-title="Remove">
-                                                                <i class="fa fa-times"></i>
-                                                            </button>
-                                                        </div>
-                                                    </td>
-                                                </tr>
+                                                    <tr>
+                                                        <td>{{ $loop->iteration }}</td>
+                                                        <td>{{ $p->tgl_pengajuan }}</td>
+                                                        <td>{{ $p->besar_pinjaman }}</td>
+                                                        <td>{{ $p->tenor_pinjaman }}</td>
+                                                        <td>
+                                                            @if ($p->keterangan == 'Disetujui')
+                                                                <button class="btn btn-success" disabled>Disetujui</button>
+                                                            @elseif ($p->keterangan == 'Ditolak')
+                                                                <button class="btn btn-danger" disabled>Ditolak</button>
+                                                            @else
+                                                                <button class="btn btn-warning"
+                                                                    disabled>{{ $p->keterangan }}</button>
+                                                            @endif
+                                                        </td>
+                                                    </tr>
                                                 @empty
-                                                    
+                                                    <tr>
+                                                        <td colspan="5" class="text-center">Belum ada data pengajuan</td>
+                                                    </tr>
                                                 @endforelse
                                             </tbody>
                                         </table>
@@ -148,6 +147,7 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
 
@@ -161,15 +161,74 @@
     <script src="../assets/js/core/popper.min.js"></script>
     <script src="../assets/js/core/bootstrap.min.js"></script>
 
+    <!-- Sweet Alert -->
+    <script src="../assets/js/plugin/sweetalert/sweetalert.min.js"></script>
     <!-- jQuery Scrollbar -->
     <script src="../assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
     <!-- Datatables -->
     <script src="../assets/js/plugin/datatables/datatables.min.js"></script>
     <!-- Kaiadmin JS -->
     <script src="../assets/js/kaiadmin.min.js"></script>
+
     <!-- Kaiadmin DEMO methods, don't include it in your project! -->
     <script src="../assets/js/setting-demo2.js"></script>
     <script>
+        var SweetAlert2Demo = (function () {
+            var initDemos = function () {
+
+                $("#addBtn").click(function (e) {
+                    e.preventDefault(); // Prevent form submission
+                    var form = $('#form-pengajuan');
+                    var formData = form.serialize();
+
+                    $.ajax({
+                        type: "POST",
+                        url: form.attr('action'),
+                        data: formData,
+                        success: function () {
+                            swal({
+                                title: "Pengajuan Diproses!",
+                                text: "Cek secara berkala pengajuan peminjaman Anda",
+                                icon: "success",
+                                buttons: {
+                                    confirm: {
+                                        className: "btn btn-success",
+                                    },
+                                },
+                            }).then((willReload) => {
+                                if (willReload) {
+                                    location.reload();
+                                }
+                            });
+                        },
+                        error: function () {
+                            swal({
+                                title: "Error!",
+                                text: "Terjadi kesalahan, silakan coba lagi.",
+                                icon: "error",
+                                buttons: {
+                                    confirm: {
+                                        className: "btn btn-danger",
+                                    },
+                                },
+                            });
+                        }
+                    });
+                });
+            };
+            return {
+                //== Init
+                init: function () {
+                    initDemos();
+                },
+            };
+        })();
+
+        //== Class Initialization
+        jQuery(document).ready(function () {
+            SweetAlert2Demo.init();
+        });
+
         $(document).ready(function () {
             $("#basic-datatables").DataTable({});
 
@@ -205,24 +264,22 @@
                 },
             });
 
-            // Add Row
             $("#add-row").DataTable({
                 pageLength: 5,
+                columns: [
+                    { title: "No." },
+                    { title: "Tanggal Pengajuan" },
+                    { title: "Besar Pinjaman" },
+                    { title: "Tenor Pinjaman" },
+                    { title: "Keterangan", orderable: false }
+                ]
             });
 
-            var action =
-                '<td> <div class="form-button-action"> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit Task"> <i class="fa fa-edit"></i> </button> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Remove"> <i class="fa fa-times"></i> </button> </div> </td>';
-
-            $("#addRowButton").click(function () {
-                $("#add-row")
-                    .dataTable()
-                    .fnAddData([
-                        $("#addName").val(),
-                        $("#addPosition").val(),
-                        $("#addOffice").val(),
-                        action,
-                    ]);
-                $("#addRowModal").modal("hide");
+            $('#addRowModal').on('show.bs.modal', function () {
+                var currentDateTime = new Date();
+                currentDateTime.setHours(currentDateTime.getHours() + 7); // Adjust to WIB (UTC+7)
+                var formattedDateTime = currentDateTime.toISOString().slice(0, 19).replace('T', ' ');
+                $('#addTgl').val(formattedDateTime);
             });
         });
     </script>

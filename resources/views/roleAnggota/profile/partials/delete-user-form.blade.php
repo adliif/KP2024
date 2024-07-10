@@ -8,7 +8,7 @@
 
                 <div class="mb-3">
                     <label class="form-label" for="password" class="block text-sm font-medium text-gray-700">{{ __('Password') }}</label>
-                    <input class="form-control" id="password" style="width: 400px;" name="password" type="password"
+                    <input class="form-control" id="password" style="width: 600px;" name="password" type="password"
                         placeholder="{{ __('Password') }}" required>
                     @if ($errors->userDeletion->has('password'))
                         <span class="text-red-600 text-sm">{{ $errors->userDeletion->first('password') }}</span>

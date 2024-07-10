@@ -35,9 +35,15 @@
                     </span>
                     <h4 class="text-section">Components</h4>
                 </li>
+                <li class="{{request()->is('pengajuan') ? 'nav-item active' : 'nav-item'}}">
+                    <a href="/pengajuan">
+                        <i class="fas fa-hand-holding-usd"></i>
+                        <p>Pengajuan</p>
+                    </a>
+                </li>
                 <li class="{{request()->is('tanggungan') ? 'nav-item active' : 'nav-item'}}">
                     <a href="/tanggungan">
-                        <i class="fas fa-hand-holding-usd"></i>
+                        <i class="fas fa-donate"></i>
                         <p>Tanggungan</p>
                     </a>
                 </li>
@@ -50,7 +56,7 @@
                 <li class="{{request()->is('profile') ? 'nav-item active' : 'nav-item'}}">
                     <a href="/profile">
                         <i class="fas fa-user-tie"></i>
-                        <p>Profile</p>
+                        <p>My Profile</p>
                     </a>
                 </li>
                 <li class="{{request()->is('helpdesk') ? 'nav-item active' : 'nav-item'}}">

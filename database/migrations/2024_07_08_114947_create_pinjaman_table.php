@@ -17,10 +17,11 @@ return new class extends Migration
             $table->unsignedBigInteger('id_user');
             $table->foreign('id_user')->references('id_user')->on('users');
             //foreign key
-            $table->integer('total_pinjaman');
-            $table->time('tgl_pinjaman');
-            $table->string('status_pinjaman');
-            $table->timestamps();
+            $table->timestamp('tgl_pengajuan');
+            $table->integer('besar_pinjaman');
+            $table->integer('tenor_pinjaman');
+            $table->string('keterangan')->default('Diproses');
+            // $table->timestamps();
         });
     }
 
@@ -29,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pinjamen');
+        Schema::dropIfExists('pinjaman');
     }
 };

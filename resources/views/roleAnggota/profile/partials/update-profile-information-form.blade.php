@@ -8,15 +8,16 @@
         @method('patch')
 
         <div class="mb-3">
-            <x-input-label class="form-label" for="nama" :value="__('nama')" />
-            <x-text-input id="nama" name="nama" type="text" class="form-control" :value="old('nama', $user->nama)"
-                required autofocus autocomplete="nama" style="width: 400px;" />
+            <x-input-label class="form-label" for="nama" :value="__('Nama')" />
+            <x-text-input id="nama" name="nama_display" type="text" class="form-control" value="{{ old('nama', $user->nama) }}"
+                required autofocus autocomplete="nama" style="width: 600px;" disabled />
+            <input type="hidden" name="nama" value="{{ old('nama', $user->nama) }}" />
             <x-input-error class="mt-2" :messages="$errors->get('nama')" />
         </div>
 
         <div class="mb-3">
             <x-input-label class="form-label" for="email" :value="__('Email')" />
-            <x-text-input id="email" name="email" type="email" class="form-control" :value="old('email', $user->email)" required autocomplete="username" style="width: 400px;" />
+            <x-text-input id="email" name="email" type="email" class="form-control" :value="old('email', $user->email)" required autocomplete="username" style="width: 600px;" />
             <x-input-error class="mt-2" :messages="$errors->get('email')" />
 
             @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && !$user->hasVerifiedEmail())
@@ -37,6 +38,36 @@
                     @endif
                 </div>
             @endif
+        </div>
+
+        <div class="mb-3">
+            <x-input-label class="form-label" for="NIP" :value="__('NIP')" />
+            <x-text-input id="NIP" name="nama_display" type="text" class="form-control" value="{{ old('NIP', $user->NIP) }}"
+                required autofocus autocomplete="NIP" style="width: 600px;" disabled />
+            <input type="hidden" name="NIP" value="{{ old('NIP', $user->NIP) }}" />
+            <x-input-error class="mt-2" :messages="$errors->get('NIP')" />
+        </div>
+
+        <div class="mb-3">
+            <x-input-label class="form-label" for="jenis_kelamin" :value="__('Jenis Kelamin')" />
+            <x-text-input id="jenis_kelamin" name="nama_display" type="text" class="form-control" value="{{ old('jenis_kelamin', $user->jenis_kelamin) }}"
+                required autofocus autocomplete="jenis_kelamin" style="width: 600px;" disabled />
+            <input type="hidden" name="jenis_kelamin" value="{{ old('jenis_kelamin', $user->jenis_kelamin) }}" />
+            <x-input-error class="mt-2" :messages="$errors->get('jenis_kelamin')" />
+        </div>
+
+        <div class="mb-3">
+            <x-input-label class="form-label" for="alamat" :value="__('Alamat')" />
+            <textarea id="alamat" name="alamat" class="form-control" required autofocus autocomplete="alamat" style="width: 600px;" 
+                aria-label="With textarea">{{ old('alamat', $user->alamat) }}</textarea>
+            <x-input-error class="mt-2" :messages="$errors->get('alamat')" />
+        </div>
+
+        <div class="mb-3">
+            <x-input-label class="form-label" for="no_tlp" :value="__('No. Telepon')" />
+            <x-text-input id="no_tlp" name="no_tlp" type="text" class="form-control" :value="old('no_tlp', $user->no_tlp)"
+                required autofocus autocomplete="no_tlp" style="width: 600px;" />
+            <x-input-error class="mt-2" :messages="$errors->get('no_tlp')" />
         </div>
 
         <div class="flex items-center gap-4">

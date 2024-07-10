@@ -18,7 +18,6 @@ return new class extends Migration
             $table->foreign('id_user')->references('id_user')->on('users');
             ////foreign key
             $table->integer('iuran')->default('100000');
-            $table->integer('total_simpanan_pokok');
             $table->timestamps();
         });
     }
