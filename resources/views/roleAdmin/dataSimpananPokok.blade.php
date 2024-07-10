@@ -7,7 +7,7 @@
 
         <div class="main-panel">
             <!-- Navbar -->
-            <x-navbar></x-navbar>
+            <x-nav-admin></x-nav-admin>
 
             <!-- Content -->
             <div class="container">
@@ -110,26 +110,15 @@
                                                     <th>No.</th>
                                                     <th>Nama</th>
                                                     <th>Iuran</th>
-                                                    <th>Total Simpanan Pokok</th>
                                                     <th style="width: 10%">Action</th>
                                                 </tr>
                                             </thead>
-                                            <tfoot>
-                                                <tr>
-                                                    <th>No.</th>
-                                                    <th>Nama</th>
-                                                    <th>Iuran</th>
-                                                    <th>Total Simpanan Pokok</th>
-                                                    <th>Action</th>
-                                                </tr>
-                                            </tfoot>
                                             <tbody>
                                                 @forelse ($simpanan as $simp)
                                                     <tr>
                                                     <td>{{ $loop->iteration }}</td>
                                                     <td>{{ $simp->user->nama }}</td>
                                                     <td>{{ $simp->iuran }}</td>
-                                                    <td>{{ $simp->total_simpanan_pokok }}</td>
                                                     <td>
                                                         <div class="form-button-action">
                                                             <button type="button" data-bs-toggle="tooltip" title=""

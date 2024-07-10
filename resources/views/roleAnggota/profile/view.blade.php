@@ -36,7 +36,7 @@
                                 <div class="card-header">
                                     <div class="card-title">Profile Information</div>
                                     <p style="width: 500px; text-align: justify;">
-                                        Update your account's profile information and email address.
+                                        Update your account's profile information.
                                     </p>
                                 </div>
                                 <div class="card-body">
@@ -78,7 +78,7 @@
                         </div>
                     </div>
 
-                    <div class="row">
+                    <!-- <div class="row">
                         <div class="col-md-12">
                             <div class="card">
                                 <div class="card-header">
@@ -101,7 +101,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
 
                 </div>
             </div>

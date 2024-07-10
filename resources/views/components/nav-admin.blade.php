@@ -86,7 +86,6 @@
                             </li>
                             <li>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="profileAdmin">My Profile</a>
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf
                                     <a class="dropdown-item" href="logout" onclick="event.preventDefault(); this.closest('form').submit();">Logout</a>

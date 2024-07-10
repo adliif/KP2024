@@ -58,38 +58,4 @@ class AdminController extends Controller
         ];
         return view('roleAdmin.dataTanggungan', $data, compact('tanggungan'));
     }
-
-    // --------------------------------------- PROFILE ----------------------------------------
-    public function viewUser(Request $request): View
-    {
-        $data = [
-            'title' => 'Profile',
-        ];
-        return view('roleAdmin.profile.view', [
-            'user' => $request->user(), $data
-        ]);
-    }
-    public function updateUser(ProfileUpdateRequest $request): RedirectResponse
-    {
-        $request->user()->fill($request->validated());
-
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
-        }
-
-        $request->user()->save();
-
-        return Redirect::route('profile.view')->with('status', 'profile-updated');
-    }
-    public function destroyUser(Request $request)
-    {
-        $request->validate([
-            'password' => ['required', new MatchOldPassword],
-        ]);
-
-        $user = $request->user();
-        $user->delete();
-
-        return redirect('/')->with('status', 'Account deleted successfully.');
-    }
 }

@@ -5,11 +5,10 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AnggotaController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 
-require __DIR__ . '/auth.php';
-
 Route::get('/', function () {
     return view('auth.login',  ['title' => 'Login']);
 });
+require __DIR__ . '/auth.php';
 
 // Routes Role Admin
 Route::middleware(['auth', 'admin'])->group(function () {
@@ -20,15 +19,15 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('dataPinjaman', [AdminController::class, 'dataPinjaman']);
     Route::get('dataTanggungan', [AdminController::class, 'dataTanggungan']);
     Route::get('dataSimpananPokok', [AdminController::class, 'dataSimpananPokok']);
-
-    Route::get('/profileAdmin', [AdminController::class, 'viewUser'])->name('profile.view');
-    Route::patch('/profileAdmin', [AdminController::class, 'updateUser'])->name('profile.update');
-    Route::delete('/profileAdmin', [AdminController::class, 'destroyUser'])->name('profile.destroy');
 });
 
 // Routes Role Anggota
 Route::middleware(['auth', 'user'])->group(function () {
     Route::get('dashboard', [AnggotaController::class, 'index'])->name('dashboard');
+
+    Route::get('pengajuan', [AnggotaController::class, 'pengajuan'])->name('pengajuan.view');
+    Route::post('pengajuan', [AnggotaController::class, 'createPengajuan'])->name('pengajuan.create');
+
     Route::get('tanggungan', [AnggotaController::class, 'tanggungan']);
     Route::get('history', [AnggotaController::class, 'history']);
     Route::get('helpdesk', [AnggotaController::class, 'helpdesk']);

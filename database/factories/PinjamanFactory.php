@@ -19,9 +19,10 @@ class PinjamanFactory extends Factory
     {
         return [
             'id_user' => User::Factory(),
-            'total_pinjaman' => '100000',
-            'tgl_pinjaman' => '2024-07-08 14:30:30',
-            'status_pinjaman' => 'Belum Lunas',
+            'tgl_pengajuan' => '2024-07-08 14:30:30',
+            'besar_pinjaman' => '100000',
+            'tenor_pinjaman' => '3',
+            'keterangan' => 'Diproses',
         ];
     }
 }

@@ -7,7 +7,7 @@
 
         <div class="main-panel">
             <!-- Navbar -->
-            <x-navbar></x-navbar>
+            <x-nav-admin></x-nav-admin>
 
             <!-- Content -->
             <div class="container">
@@ -57,18 +57,6 @@
                                                     <th style="width: 10%">Action</th>
                                                 </tr>
                                             </thead>
-                                            <tfoot>
-                                                <tr>
-                                                    <th>No.</th>
-                                                    <th>Nama</th>
-                                                    <th>E-mail</th>
-                                                    <th>NIP</th>
-                                                    <th>Jenis Kelamin</th>
-                                                    <th>Alamat</th>
-                                                    <th>No.Telpon</th>
-                                                    <th>Action</th>
-                                                </tr>
-                                            </tfoot>
                                             <tbody>
                                                 @forelse ($users as $user)
                                                 <tr>

@@ -11,16 +11,18 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class Pinjaman extends Model
 {
     use HasFactory;
-
+    public $timestamps = false;
     protected $table = 'pinjaman';
     protected $primaryKey = 'id_pinjaman';
-    protected $fillable = ['total_pinjaman', 'tgl_pinjaman', 'status_pinjaman'];
+    protected $fillable = ['id_user', 'tgl_pengajuan', 'besar_pinjaman', 'tenor_pinjaman', 'keterangan'];
 
-    public function user(): BelongsTo{
+    public function user(): BelongsTo
+    {
         return $this->belongsTo(User::class, 'id_user', 'id_user');
     }
 
-    public function tanggungan(): HasOne{
+    public function tanggungan(): HasOne
+    {
         return $this->hasOne(Tanggungan::class, 'id_Pinjaman', 'id_pinjaman');
     }
 }

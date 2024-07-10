@@ -20,8 +20,8 @@ class TanggunganFactory extends Factory
     {
         return [
             'id_pinjaman' => Pinjaman::factory(),
-            'bunga_pinjaman' => '0.08',
-            'iuran_perbulan' => '108000',
+            'total_pinjaman' => '108000',
+            'iuran_perBulan' => '108000',
             'sisa_pinjaman' => '1000000',
             'status_pinjaman' => 'Belum Lunas'
         ];
