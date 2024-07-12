@@ -12,7 +12,7 @@ class Tanggungan extends Model
 
     protected $table = 'tanggungan';
     protected $primarKey = 'id_tanggungan';
-    protected $guarded = [];
+    protected $fillable = ['id_pinjaman', 'bunga_pinjaman', 'iuran_perBulan', 'total_pinjaman', 'sisa_pinjaman', 'status_pinjaman'];
 
     public function user(): BelongsTo{
         return $this->belongsTo(User::class, 'id_pinjaman');

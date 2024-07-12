@@ -5,19 +5,30 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AnggotaController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 
+require __DIR__ . '/auth.php';
+
 Route::get('/', function () {
     return view('auth.login',  ['title' => 'Login']);
 });
-require __DIR__ . '/auth.php';
 
 // Routes Role Admin
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('adminDashboard', [AdminController::class, 'index']);
-    Route::get('register', [RegisteredUserController::class, 'create'])->name('register');
-    Route::post('register', [RegisteredUserController::class, 'store']);    
+
+    Route::get('register', [RegisteredUserController::class, 'create'])->name('register.view');
+    Route::post('/register/store', [RegisteredUserController::class, 'store'])->name('register.store');
+
     Route::get('dataAnggota', [AdminController::class, 'dataAnggota'])->name('dataAnggota');
+    Route::get('dataAnggota/edit/{id_user}', [AdminController::class, 'editAnggota'])->name('dataAnggota.edit');
+    Route::patch('dataAnggota/update/{id_user}', [AdminController::class, 'updateUser'])->name('dataAnggota.update');
+
+    Route::delete('dataAnggota/delete/{id_user}', [AdminController::class, 'destroyUser'])->name('dataAnggota.delete');
+
     Route::get('dataPinjaman', [AdminController::class, 'dataPinjaman']);
+    Route::post('updatePinjamanStatus/{id_pinjaman}', [AdminController::class, 'updatePinjamanStatus'])->name('pinjaman.updateStatus');
+    
     Route::get('dataTanggungan', [AdminController::class, 'dataTanggungan']);
+
     Route::get('dataSimpananPokok', [AdminController::class, 'dataSimpananPokok']);
 });
 

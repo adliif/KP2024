@@ -1,5 +1,5 @@
 <x-layout>
-    <x-slot:title>{{$title}}</x-slot:title>
+    <x-slot:title>{{ $title }}</x-slot:title>
 
     <div class="wrapper">
         <!-- Sidebar -->
@@ -71,8 +71,8 @@
                                                             <div class="col-sm-12">
                                                                 <div class="form-group form-group-default">
                                                                     <label>Tanggal Pengajuan</label>
-                                                                    <input name="tgl_pengajuan" id="addTgl" type="text"
-                                                                        class="form-control" readonly />
+                                                                    <input name="tgl_pengajuan" id="addTgl"
+                                                                        type="text" class="form-control" readonly />
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-6 pe-0">
@@ -91,7 +91,8 @@
                                                             </div>
                                                         </div>
                                                         <div class="modal-footer border-0">
-                                                            <button type="submit" class="btn btn-primary" id="addBtn">
+                                                            <button type="submit" class="btn btn-primary"
+                                                                id="addBtn">
                                                                 Add
                                                             </button>
 
@@ -173,10 +174,10 @@
     <!-- Kaiadmin DEMO methods, don't include it in your project! -->
     <script src="../assets/js/setting-demo2.js"></script>
     <script>
-        var SweetAlert2Demo = (function () {
-            var initDemos = function () {
+        var SweetAlert2Demo = (function() {
+            var initDemos = function() {
 
-                $("#addBtn").click(function (e) {
+                $("#addBtn").click(function(e) {
                     e.preventDefault(); // Prevent form submission
                     var form = $('#form-pengajuan');
                     var formData = form.serialize();
@@ -185,7 +186,7 @@
                         type: "POST",
                         url: form.attr('action'),
                         data: formData,
-                        success: function () {
+                        success: function() {
                             swal({
                                 title: "Pengajuan Diproses!",
                                 text: "Cek secara berkala pengajuan peminjaman Anda",
@@ -201,7 +202,7 @@
                                 }
                             });
                         },
-                        error: function () {
+                        error: function() {
                             swal({
                                 title: "Error!",
                                 text: "Terjadi kesalahan, silakan coba lagi.",
@@ -218,32 +219,32 @@
             };
             return {
                 //== Init
-                init: function () {
+                init: function() {
                     initDemos();
                 },
             };
         })();
 
         //== Class Initialization
-        jQuery(document).ready(function () {
+        jQuery(document).ready(function() {
             SweetAlert2Demo.init();
         });
 
-        $(document).ready(function () {
+        $(document).ready(function() {
             $("#basic-datatables").DataTable({});
 
             $("#multi-filter-select").DataTable({
                 pageLength: 5,
-                initComplete: function () {
+                initComplete: function() {
                     this.api()
                         .columns()
-                        .every(function () {
+                        .every(function() {
                             var column = this;
                             var select = $(
-                                '<select class="form-select"><option value=""></option></select>'
-                            )
+                                    '<select class="form-select"><option value=""></option></select>'
+                                )
                                 .appendTo($(column.footer()).empty())
-                                .on("change", function () {
+                                .on("change", function() {
                                     var val = $.fn.dataTable.util.escapeRegex($(this).val());
 
                                     column
@@ -255,7 +256,7 @@
                                 .data()
                                 .unique()
                                 .sort()
-                                .each(function (d, j) {
+                                .each(function(d, j) {
                                     select.append(
                                         '<option value="' + d + '">' + d + "</option>"
                                     );
@@ -266,16 +267,26 @@
 
             $("#add-row").DataTable({
                 pageLength: 5,
-                columns: [
-                    { title: "No." },
-                    { title: "Tanggal Pengajuan" },
-                    { title: "Besar Pinjaman" },
-                    { title: "Tenor Pinjaman" },
-                    { title: "Keterangan", orderable: false }
+                columns: [{
+                        title: "No."
+                    },
+                    {
+                        title: "Tanggal Pengajuan"
+                    },
+                    {
+                        title: "Besar Pinjaman"
+                    },
+                    {
+                        title: "Tenor Pinjaman"
+                    },
+                    {
+                        title: "Keterangan",
+                        orderable: false
+                    }
                 ]
             });
 
-            $('#addRowModal').on('show.bs.modal', function () {
+            $('#addRowModal').on('show.bs.modal', function() {
                 var currentDateTime = new Date();
                 currentDateTime.setHours(currentDateTime.getHours() + 7); // Adjust to WIB (UTC+7)
                 var formattedDateTime = currentDateTime.toISOString().slice(0, 19).replace('T', ' ');

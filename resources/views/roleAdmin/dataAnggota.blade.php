@@ -1,5 +1,5 @@
 <x-layout>
-    <x-slot:title>{{$title}}</x-slot:title>
+    <x-slot:title>{{ $title }}</x-slot:title>
 
     <div class="wrapper">
         <!-- Sidebar -->
@@ -34,12 +34,11 @@
                             <div class="card">
                                 <div class="card-header">
                                     <div class="d-flex align-items-center">
-                                        <a href="/register">
-                                            <button class="btn btn-primary btn-round ms-auto">
-                                                <i class="fa fa-plus"></i>
-                                                Tambah Anggota
-                                            </button>
-                                        </a>
+                                        <button class="btn btn-primary btn-round ms-auto" data-bs-toggle="modal"
+                                            data-bs-target="#addAnggotaModal">
+                                            <i class="fa fa-plus"></i>
+                                            Tambah Anggota
+                                        </button>
                                     </div>
                                 </div>
                                 <div class="card-body">
@@ -59,39 +58,214 @@
                                             </thead>
                                             <tbody>
                                                 @forelse ($users as $user)
-                                                <tr>
-                                                    <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ $user->nama }}</td>
-                                                    <td>{{ $user->email }}</td>
-                                                    <td>{{ $user->NIP }}</td>
-                                                    <td>{{ $user->jenis_kelamin }}</td>
-                                                    <td>{{ $user->alamat }}</td>
-                                                    <td>{{ $user->no_tlp }}</td>
-                                                    <td>
-                                                        <div class="form-button-action">
-                                                            <button type="button" data-bs-toggle="tooltip" title=""
-                                                                class="btn btn-link btn-primary btn-lg"
-                                                                data-original-title="Edit Task">
-                                                                <i class="fa fa-edit"></i>
-                                                            </button>
-                                                            <button type="button" data-bs-toggle="tooltip" title=""
-                                                                class="btn btn-link btn-danger"
-                                                                data-original-title="Remove">
-                                                                <i class="fa fa-times"></i>
-                                                            </button>
-                                                        </div>
-                                                    </td>
-                                                </tr>
+                                                    <tr>
+                                                        <td>{{ $loop->iteration }}</td>
+                                                        <td>{{ $user->nama }}</td>
+                                                        <td>{{ $user->email }}</td>
+                                                        <td>{{ $user->NIP }}</td>
+                                                        <td>{{ $user->jenis_kelamin }}</td>
+                                                        <td>{{ $user->alamat }}</td>
+                                                        <td>{{ $user->no_tlp }}</td>
+                                                        <td>
+                                                            <div class="form-button-action">
+                                                                <a href="#"
+                                                                    class="btn btn-link btn-primary edit-user"
+                                                                    data-id="{{ $user->id_user }}"
+                                                                    data-nama="{{ $user->nama }}"
+                                                                    data-email="{{ $user->email }}"
+                                                                    data-nip="{{ $user->NIP }}"
+                                                                    data-jenis_kelamin="{{ $user->jenis_kelamin }}"
+                                                                    data-alamat="{{ $user->alamat }}"
+                                                                    data-no_tlp="{{ $user->no_tlp }}"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#editUserModal">
+                                                                    <i class="fas fa-user-edit"></i>
+                                                                </a>
+                                                                <form
+                                                                    action="{{ route('dataAnggota.delete', ['id_user' => $user->id_user]) }}"
+                                                                    method="POST" style="display:inline;">
+                                                                    @csrf
+                                                                    @method('DELETE')
+                                                                    <button type="submit" data-bs-toggle="modal"
+                                                                        data-bs-target="#hapusUserModal"
+                                                                        class="btn btn-link btn-danger alert_notif">
+                                                                        <i class="fas fa-trash"></i>
+                                                                    </button>
+                                                                </form>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
                                                 @empty
-                                                <tr>
-                                                    <td>Tidak ada data</td>
-                                                </tr>
+                                                    <tr>
+                                                        <td colspan="8">Tidak ada data</td>
+                                                    </tr>
                                                 @endforelse
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Tambah Anggota -->
+            <div class="modal fade" id="addAnggotaModal" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header border-0">
+                            <h5 class="modal-title">
+                                <span class="fw-mediumbold">Tambah</span>
+                                <span class="fw-light">Anggota</span>
+                            </h5>
+                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="form-tambahanggota" method="POST" action="{{ route('register.store') }}">
+                                @csrf
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-group form-group-default">
+                                            <label>Nama</label>
+                                            <input name="nama" id="add-nama" type="text" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 pe-0">
+                                        <div class="form-group form-group-default">
+                                            <label>Email</label>
+                                            <input name="email" id="add-email" type="email" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group form-group-default">
+                                            <label>NIP</label>
+                                            <input name="NIP" id="add-NIP" type="text" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group form-group-default">
+                                            <label>Jenis Kelamin</label>
+                                            <select class="form-select" name="jenis_kelamin" id="add-jenis_kelamin">
+                                                <option value="Laki-Laki">Laki-Laki</option>
+                                                <option value="Perempuan">Perempuan</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <div class="form-group form-group-default">
+                                            <label>Alamat</label>
+                                            <textarea name="alamat" id="add-alamat" class="form-control" rows="3"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group form-group-default">
+                                            <label>NO. HP</label>
+                                            <input name="no_tlp" id="add-no_tlp" type="text"
+                                                class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group form-group-default">
+                                            <label>Password</label>
+                                            <input name="password" id="add-password" type="password"
+                                                class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group form-group-default">
+                                            <label>Konfirmasi Password</label>
+                                            <input name="password_confirmation" id="password_confirmation"
+                                                type="password" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer border-0">
+                                    <button type="submit" class="btn btn-primary" id="addAnggota">Tambah</button>
+                                    <button type="button" class="btn btn-danger"
+                                        data-bs-dismiss="modal">Batal</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Modal Edit Anggota-->
+            <div class="modal fade" id="editUserModal" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header border-0">
+                            <h5 class="modal-title">
+                                <span class="fw-mediumbold">Edit</span>
+                                <span class="fw-light">Anggota</span>
+                            </h5>
+                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="form-edit" method="POST" action="">
+                                @csrf
+                                @method('PATCH')
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-group form-group-default">
+                                            <label>Nama</label>
+                                            <input name="nama" id="nama" type="text"
+                                                class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 pe-0">
+                                        <div class="form-group form-group-default">
+                                            <label>Email</label>
+                                            <input name="email" id="email" type="email"
+                                                class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group form-group-default">
+                                            <label>NIP</label>
+                                            <input name="NIP" id="NIP" type="text"
+                                                class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group form-group-default">
+                                            <label>Jenis Kelamin</label>
+                                            <select class="form-select" name="jenis_kelamin" id="jenis_kelamin">
+                                                <option value="Laki-Laki">Laki-Laki</option>
+                                                <option value="Perempuan">Perempuan</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group form-group-default">
+                                            <label>Alamat</label>
+                                            <input name="alamat" id="alamat" type="textarea"
+                                                class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group form-group-default">
+                                            <label>NO. HP</label>
+                                            <input name="no_tlp" id="no_tlp" type="text"
+                                                class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer border-0">
+                                    <button type="submit" class="btn btn-primary" id="addBtn">
+                                        Edit
+                                    </button>
+                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+                                        Batal
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -107,68 +281,155 @@
     <script src="../assets/js/core/popper.min.js"></script>
     <script src="../assets/js/core/bootstrap.min.js"></script>
 
+    <!-- Sweet Alert -->
+    <script src="../assets/js/plugin/sweetalert/sweetalert.min.js"></script>
+
     <!-- jQuery Scrollbar -->
     <script src="../assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
+
+    <!-- jQuery Sparkline -->
+    <script src="../assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js"></script>
+
     <!-- Datatables -->
     <script src="../assets/js/plugin/datatables/datatables.min.js"></script>
+
+    <!-- SweetAlert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <!-- Kaiadmin JS -->
     <script src="../assets/js/kaiadmin.min.js"></script>
+
     <!-- Kaiadmin DEMO methods, don't include it in your project! -->
     <script src="../assets/js/setting-demo2.js"></script>
+
     <script>
-        $(document).ready(function () {
-            $("#basic-datatables").DataTable({});
+        document.addEventListener("DOMContentLoaded", function() {
+            // Initialize datatable
+            $('#add-row').DataTable({
+                "pageLength": 5,
+            });
 
-            $("#multi-filter-select").DataTable({
-                pageLength: 5,
-                initComplete: function () {
-                    this.api()
-                        .columns()
-                        .every(function () {
-                            var column = this;
-                            var select = $(
-                                '<select class="form-select"><option value=""></option></select>'
-                            )
-                                .appendTo($(column.footer()).empty())
-                                .on("change", function () {
-                                    var val = $.fn.dataTable.util.escapeRegex($(this).val());
+            // Handle add button click
+            $('button[data-bs-target="#addUserModal"]').on('click', function(e) {
+                e.preventDefault(); // Mencegah tindakan default dari klik
+                $('#addUserModal').modal('show');
+            });
 
-                                    column
-                                        .search(val ? "^" + val + "$" : "", true, false)
-                                        .draw();
-                                });
+            // Handle add anggota form submit
+            $('#form-tambahanggota').on('submit', function(e) {
+                e.preventDefault(); // Mencegah tindakan default dari klik
+                var form = $(this);
+                var formData = form.serialize();
 
-                            column
-                                .data()
-                                .unique()
-                                .sort()
-                                .each(function (d, j) {
-                                    select.append(
-                                        '<option value="' + d + '">' + d + "</option>"
-                                    );
-                                });
+                $.ajax({
+                    type: "POST",
+                    url: form.attr('action'),
+                    data: formData,
+                    success: function(response) {
+                        if (response.success) {
+                            Swal.fire({
+                                title: "Anggota Berhasil Ditambahkan",
+                                icon: "success",
+                                confirmButtonText: 'OK',
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    location
+                                        .reload(); // Reload the page to reflect the changes
+                                }
+                            });
+                        } else {
+                            Swal.fire({
+                                title: "Gagal Menambahkan Anggota",
+                                text: response.message,
+                                icon: "error"
+                            });
+                        }
+                    },
+                    error: function(response) {
+                        Swal.fire({
+                            title: "Gagal Menambahkan Anggota",
+                            text: response.responseJSON.message,
+                            icon: "error"
                         });
-                },
+                    }
+                });
             });
 
-            // Add Row
-            $("#add-row").DataTable({
-                pageLength: 5,
+            // Handle edit button click
+            $('#editUserModal').on('show.bs.modal', function(event) {
+                var button = $(event.relatedTarget);
+                var modal = $(this);
+
+                var id_user = button.data('id');
+                var nama = button.data('nama');
+                var email = button.data('email');
+                var nip = button.data('nip');
+                var jenis_kelamin = button.data('jenis_kelamin');
+                var alamat = button.data('alamat');
+                var no_tlp = button.data('no_tlp');
+
+                modal.find('.modal-body #nama').val(nama);
+                modal.find('.modal-body #email').val(email);
+                modal.find('.modal-body #NIP').val(nip);
+                modal.find('.modal-body #jenis_kelamin').val(jenis_kelamin);
+                modal.find('.modal-body #alamat').val(alamat);
+                modal.find('.modal-body #no_tlp').val(no_tlp);
+
+                $('#form-edit').attr('action', '/dataAnggota/update/' + id_user);
             });
 
-            var action =
-                '<td> <div class="form-button-action"> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit Task"> <i class="fa fa-edit"></i> </button> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Remove"> <i class="fa fa-times"></i> </button> </div> </td>';
+            $('#addAnggotaModal').on('hidden.bs.modal', function() {
+                $('#form-tambahanggota')[0].reset();
+            });
 
-            $("#addRowButton").click(function () {
-                $("#add-row")
-                    .dataTable()
-                    .fnAddData([
-                        $("#addName").val(),
-                        $("#addPosition").val(),
-                        $("#addOffice").val(),
-                        action,
-                    ]);
-                $("#addRowModal").modal("hide");
+            $('#editUserModal').on('hidden.bs.modal', function() {
+                $('#form-edit')[0].reset();
+            });
+
+            // Event delegation for delete buttons
+            $(document).on('click', '.alert_notif', function(e) {
+                e.preventDefault(); // Mencegah tindakan default dari klik
+                var form = $(this).closest('form');
+                Swal.fire({
+                    title: "Yakin hapus data?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    confirmButtonText: 'Ya',
+                    cancelButtonColor: '#3085d6',
+                    cancelButtonText: "Batal"
+                }).then(result => {
+                    // Jika pengguna mengklik "Ya"
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+
+            // Handle edit button click inside modal
+            $('#form-edit').on('submit', function(e) {
+                e.preventDefault(); // Mencegah tindakan default dari klik
+                Swal.fire({
+                    title: "Yakin mengubah data?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Ya',
+                    cancelButtonColor: '#d33',
+                    cancelButtonText: "Batal"
+                }).then(result => {
+                    // Jika pengguna mengklik "Ya"
+                    if (result.isConfirmed) {
+                        this.submit();
+                    }
+                });
+            });
+
+            $('#addAnggotaModal').on('show.bs.modal', function() {
+                var currentDateTime = new Date();
+                currentDateTime.setHours(currentDateTime.getHours() + 7); // Adjust to WIB (UTC+7)
+                var formattedDateTime = currentDateTime.toISOString().slice(0, 19).replace('T', ' ');
+                $('#addTgl').val(formattedDateTime);
             });
         });
     </script>

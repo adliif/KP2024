@@ -40,100 +40,146 @@
                                         <div class="col-md-6 col-lg-4">
                                             <div class="form-group">
                                                 <div class="max-w-xl">
-                                                    <form method="POST" action="{{ route('register') }}">
-                                                        @csrf
+                                                    <!-- Modal -->
+                                                    <div class="modal fade" id="tambahUser" tabindex="-1"
+                                                        role="dialog" aria-hidden="true">
+                                                        <div class="modal-dialog" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header border-0">
+                                                                    <h5 class="modal-title">
+                                                                        <span class="fw-mediumbold">Tambah</span>
+                                                                        <span class="fw-light">Anggota</span>
+                                                                    </h5>
+                                                                    <button type="button" class="close"
+                                                                        data-bs-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    {{-- <form method="POST"
+                                                                        action="{{ route('register') }}">
+                                                                        @csrf
 
-                                                        <!-- Name -->
-                                                        <div class="mb-3">
-                                                            <label for="nama">Nama</label>
-                                                            <x-text-input id="nama" class="form-control"
-                                                                type="text" name="nama" :value="old('nama')" required
-                                                                autofocus autocomplete="nama" />
-                                                            <x-input-error :messages="$errors->get('nama')" class="mt-2" />
+                                                                        <!-- Name -->
+                                                                        <div class="mb-3">
+                                                                            <label for="nama">Nama</label>
+                                                                            <x-text-input id="nama"
+                                                                                class="form-control" type="text"
+                                                                                name="nama" :value="old('nama')"
+                                                                                required autofocus
+                                                                                autocomplete="nama" />
+                                                                            <x-input-error :messages="$errors->get('nama')"
+                                                                                class="mt-2" />
+                                                                        </div>
+
+                                                                        <!-- Email Address -->
+                                                                        <div class="mb-3">
+                                                                            <label for="email">Email</label>
+                                                                            <x-text-input id="email"
+                                                                                class="form-control" type="text"
+                                                                                name="email" :value="old('email')"
+                                                                                required autofocus
+                                                                                autocomplete="email" />
+                                                                            <x-input-error :messages="$errors->get('email')"
+                                                                                class="mt-2" />
+                                                                        </div>
+
+                                                                        <!-- NIP -->
+                                                                        <div class="mb-3">
+                                                                            <label for="NIP">NIP</label>
+                                                                            <x-text-input id="NIP"
+                                                                                class="form-control" type="NIP"
+                                                                                name="NIP" :value="old('NIP')"
+                                                                                required autocomplete="NIP" />
+                                                                            <x-input-error :messages="$errors->get('NIP')"
+                                                                                class="mt-2" />
+                                                                        </div>
+
+                                                                        <!-- JK -->
+                                                                        <div class="mb-3">
+                                                                            <label for="jenis_kelamin">Jenis
+                                                                                Kelamin</label>
+                                                                            <select id="jenis_kelamin"
+                                                                                class="form-control"
+                                                                                type="jenis_kelamin"
+                                                                                name="jenis_kelamin"
+                                                                                :value="old('jenis_kelamin')" required
+                                                                                autocomplete="jenis_kelamin">
+                                                                                <option value="Laki-Laki">Laki-Laki
+                                                                                </option>
+                                                                                <option value="Perempuan">Perempuan
+                                                                                </option>
+                                                                            </select>
+                                                                            <x-input-error :messages="$errors->get('jenis_kelamin')"
+                                                                                class="mt-2" />
+                                                                        </div>
+
+                                                                        <!-- Alamat -->
+                                                                        <div class="mb-3">
+                                                                            <label for="alamat">Alamat</label>
+                                                                            <x-text-input id="alamat"
+                                                                                class="form-control" type="alamat"
+                                                                                name="alamat" :value="old('alamat')"
+                                                                                required autocomplete="alamat" />
+                                                                            <x-input-error :messages="$errors->get('alamat')"
+                                                                                class="mt-2" />
+                                                                        </div>
+
+                                                                        <!-- No Telp -->
+                                                                        <div class="mb-3">
+                                                                            <label for="no_tlp">No. Telpon</label>
+                                                                            <x-text-input id="no_tlp"
+                                                                                class="form-control" type="no_tlp"
+                                                                                name="no_tlp" :value="old('no_tlp')"
+                                                                                required autocomplete="no_tlp" />
+                                                                            <x-input-error :messages="$errors->get('no_tlp')"
+                                                                                class="mt-2" />
+                                                                        </div>
+
+                                                                        <!-- Password -->
+                                                                        <div class="mb-3">
+                                                                            <label for="password">Password</label>
+                                                                            <x-text-input id="password"
+                                                                                class="form-control" type="password"
+                                                                                name="password" required
+                                                                                autocomplete="new-password" />
+
+                                                                            <x-input-error :messages="$errors->get('password')"
+                                                                                class="mt-2" />
+                                                                        </div>
+
+                                                                        <!-- Confirm Password -->
+                                                                        <div class="mb-3">
+                                                                            <label for="password_confirmation">Confirm
+                                                                                Password</label>
+                                                                            <x-text-input id="password_confirmation"
+                                                                                class="form-control" type="password"
+                                                                                name="password_confirmation" required
+                                                                                autocomplete="new-password" />
+
+                                                                            <x-input-error :messages="$errors->get(
+                                                                                'password_confirmation',
+                                                                            )"
+                                                                                class="mt-2" />
+                                                                        </div>
+
+                                                                        <div
+                                                                            class="flex items-center justify-end mt-4">
+                                                                            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                                                                href="{{ route('login') }}">
+                                                                                {{ __('Already registered?') }}
+                                                                            </a>
+
+                                                                            <x-primary-button
+                                                                                class="ms-4 btn btn-primary">
+                                                                                {{ __('Register') }}
+                                                                            </x-primary-button>
+                                                                        </div>
+                                                                    </form> --}}
+                                                                </div>
+                                                            </div>
                                                         </div>
-
-                                                        <!-- Email Address -->
-                                                        <div class="mb-3">
-                                                            <label for="email">Email</label>
-                                                            <x-text-input id="email" class="form-control"
-                                                                type="text" name="email" :value="old('email')" required
-                                                                autofocus autocomplete="email" />
-                                                            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-                                                        </div>
-
-                                                        <!-- NIP -->
-                                                        <div class="mb-3">
-                                                            <label for="NIP">NIP</label>
-                                                            <x-text-input id="NIP" class="form-control"
-                                                                type="NIP" name="NIP" :value="old('NIP')" required
-                                                                autocomplete="NIP" />
-                                                            <x-input-error :messages="$errors->get('NIP')" class="mt-2" />
-                                                        </div>
-
-                                                        <!-- JK -->
-                                                        <div class="mb-3">
-                                                            <label for="jenis_kelamin">Jenis Kelamin</label>
-                                                            <select id="jenis_kelamin" class="form-control"
-                                                                type="jenis_kelamin" name="jenis_kelamin"
-                                                                :value="old('jenis_kelamin')" required
-                                                                autocomplete="jenis_kelamin">
-                                                                <option value="Laki-Laki">Laki-Laki</option>
-                                                                <option value="Perempuan">Perempuan</option>
-                                                            </select>
-                                                            <x-input-error :messages="$errors->get('jenis_kelamin')" class="mt-2" />
-                                                        </div>
-
-                                                        <!-- Alamat -->
-                                                        <div class="mb-3">
-                                                            <label for="alamat">Alamat</label>
-                                                            <x-text-input id="alamat" class="form-control"
-                                                                type="alamat" name="alamat" :value="old('alamat')" required
-                                                                autocomplete="alamat" />
-                                                            <x-input-error :messages="$errors->get('alamat')" class="mt-2" />
-                                                        </div>
-
-                                                        <!-- No Telp -->
-                                                        <div class="mb-3">
-                                                            <label for="no_tlp">No. Telpon</label>
-                                                            <x-text-input id="no_tlp" class="form-control"
-                                                                type="no_tlp" name="no_tlp" :value="old('no_tlp')"
-                                                                required autocomplete="no_tlp" />
-                                                            <x-input-error :messages="$errors->get('no_tlp')" class="mt-2" />
-                                                        </div>
-
-                                                        <!-- Password -->
-                                                        <div class="mb-3">
-                                                            <label for="password">Password</label>
-                                                            <x-text-input id="password" class="form-control"
-                                                                type="password" name="password" required
-                                                                autocomplete="new-password" />
-
-                                                            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-                                                        </div>
-
-                                                        <!-- Confirm Password -->
-                                                        <div class="mb-3">
-                                                            <label for="password_confirmation">Confirm
-                                                                Password</label>
-                                                            <x-text-input id="password_confirmation"
-                                                                class="form-control" type="password"
-                                                                name="password_confirmation" required
-                                                                autocomplete="new-password" />
-
-                                                            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-                                                        </div>
-
-                                                        <div class="flex items-center justify-end mt-4">
-                                                            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                                                                href="{{ route('login') }}">
-                                                                {{ __('Already registered?') }}
-                                                            </a>
-
-                                                            <x-primary-button class="ms-4 btn btn-primary">
-                                                                {{ __('Register') }}
-                                                            </x-primary-button>
-                                                        </div>
-                                                    </form>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -143,120 +189,9 @@
                         </div>
                     </div>
 
-                    {{-- <div id="layoutAuthentication" class="d-flex align-items-center justify-content-center min-vh-100">
-                        <div id="layoutAuthentication_content" class="w-100">
-                            <main>
-                                <div class="container">
-                                    <div class="row justify-content-center">
-                                        <div class="col-lg-5">
-                                            <div class="card shadow-lg border-0 rounded-lg">
-                                                <div class="card-header">
-                                                    <h3 class="text-center font-weight-light my-4">Register</h3>
-                                                </div>
-                                                <div class="card-body">
-                                                    <form method="POST" action="{{ route('register') }}">
-                                                        @csrf
-
-                                                        <!-- Name -->
-                                                        <div class="form-floating mb-3">
-                                                            <x-text-input id="nama" class="form-control"
-                                                                type="text" name="nama" :value="old('nama')" required
-                                                                autofocus autocomplete="nama" />
-                                                            <label for="nama">Nama</label>
-                                                            <x-input-error :messages="$errors->get('nama')" class="mt-2" />
-                                                        </div>
-
-                                                        <!-- Email Address -->
-                                                        <div class="form-floating mb-3">
-                                                            <x-text-input id="email" class="form-control"
-                                                                type="text" name="email" :value="old('email')" required
-                                                                autofocus autocomplete="email" />
-                                                            <label for="email">Email</label>
-                                                            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-                                                        </div>
-
-                                                        <!-- NIP -->
-                                                        <div class="form-floating mb-3">
-                                                            <x-text-input id="NIP" class="form-control"
-                                                                type="NIP" name="NIP" :value="old('NIP')" required
-                                                                autocomplete="NIP" />
-                                                            <label for="NIP">NIP</label>
-                                                            <x-input-error :messages="$errors->get('NIP')" class="mt-2" />
-                                                        </div>
-
-                                                        <!-- JK -->
-                                                        <div class="form-floating mb-3">
-                                                            <select id="jenis_kelamin" class="form-control"
-                                                                type="jenis_kelamin" name="jenis_kelamin"
-                                                                :value="old('jenis_kelamin')" required
-                                                                autocomplete="jenis_kelamin">
-                                                                <option value="Laki-Laki">Laki-Laki</option>
-                                                                <option value="Perempuan">Perempuan</option>
-                                                            </select>
-                                                            <label for="jenis_kelamin">Jenis Kelamin</label>
-                                                            <x-input-error :messages="$errors->get('jenis_kelamin')" class="mt-2" />
-                                                        </div>
-
-                                                        <!-- Alamat -->
-                                                        <div class="form-floating mb-3">
-                                                            <x-text-input id="alamat" class="form-control"
-                                                                type="alamat" name="alamat" :value="old('alamat')" required
-                                                                autocomplete="alamat" />
-                                                            <label for="alamat">Alamat</label>
-                                                            <x-input-error :messages="$errors->get('alamat')" class="mt-2" />
-                                                        </div>
-
-                                                        <!-- No Telp -->
-                                                        <div class="form-floating mb-3">
-                                                            <x-text-input id="no_tlp" class="form-control"
-                                                                type="no_tlp" name="no_tlp" :value="old('no_tlp')"
-                                                                required autocomplete="no_tlp" />
-                                                            <label for="no_tlp">No. Telpon</label>
-                                                            <x-input-error :messages="$errors->get('no_tlp')" class="mt-2" />
-                                                        </div>
-
-                                                        <!-- Password -->
-                                                        <div class="form-floating mb-3">
-                                                            <x-text-input id="password" class="form-control"
-                                                                type="password" name="password" required
-                                                                autocomplete="new-password" />
-
-                                                            <label for="password">Password</label>
-                                                            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-                                                        </div>
-
-                                                        <!-- Confirm Password -->
-                                                        <div class="form-floating mb-3">
-                                                            <x-text-input id="password_confirmation"
-                                                                class="form-control" type="password"
-                                                                name="password_confirmation" required
-                                                                autocomplete="new-password" />
-
-                                                            <label for="password_confirmation">Confirm
-                                                                Password</label>
-                                                            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-                                                        </div>
-
-                                                        <div class="flex items-center justify-end mt-4">
-                                                            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                                                                href="{{ route('login') }}">
-                                                                {{ __('Already registered?') }}
-                                                            </a>
-
-                                                            <x-primary-button class="ms-4 btn btn-primary">
-                                                                {{ __('Register') }}
-                                                            </x-primary-button>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </main>
-                        </div>
-                    </div> --}}
                 </div>
+
+
             </div>
 
             <!-- Footer -->

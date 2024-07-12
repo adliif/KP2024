@@ -15,13 +15,13 @@ return new class extends Migration
             $table->id('id_pinjaman');
             //foreign key
             $table->unsignedBigInteger('id_user');
-            $table->foreign('id_user')->references('id_user')->on('users');
+            $table->foreign('id_user')->references('id_user')->on('users')->onDelete('cascade');
             //foreign key
             $table->timestamp('tgl_pengajuan');
             $table->integer('besar_pinjaman');
             $table->integer('tenor_pinjaman');
             $table->string('keterangan')->default('Diproses');
-            // $table->timestamps();
+            $table->timestamps();
         });
     }
 
