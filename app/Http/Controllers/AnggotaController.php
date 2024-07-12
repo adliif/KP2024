@@ -48,10 +48,19 @@ class AnggotaController extends Controller
 
     public function tanggungan()
     {
+        // $id_user = Auth::id();
+        // $tanggungan = Tanggungan::where('id_pinjaman', Auth::user()->id_user)->orderBy('id_tanggungan', 'asc')->get();
+
+        // $tanggungan = Tanggungan::whereHas('pinjaman', function ($query) {
+        //     $query->where('keterangan', 'Disetujui');
+        // })->where('id_user', $id_user)->orderBy('id_tanggungan', 'asc')->get();
+
         $tanggungan = Tanggungan::where('id_pinjaman', Auth::user()->id_user)->orderBy('id_tanggungan', 'asc')->get();
+
         $data = [
             'title' => 'Tanggungan',
         ];
+
         return view('roleAnggota.tanggungan', $data, compact('tanggungan'));
     }
 

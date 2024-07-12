@@ -1,5 +1,5 @@
 <x-layout>
-    <x-slot:title>{{$title}}</x-slot:title>
+    <x-slot:title>{{ $title }}</x-slot:title>
 
     <div class="wrapper">
         <!-- Sidebar -->
@@ -63,8 +63,8 @@
                                                             <div class="col-sm-12">
                                                                 <div class="form-group form-group-default">
                                                                     <label>Name</label>
-                                                                    <input id="addName" type="text" class="form-control"
-                                                                        placeholder="fill name" />
+                                                                    <input id="addName" type="text"
+                                                                        class="form-control" placeholder="fill name" />
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-6 pe-0">
@@ -121,32 +121,33 @@
                                                         <td>{{ $t->pinjaman->besar_pinjaman }}</td>
                                                         <td>{{ $t->bunga_pinjaman }}</td>
                                                         <td>{{ $t->total_pinjaman }}</td>
-                                                        <td>{{ $t->iuran_perBulan}}</td>
+                                                        <td>{{ $t->iuran_perBulan }}</td>
                                                         <td>{{ $t->sisa_pinjaman }}</td>
                                                         <td>
                                                             @if ($t->status_pinjaman == 'Lunas')
                                                                 <button class="btn btn-success" disabled>Lunas</button>
                                                             @else
-                                                                <button class="btn btn-danger" disabled>{{ $t->status_pinjaman }}</button>
+                                                                <button class="btn btn-danger"
+                                                                    disabled>{{ $t->status_pinjaman }}</button>
                                                             @endif
                                                         </td>
                                                         <td>
                                                             <div class="form-button-action">
-                                                                <button type="button" data-bs-toggle="tooltip" title=""
+                                                                <button type="button" data-bs-toggle="tooltip"
+                                                                    title=""
                                                                     class="btn btn-link btn-primary btn-lg"
                                                                     data-original-title="Edit Task">
                                                                     <i class="fa fa-edit"></i>
                                                                 </button>
-                                                                <button type="button" data-bs-toggle="tooltip" title=""
-                                                                    class="btn btn-link btn-danger"
+                                                                {{-- <button type="button" data-bs-toggle="tooltip"
+                                                                    title="" class="btn btn-link btn-danger"
                                                                     data-original-title="Remove">
                                                                     <i class="fa fa-times"></i>
-                                                                </button>
+                                                                </button> --}}
                                                             </div>
                                                         </td>
                                                     </tr>
                                                 @empty
-                                                    
                                                 @endforelse
                                             </tbody>
                                         </table>
@@ -177,21 +178,21 @@
     <!-- Kaiadmin DEMO methods, don't include it in your project! -->
     <script src="../assets/js/setting-demo2.js"></script>
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             $("#basic-datatables").DataTable({});
 
             $("#multi-filter-select").DataTable({
                 pageLength: 5,
-                initComplete: function () {
+                initComplete: function() {
                     this.api()
                         .columns()
-                        .every(function () {
+                        .every(function() {
                             var column = this;
                             var select = $(
-                                '<select class="form-select"><option value=""></option></select>'
-                            )
+                                    '<select class="form-select"><option value=""></option></select>'
+                                )
                                 .appendTo($(column.footer()).empty())
-                                .on("change", function () {
+                                .on("change", function() {
                                     var val = $.fn.dataTable.util.escapeRegex($(this).val());
 
                                     column
@@ -203,7 +204,7 @@
                                 .data()
                                 .unique()
                                 .sort()
-                                .each(function (d, j) {
+                                .each(function(d, j) {
                                     select.append(
                                         '<option value="' + d + '">' + d + "</option>"
                                     );
@@ -220,7 +221,7 @@
             var action =
                 '<td> <div class="form-button-action"> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit Task"> <i class="fa fa-edit"></i> </button> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Remove"> <i class="fa fa-times"></i> </button> </div> </td>';
 
-            $("#addRowButton").click(function () {
+            $("#addRowButton").click(function() {
                 $("#add-row")
                     .dataTable()
                     .fnAddData([

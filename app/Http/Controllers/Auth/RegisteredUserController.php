@@ -30,34 +30,28 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request)
     {
         $request->validate([
-            'nama' => ['required', 'string', 'max:255'],
-            // 'username' => ['required', 'string', 'max:255', 'unique:' . User::class],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'NIP' => ['required', 'integer', 'max:255', 'unique:' . User::class],
-            'jenis_kelamin' => ['required', 'string', 'max:255'],
-            'alamat' => ['required', 'string', 'max:255'],
-            'no_tlp' => ['required', 'string', 'max:255'],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'nama' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'NIP' => 'required|string|max:255|unique:users',
+            'jenis_kelamin' => 'required|string',
+            'alamat' => 'required|string|max:255',
+            'no_tlp' => 'required|string|max:255',
+            'password' => 'required|string|min:8|confirmed',
         ]);
 
-        $user = User::create([
+        User::create([
             'nama' => $request->nama,
             'email' => $request->email,
-            'username' => $request->username,
             'NIP' => $request->NIP,
             'jenis_kelamin' => $request->jenis_kelamin,
             'alamat' => $request->alamat,
             'no_tlp' => $request->no_tlp,
-            'password' => Hash::make($request->password),
+            'password' => bcrypt($request->password),
         ]);
 
-        event(new Registered($user));
-
-        // Auth::login($user);
-
-        return redirect(route('dataAnggota'));
+        return response()->json(['success' => true]);
     }
 }
