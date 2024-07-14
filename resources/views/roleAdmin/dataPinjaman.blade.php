@@ -1,5 +1,5 @@
 <x-layout>
-    <x-slot:title>{{$title}}</x-slot:title>
+    <x-slot:title>{{ $title }}</x-slot:title>
 
     <div class="wrapper">
         <!-- Sidebar -->
@@ -32,76 +32,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card">
-                                <div class="card-header">
-                                    <div class="d-flex align-items-center">
-                                        <h4 class="card-title">Add Row</h4>
-                                        <button class="btn btn-primary btn-round ms-auto" data-bs-toggle="modal"
-                                            data-bs-target="#addRowModal">
-                                            <i class="fa fa-plus"></i>
-                                            Add Row
-                                        </button>
-                                    </div>
-                                </div>
                                 <div class="card-body">
-                                    <!-- Modal -->
-                                    <div class="modal fade" id="addRowModal" tabindex="-1" role="dialog"
-                                        aria-hidden="true">
-                                        <div class="modal-dialog" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header border-0">
-                                                    <h5 class="modal-title">
-                                                        <span class="fw-mediumbold"> New</span>
-                                                        <span class="fw-light"> Row </span>
-                                                    </h5>
-                                                    <button type="button" class="close" data-dismiss="modal"
-                                                        aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <p class="small">
-                                                        Create a new row using this form, make sure you
-                                                        fill them all
-                                                    </p>
-                                                    <form>
-                                                        <div class="row">
-                                                            <div class="col-sm-12">
-                                                                <div class="form-group form-group-default">
-                                                                    <label>Name</label>
-                                                                    <input id="addName" type="text" class="form-control"
-                                                                        placeholder="fill name" />
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-6 pe-0">
-                                                                <div class="form-group form-group-default">
-                                                                    <label>Position</label>
-                                                                    <input id="addPosition" type="text"
-                                                                        class="form-control"
-                                                                        placeholder="fill position" />
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <div class="form-group form-group-default">
-                                                                    <label>Office</label>
-                                                                    <input id="addOffice" type="text"
-                                                                        class="form-control"
-                                                                        placeholder="fill office" />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                                <div class="modal-footer border-0">
-                                                    <button type="button" id="addRowButton" class="btn btn-primary">
-                                                        Add
-                                                    </button>
-                                                    <button type="button" class="btn btn-danger" data-dismiss="modal">
-                                                        Close
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
 
                                     <div class="table-responsive">
                                         <table id="add-row" class="display table table-striped table-hover">
@@ -112,35 +43,48 @@
                                                     <th>Tanggal Pengajuan</th>
                                                     <th>Besar Pinjaman</th>
                                                     <th>Tenor Pinjaman</th>
-                                                    <th style="width: 10%">Action</th>
+                                                    <th style="width: 10%">Keterangan</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @forelse ($pinjaman as $p)
-                                                <tr>
-                                                    <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ $p->user->nama }}</td>
-                                                    <td>{{ $p->tgl_pengajuan }}</td>
-                                                    <td>{{ $p->besar_pinjaman }}</td>
-                                                    <td>{{ $p->tenor_pinjaman }}</td>
-                                                    <td>
-                                                        <div class="form-button-action">
-                                                            <button type="button" data-bs-toggle="tooltip" title=""
-                                                                class="btn btn-link btn-primary btn-lg"
-                                                                data-original-title="Edit Task">
-                                                                <i class="fa fa-edit"></i>
-                                                            </button>
-                                                            <button type="button" data-bs-toggle="tooltip" title=""
-                                                                class="btn btn-link btn-danger"
-                                                                data-original-title="Remove">
-                                                                <i class="fa fa-times"></i>
-                                                            </button>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                @empty
-                                                    
-                                                @endforelse
+                                                @foreach ($pinjaman as $p)
+                                                    <tr id="row_{{ $p->id_pinjaman }}">
+                                                        <td>{{ $loop->iteration }}</td>
+                                                        <td>{{ $p->user->nama }}</td>
+                                                        <td>{{ $p->tgl_pengajuan }}</td>
+                                                        <td>{{ $p->besar_pinjaman }}</td>
+                                                        <td>{{ $p->tenor_pinjaman }}</td>
+                                                        <td id="aksi_{{ $p->id_pinjaman }}">
+                                                            @if ($p->keterangan == 'Diproses')
+                                                                <div class="d-flex justify-content-between">
+                                                                    <form class="form-update-status"
+                                                                        action="{{ route('pinjaman.updateStatus', $p->id_pinjaman) }}"
+                                                                        method="post" data-id="{{ $p->id_pinjaman }}">
+                                                                        @csrf
+                                                                        <input type="hidden" name="status"
+                                                                            value="Disetujui">
+                                                                        <button type="submit"
+                                                                            class="btn btn-success btn-setujui me-3">Disetujui</button>
+                                                                    </form>
+                                                                    <form class="form-update-status"
+                                                                        action="{{ route('pinjaman.updateStatus', $p->id_pinjaman) }}"
+                                                                        method="post" data-id="{{ $p->id_pinjaman }}">
+                                                                        @csrf
+                                                                        <input type="hidden" name="status"
+                                                                            value="Ditolak">
+                                                                        <button type="submit"
+                                                                            class="btn btn-danger btn-tolak">Ditolak</button>
+                                                                    </form>
+                                                                </div>
+                                                            @elseif ($p->keterangan == 'Disetujui')
+                                                                <button class="btn btn-success"
+                                                                    disabled>Disetujui</button>
+                                                            @elseif ($p->keterangan == 'Ditolak')
+                                                                <button class="btn btn-danger" disabled>Ditolak</button>
+                                                            @endif
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
                                             </tbody>
                                         </table>
                                     </div>
@@ -161,6 +105,9 @@
     <script src="../assets/js/core/popper.min.js"></script>
     <script src="../assets/js/core/bootstrap.min.js"></script>
 
+    <!-- Tambahkan ini di bagian head HTML Anda -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <!-- jQuery Scrollbar -->
     <script src="../assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
     <!-- Datatables -->
@@ -170,21 +117,21 @@
     <!-- Kaiadmin DEMO methods, don't include it in your project! -->
     <script src="../assets/js/setting-demo2.js"></script>
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             $("#basic-datatables").DataTable({});
 
             $("#multi-filter-select").DataTable({
                 pageLength: 5,
-                initComplete: function () {
+                initComplete: function() {
                     this.api()
                         .columns()
-                        .every(function () {
+                        .every(function() {
                             var column = this;
                             var select = $(
-                                '<select class="form-select"><option value=""></option></select>'
-                            )
+                                    '<select class="form-select"><option value=""></option></select>'
+                                )
                                 .appendTo($(column.footer()).empty())
-                                .on("change", function () {
+                                .on("change", function() {
                                     var val = $.fn.dataTable.util.escapeRegex($(this).val());
 
                                     column
@@ -196,7 +143,7 @@
                                 .data()
                                 .unique()
                                 .sort()
-                                .each(function (d, j) {
+                                .each(function(d, j) {
                                     select.append(
                                         '<option value="' + d + '">' + d + "</option>"
                                     );
@@ -213,7 +160,7 @@
             var action =
                 '<td> <div class="form-button-action"> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit Task"> <i class="fa fa-edit"></i> </button> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Remove"> <i class="fa fa-times"></i> </button> </div> </td>';
 
-            $("#addRowButton").click(function () {
+            $("#addRowButton").click(function() {
                 $("#add-row")
                     .dataTable()
                     .fnAddData([
@@ -224,6 +171,50 @@
                     ]);
                 $("#addRowModal").modal("hide");
             });
+
+            // Handle form submission and update button status
+            $(".form-update-status").on("submit", function(e) {
+        e.preventDefault(); // Mencegah tindakan default dari klik
+        var form = $(this);
+        var id = form.data("id");
+        var status = form.find("input[name='status']").val();
+
+        $.ajax({
+            type: "POST",
+            url: form.attr('action'),
+            data: form.serialize(),
+            success: function(response) {
+                if (status === "Disetujui") {
+                    Swal.fire({
+                        title: "Pinjaman disetujui",
+                        icon: "success",
+                        confirmButtonText: 'OK',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            location.reload(); // Refresh halaman setelah alert ditutup
+                        }
+                    });
+                } else if (status === "Ditolak") {
+                    Swal.fire({
+                        title: "Pinjaman ditolak",
+                        icon: "error",
+                        confirmButtonText: 'OK',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            location.reload(); // Refresh halaman setelah alert ditutup
+                        }
+                    });
+                }
+            },
+            error: function(response) {
+                Swal.fire({
+                    title: "Gagal memperbarui status",
+                    text: response.responseJSON.message,
+                    icon: "error"
+                });
+            }
+        });
+    });
         });
     </script>
 </x-layout>

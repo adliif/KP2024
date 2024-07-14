@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\Pinjaman;
 use App\Models\Tanggungan;
+use App\Models\TransaksiPinjaman;
+use App\Models\TransaksiPokok;
 use App\Rules\MatchOldPassword;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
-use Symfony\Contracts\Service\Attribute\Required;
 
 class AnggotaController extends Controller
 {
@@ -32,35 +33,91 @@ class AnggotaController extends Controller
     }
     public function createPengajuan(Request $request)
     {
+        // Cek apakah ada pengajuan yang masih 'Diproses'
+        $pengajuanDiproses = Pinjaman::where('id_user', Auth::user()->id_user)
+            ->where('keterangan', 'Diproses')
+            ->exists();
+    
+        if ($pengajuanDiproses) {
+            return response()->json([
+                'status' => 'warning',
+                'message' => 'Anda memiliki pengajuan yang sedang diproses.',
+            ]);
+        }
+    
+        // Validasi data pengajuan
         $validatedData = $request->validate([
             'tgl_pengajuan' => 'required|date_format:Y-m-d H:i:s',
-            'besar_pinjaman' => 'required|integer',
-            'tenor_pinjaman' => 'required|integer',
+            'besar_pinjaman' => 'required|integer|max:100000000',
+            'tenor_pinjaman' => 'required|integer|max:50',
         ]);
-
         $validatedData['id_user'] = Auth::user()->id_user;
         $validatedData['keterangan'] = 'Diproses';
-
+    
         Pinjaman::create($validatedData);
-
-        return redirect()->route('pengajuan.view')->with('success', 'Pengajuan berhasil ditambahkan.');
-    }
+    
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Pengajuan berhasil ditambahkan.',
+        ]);
+    }     
 
     public function tanggungan()
     {
-        $tanggungan = Tanggungan::where('id_pinjaman', Auth::user()->id_user)->orderBy('id_tanggungan', 'asc')->get();
+        $transaksiPokok = TransaksiPokok::with('simpananPokok')
+            ->whereHas('simpananPokok')->where('id_user', Auth::user()->id);
+
+        $transaksiPinjaman = TransaksiPinjaman::with('tanggungan.pinjaman.user')
+            ->whereHas('tanggungan.pinjaman', function ($query) {
+                $query->where('status_pinjaman', 'Belum Lunas')
+                    ->where('id_user', Auth::user()->id_user);
+            })->get(); 
+
         $data = [
             'title' => 'Tanggungan',
         ];
-        return view('roleAnggota.tanggungan', $data, compact('tanggungan'));
+
+        return view('roleAnggota.tanggungan', $data, compact('transaksiPinjaman', 'transaksiPokok'));
+    }
+
+    public function updatePinjaman(Request $request, $id_transaksiPinjaman)
+    {
+        $transaksiPinjaman = TransaksiPinjaman::findOrFail($id_transaksiPinjaman);
+        $tanggungan = $transaksiPinjaman->tanggungan;
+    
+        // Periksa apakah status pembayarannya adalah "lunas" atau semacamnya
+        $statusPembayaran = $request->input('status');
+        if ($statusPembayaran == 'Lunas') {
+            $tanggungan->sisa_pinjaman -= $tanggungan->iuran_perBulan;
+            
+            // Periksa apakah sisa pinjaman menjadi 0 atau kurang, jika iya maka set status ke "Lunas"
+            if ($tanggungan->sisa_pinjaman <= 0) {
+                $tanggungan->sisa_pinjaman = 0;
+                $tanggungan->status_pinjaman = 'Lunas';
+            }
+            $tanggungan->save();
+        }
+    
+        // Update keterangan dan tanggal pembayaran di transaksi pinjaman
+        $transaksiPinjaman->keterangan = $statusPembayaran;
+        $transaksiPinjaman->tanggal_pembayaran = now()->timezone('Asia/Jakarta');
+        $transaksiPinjaman->save();
+    
+        return response()->json(['success' => true]);
     }
 
     public function history()
     {
+        $history = Tanggungan::with('pinjaman.user')
+            ->whereHas('pinjaman', function ($query) {
+                $query->where('keterangan', 'Disetujui')
+                    ->where('id_user', Auth::user()->id_user);
+            })->get();
+
         $data = [
             'title' => 'History',
         ];
-        return view('roleAnggota.history', $data);
+        return view('roleAnggota.history', $data, compact('history'));
     }
     public function helpdesk()
     {

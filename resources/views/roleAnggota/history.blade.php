@@ -1,5 +1,5 @@
 <x-layout>
-    <x-slot:title>{{$title}}</x-slot:title>
+    <x-slot:title>{{ $title }}</x-slot:title>
 
     <div class="wrapper">
         <!-- Sidebar -->
@@ -29,28 +29,61 @@
                         </ul>
                     </div>
 
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <h4 class="card-title">Basic</h4>
-                            </div>
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table id="basic-datatables" class="display table table-striped table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th>Name</th>
-                                                <th>Position</th>
-                                                <th>Office</th>
-                                                <th>Age</th>
-                                                <th>Start date</th>
-                                                <th>Salary</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-
-                                        </tbody>
-                                    </table>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="d-flex align-items-center">
+                                        <h4 class="card-title">History Pinjaman</h4>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table id="add-row" class="display table table-striped table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>No.</th>
+                                                    <th>Tanggal Pengajuan</th>
+                                                    <th>Besar Pinjaman</th>
+                                                    <th>Bunga</th>
+                                                    <th>Total Pinjaman</th>
+                                                    <th>Iuran/Bulan</th>
+                                                    <th>Sisa Pinjaman</th>
+                                                    <th>Status Pinjaman</th>
+                                                    <th style="width: 10%">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @forelse ($history as $t)
+                                                    <tr>
+                                                        <td>{{ $loop->iteration }}</td>
+                                                        <td>{{ $t->pinjaman->tgl_pengajuan }}</td>
+                                                        <td>Rp{{ number_format($t->pinjaman->besar_pinjaman, 0, ',', '.') }}</td>
+                                                        <td>Rp{{ number_format($t->bunga_pinjaman, 0, ',', '.') }}</td>
+                                                        <td>Rp{{ number_format($t->total_pinjaman, 0, ',', '.') }}</td>
+                                                        <td>Rp{{ number_format($t->iuran_perBulan, 0, ',', '.') }}</td>
+                                                        <td>Rp{{ number_format($t->sisa_pinjaman, 0, ',', '.') }}</td>
+                                                        <td>
+                                                            @if ($t->sisa_pinjaman == 0)
+                                                                Lunas
+                                                            @else
+                                                                {{ $t->status_pinjaman }}
+                                                            @endif
+                                                        </td>
+                                                        <td>
+                                                            @if ($t->status_pinjaman == 'Lunas')
+                                                                <button class="btn btn-dark" disabled>Bayar</button>
+                                                            @else
+                                                                <button class="btn btn-primary" onclick="window.location.href='{{ route('tanggungan.view') }}'">Bayar</button>
+                                                            @endif
+                                                        </td>
+                                                    </tr>
+                                                @empty
+                                                
+                                                @endforelse
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -77,41 +110,7 @@
     <!-- Kaiadmin DEMO methods, don't include it in your project! -->
     <script src="../assets/js/setting-demo2.js"></script>
     <script>
-        $(document).ready(function () {
-            $("#basic-datatables").DataTable({});
-
-            $("#multi-filter-select").DataTable({
-                pageLength: 5,
-                initComplete: function () {
-                    this.api()
-                        .columns()
-                        .every(function () {
-                            var column = this;
-                            var select = $(
-                                '<select class="form-select"><option value=""></option></select>'
-                            )
-                                .appendTo($(column.footer()).empty())
-                                .on("change", function () {
-                                    var val = $.fn.dataTable.util.escapeRegex($(this).val());
-
-                                    column
-                                        .search(val ? "^" + val + "$" : "", true, false)
-                                        .draw();
-                                });
-
-                            column
-                                .data()
-                                .unique()
-                                .sort()
-                                .each(function (d, j) {
-                                    select.append(
-                                        '<option value="' + d + '">' + d + "</option>"
-                                    );
-                                });
-                        });
-                },
-            });
-
+        $(document).ready(function() {
             // Add Row
             $("#add-row").DataTable({
                 pageLength: 5,
@@ -119,18 +118,6 @@
 
             var action =
                 '<td> <div class="form-button-action"> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit Task"> <i class="fa fa-edit"></i> </button> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Remove"> <i class="fa fa-times"></i> </button> </div> </td>';
-
-            $("#addRowButton").click(function () {
-                $("#add-row")
-                    .dataTable()
-                    .fnAddData([
-                        $("#addName").val(),
-                        $("#addPosition").val(),
-                        $("#addOffice").val(),
-                        action,
-                    ]);
-                $("#addRowModal").modal("hide");
-            });
         });
     </script>
 </x-layout>

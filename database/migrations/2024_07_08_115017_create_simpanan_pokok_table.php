@@ -15,9 +15,11 @@ return new class extends Migration
             $table->id('id_simpanan_pokok');
             //foreign key
             $table->unsignedBigInteger('id_user');
-            $table->foreign('id_user')->references('id_user')->on('users');
-            ////foreign key
-            $table->integer('iuran')->default('100000');
+            $table->foreign('id_user')->references('id_user')->on('users')->onDelete('cascade');
+
+            $table->integer('iuran');
+            $table->integer('total_simpanan');
+            $table->string('status_simpanan');
             $table->timestamps();
         });
     }
