@@ -17,12 +17,10 @@ return new class extends Migration
             //FK
             $table->unsignedBigInteger('id_tanggungan');
             $table->foreign('id_tanggungan')->references('id_tanggungan')->on('tanggungan')->onDelete('cascade');
-            //FK
 
-            $table->time('jatuh_tempo');
-            $table->time('tanggal_pembayaran');
+            $table->timestamp('jatuh_tempo');
+            $table->timestamp('tanggal_pembayaran')->nullable();
             $table->string('keterangan');
-            $table->timestamps();
         });
     }
 

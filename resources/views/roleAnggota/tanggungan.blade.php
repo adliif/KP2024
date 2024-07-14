@@ -34,122 +34,96 @@
                             <div class="card">
                                 <div class="card-header">
                                     <div class="d-flex align-items-center">
-                                        <h4 class="card-title">History Peminjaman</h4>
+                                        <h4 class="card-title">Tanggungan Pokok</h4>
                                     </div>
                                 </div>
                                 <div class="card-body">
-                                    <!-- Modal -->
-                                    <div class="modal fade" id="addRowModal" tabindex="-1" role="dialog"
-                                        aria-hidden="true">
-                                        <div class="modal-dialog" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header border-0">
-                                                    <h5 class="modal-title">
-                                                        <span class="fw-mediumbold"> New</span>
-                                                        <span class="fw-light"> Row </span>
-                                                    </h5>
-                                                    <button type="button" class="close" data-dismiss="modal"
-                                                        aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <p class="small">
-                                                        Create a new row using this form, make sure you
-                                                        fill them all
-                                                    </p>
-                                                    <form>
-                                                        <div class="row">
-                                                            <div class="col-sm-12">
-                                                                <div class="form-group form-group-default">
-                                                                    <label>Name</label>
-                                                                    <input id="addName" type="text"
-                                                                        class="form-control" placeholder="fill name" />
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-6 pe-0">
-                                                                <div class="form-group form-group-default">
-                                                                    <label>Position</label>
-                                                                    <input id="addPosition" type="text"
-                                                                        class="form-control"
-                                                                        placeholder="fill position" />
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <div class="form-group form-group-default">
-                                                                    <label>Office</label>
-                                                                    <input id="addOffice" type="text"
-                                                                        class="form-control"
-                                                                        placeholder="fill office" />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                                <div class="modal-footer border-0">
-                                                    <button type="button" id="addRowButton" class="btn btn-primary">
-                                                        Add
-                                                    </button>
-                                                    <button type="button" class="btn btn-danger" data-dismiss="modal">
-                                                        Close
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <div class="table-responsive">
+                                        <table id="add-row2" class="display table table-striped table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>No.</th>
+                                                    <th>jatuh Tempo</th>
+                                                    <th>Iuran/Bulan</th>
+                                                    <th style="text-align: center;">Keterangan</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @forelse ($transaksiPokok as $t)
+                                                    <tr>
+                                                        <td>{{ $loop->iteration }}</td>
+                                                        <td>{{ $t->jatuh_tempo }}</td>
+                                                        <td>Rp{{ number_format($t->simpanan_pokoks->iuran, 0, ',', '.') }}</td>
+                                                        <td style="text-align: center; vertical-align: middle;">
+                                                            @if ($t->keterangan == 'Lunas')
+                                                                <button class="btn btn-dark"
+                                                                    disabled>{{ $t->keterangan }}</button>
+                                                            @else
+                                                                <button class="btn btn-primary">{{ $t->keterangan }}</button>
+                                                            @endif
+                                                        </td>
+                                                    </tr>
+                                                @empty
 
+                                                @endforelse
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="d-flex align-items-center">
+                                        <h4 class="card-title">Tanggungan Pinjaman</h4>
+                                    </div>
+                                </div>
+                                <div class="card-body">
                                     <div class="table-responsive">
                                         <table id="add-row" class="display table table-striped table-hover">
                                             <thead>
                                                 <tr>
                                                     <th>No.</th>
-                                                    <th>Tanggal Pengajuan</th>
-                                                    <th>Besar Pinjaman</th>
-                                                    <th>Bunga</th>
-                                                    <th>Total Pinjaman</th>
+                                                    <th>jatuh Tempo</th>
                                                     <th>Iuran/Bulan</th>
-                                                    <th>Sisa Pinjaman</th>
-                                                    <th>Status Pinjaman</th>
-                                                    <th style="width: 10%">Action</th>
+                                                    <th style="text-align: center;">Keterangan</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @forelse ($tanggungan as $t)
-                                                    <tr>
+                                                @forelse ($transaksiPinjaman as $t)
+                                                    <tr id="row_{{ $t->id_transaksiPinjaman }}">
                                                         <td>{{ $loop->iteration }}</td>
-                                                        <td>{{ $t->pinjaman->tgl_pengajuan }}</td>
-                                                        <td>{{ $t->pinjaman->besar_pinjaman }}</td>
-                                                        <td>{{ $t->bunga_pinjaman }}</td>
-                                                        <td>{{ $t->total_pinjaman }}</td>
-                                                        <td>{{ $t->iuran_perBulan }}</td>
-                                                        <td>{{ $t->sisa_pinjaman }}</td>
-                                                        <td>
-                                                            @if ($t->status_pinjaman == 'Lunas')
-                                                                <button class="btn btn-success" disabled>Lunas</button>
+                                                        <td>{{ $t->jatuh_tempo }}</td>
+                                                        <td>Rp{{ number_format($t->tanggungan->iuran_perBulan, 0, ',', '.') }}</td>
+                                                        <td id="aksi_{{ $t->id_transaksiPinjaman }}" style="text-align: center;">
+                                                            @if ($t->keterangan != 'Lunas')
+                                                                @php
+                                                                    $prevTransaksi = $transaksiPinjaman->where('id_transaksiPinjaman', $t->id_transaksiPinjaman - 1)->first();
+                                                                @endphp
+                                                                @if ($loop->first || ($prevTransaksi && $prevTransaksi->keterangan == 'Lunas'))
+                                                                    <form class="form-update-status" action="{{ route('pinjaman.update', $t->id_transaksiPinjaman) }}" 
+                                                                        method="post" data-id="{{ $t->id_transaksiPinjaman }}" >
+                                                                        @csrf
+                                                                        <input type="hidden" name="status" value="Lunas">
+                                                                        <button type="submit" class="btn btn-primary btn-setujui">{{ $t->keterangan }}</button>
+                                                                    </form>
+                                                                @else
+                                                                    <button class="btn btn-primary" disabled>{{ $t->keterangan }}</button>
+                                                                @endif
                                                             @else
-                                                                <button class="btn btn-danger"
-                                                                    disabled>{{ $t->status_pinjaman }}</button>
+                                                                <button class="btn btn-dark" disabled>{{ $t->keterangan }}</button>
                                                             @endif
-                                                        </td>
-                                                        <td>
-                                                            <div class="form-button-action">
-                                                                <button type="button" data-bs-toggle="tooltip"
-                                                                    title=""
-                                                                    class="btn btn-link btn-primary btn-lg"
-                                                                    data-original-title="Edit Task">
-                                                                    <i class="fa fa-edit"></i>
-                                                                </button>
-                                                                {{-- <button type="button" data-bs-toggle="tooltip"
-                                                                    title="" class="btn btn-link btn-danger"
-                                                                    data-original-title="Remove">
-                                                                    <i class="fa fa-times"></i>
-                                                                </button> --}}
-                                                            </div>
                                                         </td>
                                                     </tr>
                                                 @empty
+                                                    
                                                 @endforelse
                                             </tbody>
+
                                         </table>
                                     </div>
                                 </div>
@@ -169,6 +143,9 @@
     <script src="../assets/js/core/popper.min.js"></script>
     <script src="../assets/js/core/bootstrap.min.js"></script>
 
+    <!-- Tambahkan ini di bagian head HTML Anda -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <!-- jQuery Scrollbar -->
     <script src="../assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
     <!-- Datatables -->
@@ -178,8 +155,53 @@
     <!-- Kaiadmin DEMO methods, don't include it in your project! -->
     <script src="../assets/js/setting-demo2.js"></script>
     <script>
-        $(document).ready(function() {
-            $("#basic-datatables").DataTable({});
+        $(document).ready(function () {
+            // Handle form submission and update button status
+            $(".form-update-status").on("submit", function(e) {
+                e.preventDefault(); // Mencegah tindakan default dari klik
+                var form = $(this);
+                var id = form.data("id");
+                var status = form.find("input[name='status']").val();
+
+                $.ajax({
+                    type: "POST",
+                    url: form.attr('action'),
+                    data: form.serialize(),
+                    success: function(response) {
+                        if (status === "Lunas") {
+                            Swal.fire({
+                                title: "Pembayaran Berhasil!",
+                                text: "Terima kasih telah membayar tepat waktu.",
+                                icon: "success",
+                                buttons: {
+                                    confirm: {
+                                        className: "btn btn-success",
+                                    },
+                                },
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    location.reload(); // Refresh halaman setelah alert ditutup
+                                }
+                            });
+                        }
+                    },
+                    error: function(response) {
+                        Swal.fire({
+                            title: "Gagal memperbarui status",
+                            text: response.responseJSON.message,
+                            icon: "error"
+                        });
+                    }
+                });
+            });
+
+            $("#add-row").DataTable({
+                pageLength: 5,
+            });
+
+            $("#add-row2").DataTable({
+                pageLength: 5,
+            });
 
             $("#multi-filter-select").DataTable({
                 pageLength: 5,
@@ -211,11 +233,6 @@
                                 });
                         });
                 },
-            });
-
-            // Add Row
-            $("#add-row").DataTable({
-                pageLength: 5,
             });
 
             var action =

@@ -16,9 +16,10 @@ return new class extends Migration
             //foreign key
             $table->unsignedBigInteger('id_user');
             $table->foreign('id_user')->references('id_user')->on('users')->onDelete('cascade');
-            ////foreign key
-            $table->integer('iuran')->default('100000');
-            $table->integer('total_simpanan')->default('10000');
+
+            $table->integer('iuran');
+            $table->integer('total_simpanan');
+            $table->string('status_simpanan');
             $table->timestamps();
         });
     }

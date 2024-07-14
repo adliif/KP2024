@@ -21,14 +21,12 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('dataAnggota', [AdminController::class, 'dataAnggota'])->name('dataAnggota');
     Route::get('dataAnggota/edit/{id_user}', [AdminController::class, 'editAnggota'])->name('dataAnggota.edit');
     Route::patch('dataAnggota/update/{id_user}', [AdminController::class, 'updateUser'])->name('dataAnggota.update');
-
     Route::delete('dataAnggota/delete/{id_user}', [AdminController::class, 'destroyUser'])->name('dataAnggota.delete');
 
     Route::get('dataPinjaman', [AdminController::class, 'dataPinjaman']);
     Route::post('updatePinjamanStatus/{id_pinjaman}', [AdminController::class, 'updatePinjamanStatus'])->name('pinjaman.updateStatus');
     
     Route::get('dataTanggungan', [AdminController::class, 'dataTanggungan']);
-
     Route::get('dataSimpananPokok', [AdminController::class, 'dataSimpananPokok']);
 });
 
@@ -39,7 +37,9 @@ Route::middleware(['auth', 'user'])->group(function () {
     Route::get('pengajuan', [AnggotaController::class, 'pengajuan'])->name('pengajuan.view');
     Route::post('pengajuan', [AnggotaController::class, 'createPengajuan'])->name('pengajuan.create');
 
-    Route::get('tanggungan', [AnggotaController::class, 'tanggungan']);
+    Route::get('tanggungan', [AnggotaController::class, 'tanggungan'])->name('tanggungan.view');
+    Route::post('/updatePinjaman/{id_transaksiPinjaman}', [AnggotaController::class, 'updatePinjaman'])->name('pinjaman.update');
+
     Route::get('history', [AnggotaController::class, 'history']);
     Route::get('helpdesk', [AnggotaController::class, 'helpdesk']);
 

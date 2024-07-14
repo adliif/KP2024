@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,11 +17,7 @@ class PinjamanFactory extends Factory
     public function definition(): array
     {
         return [
-            'id_user' => User::Factory(),
-            'tgl_pengajuan' => '2024-07-08 14:30:30',
-            'besar_pinjaman' => '100000',
-            'tenor_pinjaman' => '3',
-            'keterangan' => 'Diproses',
+            //
         ];
     }
 }

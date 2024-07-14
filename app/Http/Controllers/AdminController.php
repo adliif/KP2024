@@ -7,10 +7,7 @@ use App\Models\Pinjaman;
 use App\Models\Tanggungan;
 use App\Models\SimpananPokok;
 use App\Models\TransaksiPinjaman;
-use App\Models\TransaksiPokok;
 use Illuminate\Http\Request;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Redirect;
 
 class AdminController extends Controller
 {
@@ -68,15 +65,14 @@ class AdminController extends Controller
     protected function createTanggungan($pinjaman)
     {
         $besar_pinjaman = $pinjaman->besar_pinjaman;
-        $bunga_bulanan = 0.08; // Bunga tahunan default
-        $tenor = $pinjaman->tenor_pinjaman; // Jumlah cicilan
-
+        // Bunga tahunan default
+        $bunga_bulanan = 0.08;
+        // Jumlah cicilan
+        $tenor = $pinjaman->tenor_pinjaman;
         //jumlah bunga
         $jumlah_bunga = $besar_pinjaman * 0.08;
-
         //total pinjaman
         $total_pembayaran = $besar_pinjaman + ($bunga_bulanan * $besar_pinjaman);
-
         //pembayaran bulanan
         $pembayaran_bulanan = $total_pembayaran / $tenor;
 
@@ -90,36 +86,20 @@ class AdminController extends Controller
             'status_pinjaman' => 'Belum Lunas'
         ]);
 
-        // Cari data Simpanan Pokok terkait pengguna
-        $simpananPokok = SimpananPokok::where('id_user', $pinjaman->id_user)->first();
-
-        if (!$simpananPokok) {
-            // Tangani kasus tidak ditemukan simpanan pokok untuk pengguna
-            return response()->json(['error' => 'Simpanan pokok tidak ditemukan untuk pengguna ini.'], 404);
+        // Pastikan tanggungan berhasil dibuat
+        if ($tanggungan) {
+            $jatuh_tempo_awal = now()->endOfDay(); // Menggunakan tanggal saat ini sebagai jatuh tempo awal, dan mengatur jam ke 00:00:00
+            for ($i = 1; $i <= $tenor; $i++) {
+                $jatuh_tempo = $jatuh_tempo_awal->copy()->addMonths($i);
+                TransaksiPinjaman::create([
+                    'id_tanggungan' => $tanggungan->id_tanggungan,
+                    'jatuh_tempo' => $jatuh_tempo,
+                    'tanggal_pembayaran' => null, // Set tanggal pembayaran ke null karena belum dibayar
+                    'keterangan' => 'Bayar cicilan ke-' . $i
+                ]);
+            }
         }
-
-        // Buat data Transaksi Simpanan Pokok
-        TransaksiPokok::create([
-            'id_simpanan_pokok' => $simpananPokok->id_simpanan_pokok,
-            'jatuh_tempo' => Carbon::now(),
-            'tanggal_pembayaran' => Carbon::now(),
-            'keterangan' => 'Belum Lunas',
-        ]);
-
-        // Buat data Transaksi Pinjaman sesuai tenor
-        $tanggalPinjaman = Carbon::now();
-        for ($i = 0; $i < $tenor; $i++) {
-            TransaksiPinjaman::create([
-                'id_tanggungan' => $tanggungan->id,
-                'jatuh_tempo' => $tanggalPinjaman->copy()->addMonths($i + 1),
-                'tanggal_pembayaran' => $tanggalPinjaman->copy()->addMonths($i + 1),
-                'keterangan' => 'Belum Lunas',
-            ]);
-        }
-
-        return response()->json(['success' => true]);
     }
-
 
     public function updatePinjamanStatus(Request $request, $id_pinjaman)
     {

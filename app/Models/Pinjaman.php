@@ -6,7 +6,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\Hasmany;
 
 class Pinjaman extends Model
 {
@@ -18,11 +18,11 @@ class Pinjaman extends Model
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'id_user', 'id_user');
+        return $this->belongsTo(User::class, 'id_user');
     }
 
-    public function tanggungan(): HasOne
+    public function tanggungan(): HasMany
     {
-        return $this->hasOne(Tanggungan::class, 'id_Pinjaman', 'id_pinjaman');
+        return $this->hasMany(Tanggungan::class, 'id_Pinjaman');
     }
 }

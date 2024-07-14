@@ -10,7 +10,7 @@ class TransaksiPokok extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'id_transaksiSimpanan';
+    protected $primaryKey = 'id_transaksipokok';
     protected $fillable = ['id_simpanan_pokok','jatuh_tempo', 'tanggal_pembayaran', 'keterangan'];
 
     // Relasi dengan SimpananPokok

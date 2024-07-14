@@ -29,18 +29,33 @@
                         </ul>
                     </div>
 
+                    @if ($errors->any())
+                        <div class="alert alert-warning">
+                            {{ $errors->first('error') }}
+                        </div>
+                    @endif
+
+                    @if (session('success'))
+                        <div class="alert alert-success">
+                            {{ session('success') }}
+                        </div>
+                    @endif
+
+                    @if (session('warning'))
+                        <div class="alert alert-warning">
+                            {{ session('warning') }}
+                        </div>
+                    @endif
+
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card">
                                 <div class="card-header">
                                     <div class="d-flex align-items-center">
-                                        <div class="card-title">
-                                            <h4>History Pengajuan Peminjaman</h4>
-                                        </div>
                                         <button class="btn btn-primary btn-round ms-auto" data-bs-toggle="modal"
                                             data-bs-target="#addRowModal">
                                             <i class="fa fa-plus"></i>
-                                            Ajuin Pinjaman
+                                            Ajukan Pinjaman
                                         </button>
                                     </div>
                                 </div>
@@ -71,28 +86,27 @@
                                                             <div class="col-sm-12">
                                                                 <div class="form-group form-group-default">
                                                                     <label>Tanggal Pengajuan</label>
-                                                                    <input name="tgl_pengajuan" id="addTgl"
-                                                                        type="text" class="form-control" readonly />
+                                                                    <input name="tgl_pengajuan" id="addTgl" type="text"
+                                                                        class="form-control" readonly />
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-6 pe-0">
                                                                 <div class="form-group form-group-default">
-                                                                    <label>Besar Pinjaman</label>
+                                                                    <label>Besar Pinjaman (Maks 100 Juta)</label>
                                                                     <input name="besar_pinjaman" id="addBesar"
                                                                         type="text" class="form-control" />
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-6">
                                                                 <div class="form-group form-group-default">
-                                                                    <label>Tenor Pinjaman</label>
+                                                                    <label>Tenor Pinjaman (Maks 50x)</label>
                                                                     <input name="tenor_pinjaman" id="addTenor"
                                                                         type="text" class="form-control" />
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div class="modal-footer border-0">
-                                                            <button type="submit" class="btn btn-primary"
-                                                                id="addBtn">
+                                                            <button type="submit" class="btn btn-primary" id="addBtn">
                                                                 Add
                                                             </button>
 
@@ -123,9 +137,9 @@
                                                     <tr>
                                                         <td>{{ $loop->iteration }}</td>
                                                         <td>{{ $p->tgl_pengajuan }}</td>
-                                                        <td>{{ $p->besar_pinjaman }}</td>
+                                                        <td>Rp{{ number_format($p->besar_pinjaman, 0, ',', '.') }}</td>
                                                         <td>{{ $p->tenor_pinjaman }}</td>
-                                                        <td>
+                                                        <td style="text-align: center; vertical-align: middle;">
                                                             @if ($p->keterangan == 'Disetujui')
                                                                 <button class="btn btn-success" disabled>Disetujui</button>
                                                             @elseif ($p->keterangan == 'Ditolak')
@@ -138,7 +152,7 @@
                                                     </tr>
                                                 @empty
                                                     <tr>
-                                                        <td colspan="5" class="text-center">Belum ada data pengajuan</td>
+                                                        <td colspan="5" class="text-center">Tidak ada data pengajuan.</td>
                                                     </tr>
                                                 @endforelse
                                             </tbody>
@@ -171,38 +185,81 @@
     <!-- Kaiadmin JS -->
     <script src="../assets/js/kaiadmin.min.js"></script>
 
-    <!-- Kaiadmin DEMO methods, don't include it in your project! -->
     <script src="../assets/js/setting-demo2.js"></script>
     <script>
-        var SweetAlert2Demo = (function() {
-            var initDemos = function() {
+        var SweetAlert2Demo = (function () {
+            var initDemos = function () {
 
-                $("#addBtn").click(function(e) {
+                $("#addBtn").click(function (e) {
                     e.preventDefault(); // Prevent form submission
                     var form = $('#form-pengajuan');
                     var formData = form.serialize();
+
+                    var besarPinjaman = parseInt($('#addBesar').val());
+                    var tenorPinjaman = parseInt($('#addTenor').val());
+
+                    if (besarPinjaman > 100000000) {
+                        swal({
+                            title: "Error!",
+                            text: "Besar pinjaman tidak boleh lebih dari 100 juta.",
+                            icon: "error",
+                            buttons: {
+                                confirm: {
+                                    className: "btn btn-danger",
+                                },
+                            },
+                        });
+                        return;
+                    }
+
+                    if (tenorPinjaman > 50) {
+                        swal({
+                            title: "Error!",
+                            text: "Tenor pinjaman tidak boleh lebih dari 50 bulan.",
+                            icon: "error",
+                            buttons: {
+                                confirm: {
+                                    className: "btn btn-danger",
+                                },
+                            },
+                        });
+                        return;
+                    }
 
                     $.ajax({
                         type: "POST",
                         url: form.attr('action'),
                         data: formData,
-                        success: function() {
-                            swal({
-                                title: "Pengajuan Diproses!",
-                                text: "Cek secara berkala pengajuan peminjaman Anda",
-                                icon: "success",
-                                buttons: {
-                                    confirm: {
-                                        className: "btn btn-success",
+                        success: function (response) {
+                            if (response.status === 'warning') {
+                                swal({
+                                    title: "Peringatan!",
+                                    text: response.message,
+                                    icon: "warning",
+                                    buttons: {
+                                        confirm: {
+                                            className: "btn btn-warning",
+                                        },
                                     },
-                                },
-                            }).then((willReload) => {
-                                if (willReload) {
-                                    location.reload();
-                                }
-                            });
+                                });
+                            } else {
+                                swal({
+                                    title: "Pengajuan Diproses!",
+                                    text: "Cek secara berkala pengajuan peminjaman Anda.",
+                                    icon: "success",
+                                    buttons: {
+                                        confirm: {
+                                            className: "btn btn-success",
+                                        },
+                                    },
+                                }).then((willReload) => {
+                                    if (willReload) {
+                                        location.reload();
+                                    }
+                                });
+                            }
                         },
-                        error: function() {
+                        error: function () {
                             swal({
                                 title: "Error!",
                                 text: "Terjadi kesalahan, silakan coba lagi.",
@@ -219,32 +276,32 @@
             };
             return {
                 //== Init
-                init: function() {
+                init: function () {
                     initDemos();
                 },
             };
         })();
 
         //== Class Initialization
-        jQuery(document).ready(function() {
+        jQuery(document).ready(function () {
             SweetAlert2Demo.init();
         });
 
-        $(document).ready(function() {
+        $(document).ready(function () {
             $("#basic-datatables").DataTable({});
 
             $("#multi-filter-select").DataTable({
                 pageLength: 5,
-                initComplete: function() {
+                initComplete: function () {
                     this.api()
                         .columns()
-                        .every(function() {
+                        .every(function () {
                             var column = this;
                             var select = $(
-                                    '<select class="form-select"><option value=""></option></select>'
-                                )
+                                '<select class="form-select"><option value=""></option></select>'
+                            )
                                 .appendTo($(column.footer()).empty())
-                                .on("change", function() {
+                                .on("change", function () {
                                     var val = $.fn.dataTable.util.escapeRegex($(this).val());
 
                                     column
@@ -256,7 +313,7 @@
                                 .data()
                                 .unique()
                                 .sort()
-                                .each(function(d, j) {
+                                .each(function (d, j) {
                                     select.append(
                                         '<option value="' + d + '">' + d + "</option>"
                                     );
@@ -267,26 +324,16 @@
 
             $("#add-row").DataTable({
                 pageLength: 5,
-                columns: [{
-                        title: "No."
-                    },
-                    {
-                        title: "Tanggal Pengajuan"
-                    },
-                    {
-                        title: "Besar Pinjaman"
-                    },
-                    {
-                        title: "Tenor Pinjaman"
-                    },
-                    {
-                        title: "Keterangan",
-                        orderable: false
-                    }
+                columns: [
+                    { title: "No." },
+                    { title: "Tanggal Pengajuan" },
+                    { title: "Besar Pinjaman" },
+                    { title: "Tenor Pinjaman" },
+                    { title: "Keterangan", orderable: false }
                 ]
             });
 
-            $('#addRowModal').on('show.bs.modal', function() {
+            $('#addRowModal').on('show.bs.modal', function () {
                 var currentDateTime = new Date();
                 currentDateTime.setHours(currentDateTime.getHours() + 7); // Adjust to WIB (UTC+7)
                 var formattedDateTime = currentDateTime.toISOString().slice(0, 19).replace('T', ' ');

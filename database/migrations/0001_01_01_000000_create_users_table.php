@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id('id_user')->onDelete('cascade');
             $table->string('nama');
-            // $table->string('username');
             $table->string('email')->unique();
             $table->string('NIP')->unique();
             $table->string('jenis_kelamin');

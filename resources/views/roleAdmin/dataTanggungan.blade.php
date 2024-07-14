@@ -61,12 +61,12 @@
                                                             <td>{{ $t->iuran_perBulan }}</td>
                                                             <td>{{ $t->sisa_pinjaman }}</td>
                                                             <td id="aksi_{{ $t->sisa_pinjaman }}">
-                                                            @if ($t->sisa_pinjaman > 0)
-                                                                <button class="btn btn-danger" disabled>Belum Lunas</button>
-                                                            @else
-                                                                <button class="btn btn-success" disabled>Lunas</button>
-                                                            @endif
-                                                        </td>
+                                                                @if ($t->sisa_pinjaman > 0)
+                                                                    <button class="btn btn-danger" disabled>Belum Lunas</button>
+                                                                @else
+                                                                    <button class="btn btn-success" disabled>Lunas</button>
+                                                                @endif
+                                                            </td>
                                                         </tr>
                                                     @endforeach
                                                 </tbody>

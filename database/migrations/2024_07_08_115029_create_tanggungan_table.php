@@ -16,7 +16,7 @@ return new class extends Migration
             //foreign key
             $table->unsignedBigInteger('id_pinjaman');
             $table->foreign('id_pinjaman')->references('id_pinjaman')->on('pinjaman')->onDelete('cascade');
-            //foreign key
+
             $table->float('bunga_pinjaman')->default(0.08);
             $table->float('total_pinjaman');
             $table->integer('iuran_perBulan');

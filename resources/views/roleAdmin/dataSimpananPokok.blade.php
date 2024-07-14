@@ -42,7 +42,7 @@
                                                     <th>Nama</th>
                                                     <th>Iuran</th>
                                                     <th>Total Simpanan</th>
-                                                    <th style="width: 10%">Action</th>
+                                                    <th>Simpanan Bulan Ini</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
