@@ -103,7 +103,7 @@ class AnggotaController extends Controller
         $transaksiPinjaman->tanggal_pembayaran = now()->timezone('Asia/Jakarta');
         $transaksiPinjaman->save();
     
-        return response()->json(['success' => true]);
+        return redirect()->route('tanggungan.view');
     }
 
     public function history()
@@ -148,16 +148,5 @@ class AnggotaController extends Controller
         $request->user()->save();
 
         return Redirect::route('profile.view')->with('status', 'profile-updated');
-    }
-    public function destroyUser(Request $request)
-    {
-        $request->validate([
-            'password' => ['required', new MatchOldPassword],
-        ]);
-
-        $user = $request->user();
-        $user->delete();
-
-        return redirect('/')->with('status', 'Account deleted successfully.');
     }
 }

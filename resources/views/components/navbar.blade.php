@@ -89,7 +89,7 @@
                                 <a class="dropdown-item" href="profile">My Profile</a>
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf
-                                    <a class="dropdown-item" href="logout" onclick="event.preventDefault(); this.closest('form').submit();">Logout</a>
+                                    <a class="dropdown-item" href="logout" onclick="event.preventDefault(); this.closest('form').submit();">Keluar</a>
                                 </form>
                             </li>
                         </div>

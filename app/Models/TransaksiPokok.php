@@ -11,7 +11,7 @@ class TransaksiPokok extends Model
     use HasFactory;
 
     protected $primaryKey = 'id_transaksipokok';
-    protected $fillable = ['id_simpanan_pokok','jatuh_tempo', 'tanggal_pembayaran', 'keterangan'];
+    protected $fillable = ['id_simpanan_pokok','jatuh_tempo', 'tanggal_pembayaran', 'snap_token', 'keterangan'];
 
     // Relasi dengan SimpananPokok
     public function simpananPokok(): BelongsTo

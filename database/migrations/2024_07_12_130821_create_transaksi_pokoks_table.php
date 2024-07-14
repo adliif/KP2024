@@ -18,8 +18,9 @@ return new class extends Migration
             $table->unsignedBigInteger('id_simpanan_pokok');
             $table->foreign('id_simpanan_pokok')->references('id_simpanan_pokok')->on('simpanan_pokoks')->onDelete('cascade');
 
-            $table->time('jatuh_tempo');
-            $table->time('tanggal_pembayaran');
+            $table->timestamp('jatuh_tempo');
+            $table->timestamp('tanggal_pembayaran')->nullable();
+            $table->string('snap_token')->nullable();
             $table->string('keterangan');
         });
     }

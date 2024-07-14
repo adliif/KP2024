@@ -151,9 +151,7 @@
                                                         </td>
                                                     </tr>
                                                 @empty
-                                                    <tr>
-                                                        <td colspan="5" class="text-center">Tidak ada data pengajuan.</td>
-                                                    </tr>
+
                                                 @endforelse
                                             </tbody>
                                         </table>
