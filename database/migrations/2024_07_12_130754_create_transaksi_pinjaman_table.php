@@ -20,6 +20,7 @@ return new class extends Migration
 
             $table->timestamp('jatuh_tempo');
             $table->timestamp('tanggal_pembayaran')->nullable();
+            $table->string('snap_token')->nullable();
             $table->string('keterangan');
         });
     }

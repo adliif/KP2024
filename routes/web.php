@@ -41,9 +41,9 @@ Route::middleware(['auth', 'user'])->group(function () {
     Route::post('/updatePinjaman/{id_transaksiPinjaman}', [AnggotaController::class, 'updatePinjaman'])->name('pinjaman.update');
 
     Route::get('history', [AnggotaController::class, 'history']);
+    Route::get('historyTransaksi', [AnggotaController::class, 'history']);
     Route::get('helpdesk', [AnggotaController::class, 'helpdesk']);
 
     Route::get('/profile', [AnggotaController::class, 'viewUser'])->name('profile.view');
     Route::patch('/profile', [AnggotaController::class, 'updateUser'])->name('profile.update');
-    Route::delete('/profile', [AnggotaController::class, 'destroyUser'])->name('profile.destroy');
 });

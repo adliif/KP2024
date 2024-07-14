@@ -86,15 +86,37 @@ class AdminController extends Controller
             'status_pinjaman' => 'Belum Lunas'
         ]);
 
+        // Set your Merchant Server Key
+        \Midtrans\Config::$serverKey = config('midtrans.serverKey');
+        // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
+        \Midtrans\Config::$isProduction = config('midtrans.isProduction');
+        // Set sanitization on (default)
+        \Midtrans\Config::$isSanitized = config('midtrans.isSanitized');
+        // Set 3DS transaction for credit card to true
+        \Midtrans\Config::$is3ds = config('midtrans.is3ds');
+
         // Pastikan tanggungan berhasil dibuat
         if ($tanggungan) {
             $jatuh_tempo_awal = now()->endOfDay(); // Menggunakan tanggal saat ini sebagai jatuh tempo awal, dan mengatur jam ke 00:00:00
             for ($i = 1; $i <= $tenor; $i++) {
+                $params = array(
+                    'transaction_details' => array(
+                        'order_id' => rand(),
+                        'gross_amount' => $pembayaran_bulanan,
+                    ),
+                    'customer_details' => array(
+                        'first_name' => $tanggungan->pinjaman->user->nama,
+                        'email' => $tanggungan->pinjaman->user->email,
+                    ),
+                );
+                $snapToken = \Midtrans\Snap::getSnapToken($params);
+
                 $jatuh_tempo = $jatuh_tempo_awal->copy()->addMonths($i);
                 TransaksiPinjaman::create([
                     'id_tanggungan' => $tanggungan->id_tanggungan,
                     'jatuh_tempo' => $jatuh_tempo,
                     'tanggal_pembayaran' => null, // Set tanggal pembayaran ke null karena belum dibayar
+                    'snap_token' => $snapToken,
                     'keterangan' => 'Bayar cicilan ke-' . $i
                 ]);
             }

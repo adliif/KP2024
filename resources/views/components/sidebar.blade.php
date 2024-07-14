@@ -23,7 +23,7 @@
     <div class="sidebar-wrapper scrollbar scrollbar-inner">
         <div class="sidebar-content">
             <ul class="nav nav-secondary">
-                <li class="{{request()->is('dashboard') ? 'nav-item active' : 'nav-item'}}">
+                <li class="{{request()->is('dashboard', 'profile') ? 'nav-item active' : 'nav-item'}}">
                     <a href="/dashboard">
                         <i class="fas fa-home"></i>
                         <p>Dashboard</p>
@@ -37,32 +37,32 @@
                 </li>
                 <li class="{{request()->is('pengajuan') ? 'nav-item active' : 'nav-item'}}">
                     <a href="/pengajuan">
-                        <i class="fas fa-hand-holding-usd"></i>
-                        <p>Pengajuan</p>
+                        <i class="fas fa-plus-circle"></i>
+                        <p>Pengajuan Pinjaman</p>
                     </a>
                 </li>
                 <li class="{{request()->is('tanggungan') ? 'nav-item active' : 'nav-item'}}">
                     <a href="/tanggungan">
                         <i class="fas fa-donate"></i>
-                        <p>Tanggungan</p>
+                        <p>Tanggungan Anggota</p>
                     </a>
                 </li>
                 <li class="{{request()->is('history') ? 'nav-item active' : 'nav-item'}}">
                     <a href="/history">
-                        <i class="fas fa-history"></i>
-                        <p>History</p>
+                        <i class="fas fa-hand-holding-usd"></i>
+                        <p>Riwayat Pinjaman</p>
                     </a>
                 </li>
-                <li class="{{request()->is('profile') ? 'nav-item active' : 'nav-item'}}">
-                    <a href="/profile">
-                        <i class="fas fa-user-tie"></i>
-                        <p>My Profile</p>
+                <li class="{{request()->is('historyTransaksi') ? 'nav-item active' : 'nav-item'}}">
+                    <a href="/historyTransaksi">
+                        <i class="fas fa-history"></i>
+                        <p>Riwayat Transaksi</p>
                     </a>
                 </li>
                 <li class="{{request()->is('helpdesk') ? 'nav-item active' : 'nav-item'}}">
                     <a href="/helpdesk">
                         <i class="fas fa-address-book"></i>
-                        <p>Helpdesk</p>
+                        <p>Kontak</p>
                     </a>
                 </li>
                 <li class="{{request()->is('logout') ? 'nav-item active' : 'nav-item'}}">
@@ -70,7 +70,7 @@
                         @csrf
                         <a href="logout" onclick="event.preventDefault(); this.closest('form').submit();">
                             <i class="fas fa-sign-out-alt"></i>
-                            <p>Logout</p>
+                            <p>Keluar</p>
                         </a>
                     </form>
                 </li>

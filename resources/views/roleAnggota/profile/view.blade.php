@@ -77,32 +77,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- <div class="row">
-                        <div class="col-md-12">
-                            <div class="card">
-                                <div class="card-header">
-                                    <div class="card-title">Delete Account</div>
-                                    <p style="width: 500px; text-align: justify;">
-                                        Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, 
-                                        please download any data or information that you wish to retain.
-                                    </p>
-                                </div>
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-md-6 col-lg-4">
-                                            <div class="form-group">
-                                                <div class="max-w-xl">
-                                                    @include('roleAnggota.profile.partials.delete-user-form')
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
-
                 </div>
             </div>
 
