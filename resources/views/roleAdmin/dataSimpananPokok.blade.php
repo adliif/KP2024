@@ -1,5 +1,5 @@
 <x-layout>
-    <x-slot:title>{{$title}}</x-slot:title>
+    <x-slot:title>{{ $title }}</x-slot:title>
 
     <div class="wrapper">
         <!-- Sidebar -->
@@ -32,8 +32,11 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card">
+                                <div class="card-header">
+                                    <button id="create-all-transactions" class="btn btn-primary btn-round">Buat
+                                        Transaksi Simpanan</button>
+                                </div>
                                 <div class="card-body">
-
                                     <div class="table-responsive">
                                         <table id="add-row" class="display table table-striped table-hover">
                                             <thead>
@@ -42,35 +45,32 @@
                                                     <th>Nama</th>
                                                     <th>Iuran</th>
                                                     <th>Total Simpanan</th>
-                                                    <th>Simpanan Bulan Ini</th>
+                                                    <th>Status Simpanan</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 @forelse ($simpanan as $simp)
                                                     <tr>
-                                                    <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ $simp->user->nama }}</td>
-                                                    <td>{{ $simp->iuran }}</td>
-                                                    <td>{{ $simp->total_simpanan }}</td>
-                                                    <td>
-                                                        <div class="form-button-action">
-                                                            <button type="button" data-bs-toggle="tooltip" title=""
-                                                                class="btn btn-link btn-primary btn-lg"
-                                                                data-original-title="Edit Task">
-                                                                <i class="fa fa-edit"></i>
-                                                            </button>
-                                                            <button type="button" data-bs-toggle="tooltip" title=""
-                                                                class="btn btn-link btn-danger"
-                                                                data-original-title="Remove">
-                                                                <i class="fas fa-trash"></i>
-                                                            </button>
-                                                        </div>
-                                                    </td>
-                                                </tr>
+                                                        <td>{{ $loop->iteration }}</td>
+                                                        <td>{{ $simp->user->nama }}</td>
+                                                        <td>{{ 'Rp. ' . number_format($simp->iuran, 0, ',', '.') }}</td>
+                                                        <td>{{ 'Rp. ' . number_format($simp->total_simpanan, 0, ',', '.') }}
+                                                        </td>
+                                                        <td>
+                                                            <div class="d-flex justify-content-between">
+                                                                <button
+                                                                    class="btn btn-{{ $simp->status_simpanan == 'Belum Lunas' ? 'danger' : 'success' }}"
+                                                                    disabled>
+                                                                    {{ $simp->status_simpanan }}
+                                                                </button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
                                                 @empty
-                                                    
+                                                    <tr>
+                                                        <td colspan="5">No data available</td>
+                                                    </tr>
                                                 @endforelse
-                                                
                                             </tbody>
                                         </table>
                                     </div>
@@ -86,7 +86,7 @@
         </div>
     </div>
 
-    <!--   Core JS Files   -->
+    <!-- Core JS Files -->
     <script src="../assets/js/core/jquery-3.7.1.min.js"></script>
     <script src="../assets/js/core/popper.min.js"></script>
     <script src="../assets/js/core/bootstrap.min.js"></script>
@@ -99,60 +99,104 @@
     <script src="../assets/js/kaiadmin.min.js"></script>
     <!-- Kaiadmin DEMO methods, don't include it in your project! -->
     <script src="../assets/js/setting-demo2.js"></script>
+
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
-        $(document).ready(function () {
-            $("#basic-datatables").DataTable({});
-
-            $("#multi-filter-select").DataTable({
-                pageLength: 5,
-                initComplete: function () {
-                    this.api()
-                        .columns()
-                        .every(function () {
-                            var column = this;
-                            var select = $(
-                                '<select class="form-select"><option value=""></option></select>'
-                            )
-                                .appendTo($(column.footer()).empty())
-                                .on("change", function () {
-                                    var val = $.fn.dataTable.util.escapeRegex($(this).val());
-
-                                    column
-                                        .search(val ? "^" + val + "$" : "", true, false)
-                                        .draw();
-                                });
-
-                            column
-                                .data()
-                                .unique()
-                                .sort()
-                                .each(function (d, j) {
-                                    select.append(
-                                        '<option value="' + d + '">' + d + "</option>"
-                                    );
-                                });
-                        });
+        function updateTransaksi(id, keterangan) {
+            $.ajax({
+                url: '/transaksi/' + id + '/update',
+                method: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    keterangan: keterangan
                 },
+                success: function(response) {
+                    Swal.fire({
+                        title: 'Keterangan berhasil diperbarui',
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            location.reload();
+                        }
+                    });
+                },
+                error: function(response) {
+                    Swal.fire({
+                        title: "Gagal memperbarui keterangan",
+                        text: response.responseJSON.message ||
+                            'Terjadi kesalahan saat memproses permintaan.',
+                        icon: 'error'
+                    });
+                }
             });
+        }
 
-            // Add Row
+        $(document).ready(function() {
             $("#add-row").DataTable({
-                pageLength: 5,
+                pageLength: 25,
             });
 
-            var action =
-                '<td> <div class="form-button-action"> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit Task"> <i class="fa fa-edit"></i> </button> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Remove"> <i class="fa fa-times"></i> </button> </div> </td>';
+            // Fungsi untuk memeriksa status simpanan
+            function checkButtonStatus() {
+                $.ajax({
+                    url: '/checkSimpananStatus',
+                    method: 'GET',
+                    success: function(response) {
+                        if (response.disableButton) {
+                            $('#create-all-transactions').prop('disabled', true);
+                        } else {
+                            $('#create-all-transactions').prop('disabled', false);
+                        }
+                    }
+                });
+            }
 
-            $("#addRowButton").click(function () {
-                $("#add-row")
-                    .dataTable()
-                    .fnAddData([
-                        $("#addName").val(),
-                        $("#addPosition").val(),
-                        $("#addOffice").val(),
-                        action,
-                    ]);
-                $("#addRowModal").modal("hide");
+            // Pengecekan awal saat halaman dimuat
+            checkButtonStatus();
+
+            $('#create-all-transactions').on('click', function() {
+                // Tampilkan loading saat tombol diklik
+                Swal.fire({
+                    title: 'Memproses...',
+                    text: 'Mohon tunggu beberapa saat.',
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                $.ajax({
+                    url: '/buatTransaksiSimpanan',
+                    method: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        console.log('Success:', response); // Debug log
+                        Swal.close(); // Sembunyikan loading
+                        Swal.fire({
+                            title: 'Data Transaksi Simpanan Pokok Berhasil Dibuat',
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                location.reload();
+                            }
+                        });
+                    },
+                    error: function(response) {
+                        console.log('Error:', response); // Debug log
+                        Swal.close(); // Sembunyikan loading
+                        Swal.fire({
+                            title: "Gagal memperbarui status",
+                            text: response.responseJSON.message ||
+                                'Terjadi kesalahan saat memproses permintaan.',
+                            icon: 'error'
+                        });
+                    }
+                });
             });
         });
     </script>

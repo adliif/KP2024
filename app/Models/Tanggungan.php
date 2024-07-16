@@ -15,11 +15,6 @@ class Tanggungan extends Model
     protected $primaryKey = 'id_tanggungan';
     protected $fillable = ['id_pinjaman', 'bunga_pinjaman', 'iuran_perBulan', 'total_pinjaman', 'sisa_pinjaman', 'status_pinjaman'];
 
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'id_pinjaman');
-    }
-
     public function pinjaman(): BelongsTo
     {
         return $this->belongsTo(Pinjaman::class, 'id_pinjaman');

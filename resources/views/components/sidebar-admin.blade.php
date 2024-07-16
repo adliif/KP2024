@@ -2,7 +2,7 @@
     <div class="sidebar-logo">
         <!-- Logo Header -->
         <div class="logo-header" data-background-color="dark">
-            <a href="/" class="logo">
+            <a href="#" class="logo">
                 <img src="assets/img/kaiadmin/logo_light.svg" alt="navbar brand" class="navbar-brand" height="20" />
             </a>
             <div class="nav-toggle">
@@ -41,6 +41,12 @@
                         <p>Data Anggota</p>
                     </a>
                 </li>
+                <li class="{{request()->is('dataSimpananPokok') ? 'nav-item active' : 'nav-item'}}">
+                    <a href="/dataSimpananPokok">
+                        <i class="fas fa-money-check-alt"></i>
+                        <p>Data Simpanan Pokok</p>
+                    </a>
+                </li>
                 <li class="{{request()->is('dataPinjaman') ? 'nav-item active' : 'nav-item'}}">
                     <a href="/dataPinjaman">
                         <i class="fas fa-money-bill-alt"></i>
@@ -53,11 +59,26 @@
                         <p>Data Tanggungan</p>
                     </a>
                 </li>
-                <li class="{{request()->is('dataSimpananPokok') ? 'nav-item active' : 'nav-item'}}">
-                    <a href="/dataSimpananPokok">
-                        <i class="fas fa-money-check-alt"></i>
-                        <p>Data Simpanan Pokok</p>
+                <li class="nav-item {{ request()->is('transaksiSimpanan', 'transaksiPinjaman') ? 'active' : '' }}">
+                    <a href="#" data-bs-toggle="collapse" data-bs-target="#submenuTransaksi" aria-expanded="{{ request()->is('transaksiSimpanan', 'transaksiPinjaman') ? 'true' : 'false' }}" aria-controls="submenuTransaksi">
+                        <i class="fas fa-history"></i>
+                        <p>Data Transaksi</p>
+                        <span class="caret"></span>
                     </a>
+                    <div class="collapse {{ request()->is('transaksiSimpanan', 'transaksiPinjaman') ? 'show' : '' }}" id="submenuTransaksi">
+                        <ul class="nav nav-collapse">
+                            <li class="{{ request()->is('transaksiSimpanan') ? 'active' : '' }}">
+                                <a href="/transaksiSimpanan">
+                                    <span class="sub-item">Transaksi Simpanan</span>
+                                </a>
+                            </li>
+                            <li class="{{ request()->is('transaksiPinjaman') ? 'active' : '' }}">
+                                <a href="/transaksiPinjaman">
+                                    <span class="sub-item">Transaksi Pinjaman</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </li>
                 <li class="{{request()->is('logout') ? 'nav-item active' : 'nav-item'}}">
                     <form method="POST" action="{{ route('logout') }}">

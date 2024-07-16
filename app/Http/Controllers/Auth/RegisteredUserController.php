@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\SimpananPokok;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -42,7 +43,7 @@ class RegisteredUserController extends Controller
             'password' => 'required|string|min:8|confirmed',
         ]);
 
-        User::create([
+        $user = User::create([
             'nama' => $request->nama,
             'email' => $request->email,
             'NIP' => $request->NIP,
@@ -52,6 +53,18 @@ class RegisteredUserController extends Controller
             'password' => bcrypt($request->password),
         ]);
 
+        $this->createSimpananPokok($user->id_user);
+
         return response()->json(['success' => true]);
+    }
+
+    protected function createSimpananPokok($id_user)
+    {
+        SimpananPokok::create([
+            'id_user' => $id_user,
+            'iuran' => 100000,
+            'total_simpanan' => 0,
+            'status_simpanan' => 'Lunas'
+        ]);
     }
 }
