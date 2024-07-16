@@ -34,7 +34,7 @@
                             <div class="card">
                                 <div class="card-header">
                                     <div class="d-flex align-items-center">
-                                        <h4 class="card-title">Tanggungan Pokok</h4>
+                                        <h4 class="card-title">Tanggungan Simpanan</h4>
                                     </div>
                                 </div>
                                 <div class="card-body">
@@ -102,7 +102,7 @@
                                                     <tr id="row_{{ $t->id_transaksiPinjaman }}">
                                                         <td>{{ $loop->iteration }}</td>
                                                         <td>{{ $t->jatuh_tempo }}</td>
-                                                        <td>Rp{{ number_format($t->tanggungan->iuran_perBulan, 0, ',', '.') }}</td>
+                                                        <td>Rp{{ number_format(ceil($t->tanggungan->iuran_perBulan), 0, ',', '.') }}</td>
                                                         <td id="aksi_{{ $t->id_transaksiPinjaman }}" style="text-align: center;">
                                                             @if ($t->keterangan != 'Lunas')
                                                                 @php

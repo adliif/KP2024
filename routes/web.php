@@ -48,8 +48,8 @@ Route::middleware(['auth', 'user'])->group(function () {
     Route::post('/updateSimpanan/{id_transaksiPokok}', [AnggotaController::class, 'updateSimpanan'])->name('simpanan.update');
 
     Route::get('history', [AnggotaController::class, 'history']);
-    Route::get('historyTransaksi', [AnggotaController::class, 'history']);
-    Route::get('helpdesk', [AnggotaController::class, 'helpdesk']);
+    Route::get('transaksiSimpananUser', [AnggotaController::class, 'viewTransaksiSimpanan']);
+    Route::get('transaksiPinjamanUser', [AnggotaController::class, 'viewTransaksiPinjaman']);
 
     Route::get('/profile', [AnggotaController::class, 'viewUser'])->name('profile.view');
     Route::patch('/profile', [AnggotaController::class, 'updateUser'])->name('profile.update');

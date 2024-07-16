@@ -196,7 +196,7 @@ class AdminController extends Controller
                 $params = array(
                     'transaction_details' => array(
                         'order_id' => rand(),
-                        'gross_amount' => intval($pembayaran_bulanan),
+                        'gross_amount' => ceil($pembayaran_bulanan),
                     ),
                     'customer_details' => array(
                         'first_name' => $tanggungan->pinjaman->user->nama,

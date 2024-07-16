@@ -17,8 +17,8 @@ return new class extends Migration
             $table->unsignedBigInteger('id_user');
             $table->foreign('id_user')->references('id_user')->on('users')->onDelete('cascade');
 
-            $table->integer('iuran');
-            $table->integer('total_simpanan')->nullable();
+            $table->float('iuran');
+            $table->float('total_simpanan')->nullable();
             $table->string('status_simpanan');
             $table->timestamps();
         });

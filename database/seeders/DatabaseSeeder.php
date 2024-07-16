@@ -20,6 +20,6 @@ class DatabaseSeeder extends Seeder
         //     Pinjaman::factory()->create(['id_user' => $user->id_user]);
         // });
 
-        User::factory(3)->create();
+        User::factory(1)->create();
     }
 }

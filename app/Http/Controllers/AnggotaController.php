@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\User;
 use App\Models\Pinjaman;
 use App\Models\Tanggungan;
 use App\Models\TransaksiPinjaman;
@@ -17,8 +18,10 @@ class AnggotaController extends Controller
 {
     public function index()
     {
+        $totalUser = User::where('usertype', 'user')->count();
         $data = [
             'title' => 'Dahboard',
+            'user' => $totalUser,
         ];
         return view('roleAnggota.dashboard', $data);
     }
@@ -143,12 +146,33 @@ class AnggotaController extends Controller
         ];
         return view('roleAnggota.history', $data, compact('history'));
     }
-    public function helpdesk()
-    {
+
+    // ----------------------------------- DATA TRANSAKSI -------------------------------------
+    public function viewTransaksiSimpanan(){
+        $transaksiPokok = TransaksiPokok::with('simpananPokok.user')
+            ->whereHas('simpananPokok', function ($query) {
+                $query->where('keterangan', 'Lunas')
+                    ->where('id_user', Auth::user()->id_user);
+            })->get();
+
         $data = [
-            'title' => 'Helpdesk',
+            'title' => 'Transaksi Simpanan'
         ];
-        return view('roleAnggota.helpdesk', $data);
+
+        return view('roleAnggota.transaksiSimpanan', $data, compact('transaksiPokok'));
+    }
+
+    public function viewTransaksiPinjaman(){
+        $transaksiPinjaman = TransaksiPinjaman::with('tanggungan.pinjaman.user')
+            ->whereHas('tanggungan.pinjaman', function ($query) {
+                $query->where('id_user', Auth::user()->id_user);
+            })->where('keterangan', 'Lunas')->get(); 
+
+        $data = [
+            'title' => 'Transaksi Simpanan'
+        ];
+
+        return view('roleAnggota.transaksiPinjaman', $data, compact('transaksiPinjaman'));
     }
 
     // --------------------------------------- PROFILE ----------------------------------------
