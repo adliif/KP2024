@@ -32,8 +32,17 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card">
+                                <div class="card-header">
+                                    {{-- <div class="d-flex align-items-center">
+                                        <a href="#" class="btn btn-success btn-round ms-auto">
+                                            <i class="fa fa-file-excel"></i> Export Excel
+                                        </a>
+                                        <a href="#" class="btn btn-danger btn-round ms-3">
+                                            <i class="fa fa-file-pdf"></i> Export PDF
+                                        </a>
+                                    </div> --}}
+                                </div>
                                 <div class="card-body">
-
                                     <div class="table-responsive">
                                         <table id="add-row" class="display table table-striped table-hover">
                                             <thead>
@@ -52,14 +61,14 @@
                                                         <td>{{ $loop->iteration }}</td>
                                                         <td>{{ $p->user->nama }}</td>
                                                         <td>{{ $p->tgl_pengajuan }}</td>
-                                                        <td>{{ $p->besar_pinjaman }}</td>
+                                                        <td>{{ 'Rp. ' . number_format($p->besar_pinjaman, 0, ',', '.') }}</td>
                                                         <td>{{ $p->tenor_pinjaman }}</td>
                                                         <td id="aksi_{{ $p->id_pinjaman }}">
                                                             @if ($p->keterangan == 'Diproses')
                                                                 <div class="d-flex justify-content-between">
                                                                     <form class="form-update-status"
                                                                         action="{{ route('pinjaman.updateStatus', $p->id_pinjaman) }}"
-                                                                        method="post" data-id="{{ $p->id_pinjaman }}">
+                                                                        method="POST" data-id="{{ $p->id_pinjaman }}">
                                                                         @csrf
                                                                         <input type="hidden" name="status"
                                                                             value="Disetujui">
@@ -68,7 +77,7 @@
                                                                     </form>
                                                                     <form class="form-update-status"
                                                                         action="{{ route('pinjaman.updateStatus', $p->id_pinjaman) }}"
-                                                                        method="post" data-id="{{ $p->id_pinjaman }}">
+                                                                        method="POST" data-id="{{ $p->id_pinjaman }}">
                                                                         @csrf
                                                                         <input type="hidden" name="status"
                                                                             value="Ditolak">
@@ -117,104 +126,65 @@
     <!-- Kaiadmin DEMO methods, don't include it in your project! -->
     <script src="../assets/js/setting-demo2.js"></script>
     <script>
-        $(document).ready(function() {
-            $("#basic-datatables").DataTable({});
+    document.addEventListener("DOMContentLoaded", function() {
+        // DataTable initialization
+        $("#basic-datatables").DataTable({});
 
-            $("#multi-filter-select").DataTable({
-                pageLength: 5,
-                initComplete: function() {
-                    this.api()
-                        .columns()
-                        .every(function() {
-                            var column = this;
-                            var select = $(
-                                    '<select class="form-select"><option value=""></option></select>'
-                                )
-                                .appendTo($(column.footer()).empty())
-                                .on("change", function() {
-                                    var val = $.fn.dataTable.util.escapeRegex($(this).val());
+        $("#add-row").DataTable({
+            pageLength: 25,
+        });
 
-                                    column
-                                        .search(val ? "^" + val + "$" : "", true, false)
-                                        .draw();
-                                });
+        // Handle form submission and update button status
+        $(document).on('submit', '.form-update-status', function(e) {
+            e.preventDefault();
+            var form = $(this);
+            var id = form.data('id');
+            var status = form.find('input[name="status"]').val();
 
-                            column
-                                .data()
-                                .unique()
-                                .sort()
-                                .each(function(d, j) {
-                                    select.append(
-                                        '<option value="' + d + '">' + d + "</option>"
-                                    );
-                                });
-                        });
-                },
-            });
-
-            // Add Row
-            $("#add-row").DataTable({
-                pageLength: 5,
-            });
-
-            var action =
-                '<td> <div class="form-button-action"> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit Task"> <i class="fa fa-edit"></i> </button> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Remove"> <i class="fa fa-times"></i> </button> </div> </td>';
-
-            $("#addRowButton").click(function() {
-                $("#add-row")
-                    .dataTable()
-                    .fnAddData([
-                        $("#addName").val(),
-                        $("#addPosition").val(),
-                        $("#addOffice").val(),
-                        action,
-                    ]);
-                $("#addRowModal").modal("hide");
-            });
-
-            // Handle form submission and update button status
-            $(".form-update-status").on("submit", function(e) {
-        e.preventDefault(); // Mencegah tindakan default dari klik
-        var form = $(this);
-        var id = form.data("id");
-        var status = form.find("input[name='status']").val();
-
-        $.ajax({
-            type: "POST",
-            url: form.attr('action'),
-            data: form.serialize(),
-            success: function(response) {
-                if (status === "Disetujui") {
-                    Swal.fire({
-                        title: "Pinjaman disetujui",
-                        icon: "success",
-                        confirmButtonText: 'OK',
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            location.reload(); // Refresh halaman setelah alert ditutup
-                        }
-                    });
-                } else if (status === "Ditolak") {
-                    Swal.fire({
-                        title: "Pinjaman ditolak",
-                        icon: "error",
-                        confirmButtonText: 'OK',
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            location.reload(); // Refresh halaman setelah alert ditutup
-                        }
-                    });
-                }
-            },
-            error: function(response) {
+            if (status === 'Disetujui') {
                 Swal.fire({
-                    title: "Gagal memperbarui status",
-                    text: response.responseJSON.message,
-                    icon: "error"
+                    title: 'Memproses...',
+                    text: 'Mohon tunggu beberapa saat.',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading()
+                    }
                 });
             }
+
+            // Disable the submit button to prevent multiple clicks
+            form.find('button[type="submit"]').prop('disabled', true);
+
+            $.ajax({
+                type: "POST",
+                url: form.attr('action'),
+                data: form.serialize(),
+                success: function(response) {
+                    Swal.close(); // Close the loading alert
+                    Swal.fire({
+                        title: status === "Disetujui" ? "Pinjaman disetujui" : "Pinjaman ditolak",
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            location.reload();
+                        }
+                    });
+                },
+                error: function(response) {
+                    Swal.close(); // Close the loading alert
+                    Swal.fire({
+                        title: "Gagal memperbarui status",
+                        text: response.responseJSON.message || 'Terjadi kesalahan saat memproses permintaan.',
+                        icon: 'error'
+                    });
+                    form.find('button[type="submit"]').prop('disabled', false);
+                }
+            });
         });
     });
-        });
-    </script>
+</script>
+
+
+
 </x-layout>

@@ -65,4 +65,8 @@ class User extends Authenticatable
     public function tanggungan(): HasOne{
         return $this->hasOne(Tanggungan::class, 'id_tanggungan');
     }
+
+    public function transaksiPokok(): HasOne{
+        return $this->hasOne(TransaksiPokok::class, 'id_transaksiPokok');
+    }
 }
