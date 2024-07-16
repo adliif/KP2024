@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Pinjaman;
 use App\Models\Tanggungan;
-use App\Models\SimpananPokok;
-use App\Models\TransaksiPinjaman;
 use Illuminate\Http\Request;
+use App\Models\SimpananPokok;
+use App\Models\TransaksiPokok;
+use App\Models\TransaksiPinjaman;
+use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
@@ -62,6 +64,98 @@ class AdminController extends Controller
         return view('roleAdmin.dataPinjaman', $data, compact('pinjaman'));
     }
 
+    public function buatTransaksiSimpanan(Request $request)
+    {
+        $simpananList = SimpananPokok::all();
+        $allLunas = true;
+
+        // Periksa apakah semua SimpananPokok berstatus Lunas
+        foreach ($simpananList as $simpanan) {
+            if ($simpanan->status_simpanan !== 'Lunas') {
+                $allLunas = false;
+                break;
+            }
+        }
+
+        if (!$allLunas) {
+            return response()->json(['message' => 'Beberapa pengguna belum melunasi transaksi sebelumnya'], 400);
+        }
+
+        // Set your Merchant Server Key
+        \Midtrans\Config::$serverKey = config('midtrans.serverKey');
+        \Midtrans\Config::$isProduction = config('midtrans.isProduction');
+        \Midtrans\Config::$isSanitized = config('midtrans.isSanitized');
+        \Midtrans\Config::$is3ds = config('midtrans.is3ds');
+
+        foreach ($simpananList as $simpanan) {
+            $params = [
+                'transaction_details' => [
+                    'order_id' => rand(),
+                    'gross_amount' => $simpanan->iuran,
+                ],
+                'customer_details' => [
+                    'first_name' => $simpanan->user->nama,
+                    'email' => $simpanan->user->email,
+                ],
+            ];
+
+            $snapToken = \Midtrans\Snap::getSnapToken($params);
+
+            // Set jatuh_tempo to the first day of the next month ->startOfMonth()
+            $now = now();
+            $jatuh_tempo = $now->copy()->addMonth();
+
+            TransaksiPokok::create([
+                'id_simpanan_pokok' => $simpanan->id_simpanan_pokok,
+                'jatuh_tempo' => $jatuh_tempo,
+                'snap_token' => $snapToken,
+                'keterangan' => 'Belum Lunas',
+            ]);
+
+            $simpanan->status_simpanan = 'Belum Lunas';
+            $simpanan->save();
+        }
+
+        return response()->json(['message' => 'Semua transaksi berhasil dibuat']);
+    }
+
+    // public function updateTransaksiPokok(Request $request, $id)
+    // {
+    //     $transaksi = TransaksiPokok::find($id);
+    //     if ($transaksi) {
+    //         $transaksi->keterangan = $request->input('keterangan');
+    //         $transaksi->save();
+
+    //         // Update the corresponding SimpananPokok status if needed
+    //         if ($transaksi->keterangan == 'Lunas') {
+    //             $simpananPokok = SimpananPokok::find($transaksi->id_simpanan_pokok);
+    //             if ($simpananPokok) {
+    //                 $simpananPokok->status_simpanan = 'Lunas';
+    //                 $simpananPokok->save();
+    //             }
+    //         }
+
+    //         return response()->json(['message' => 'Transaksi Pokok updated successfully']);
+    //     } else {
+    //         return response()->json(['message' => 'Transaksi Pokok not found'], 404);
+    //     }
+    // }
+
+    public function checkSimpananStatus()
+    {
+        $simpananList = SimpananPokok::all();
+        $disableButton = false;
+
+        foreach ($simpananList as $simpanan) {
+            if ($simpanan->status_simpanan === 'Belum Lunas') {
+                $disableButton = true;
+                break;
+            }
+        }
+
+        return response()->json(['disableButton' => $disableButton]);
+    }
+
     protected function createTanggungan($pinjaman)
     {
         $besar_pinjaman = $pinjaman->besar_pinjaman;
@@ -102,7 +196,7 @@ class AdminController extends Controller
                 $params = array(
                     'transaction_details' => array(
                         'order_id' => rand(),
-                        'gross_amount' => $pembayaran_bulanan,
+                        'gross_amount' => intval($pembayaran_bulanan),
                     ),
                     'customer_details' => array(
                         'first_name' => $tanggungan->pinjaman->user->nama,
@@ -125,15 +219,25 @@ class AdminController extends Controller
 
     public function updatePinjamanStatus(Request $request, $id_pinjaman)
     {
-        $pinjaman = Pinjaman::findOrFail($id_pinjaman);
-        $pinjaman->keterangan = $request->input('status');
-        $pinjaman->save();
+        DB::beginTransaction();
 
-        if ($pinjaman->keterangan == 'Disetujui') {
-            $this->createTanggungan($pinjaman);
+        try {
+            $pinjaman = Pinjaman::findOrFail($id_pinjaman);
+            $pinjaman->keterangan = $request->input('status');
+            $pinjaman->save();
+
+            if ($pinjaman->keterangan == 'Disetujui') {
+                $this->createTanggungan($pinjaman);
+            }
+
+            DB::commit();
+
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json(['success' => false, 'message' => 'Error updating status', 'error' => $e->getMessage()], 500);
         }
-
-        return response()->json(['success' => true]);
     }
 
     public function dataTanggungan()
@@ -153,5 +257,25 @@ class AdminController extends Controller
     {
         $user = User::findOrFail($id)->delete();
         return redirect(route('dataAnggota'));
+    }
+
+    public function viewTransaksiSimpanan(){
+        $transaksiPokok = TransaksiPokok::orderBy('id_transaksiPokok', 'asc')->get();
+
+        $data = [
+            'title' => 'Transaksi Simpanan'
+        ];
+
+        return view('roleAdmin.transaksiSimpanan', $data, compact('transaksiPokok'));
+    }
+
+    public function viewTransaksiPinjaman(){
+        $transaksiPinjaman = TransaksiPinjaman::orderBy('id_transaksiPinjaman', 'asc')->get();
+
+        $data = [
+            'title' => 'Transaksi Simpanan'
+        ];
+
+        return view('roleAdmin.transaksiPinjaman', $data, compact('transaksiPinjaman'));
     }
 }

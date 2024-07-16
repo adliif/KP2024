@@ -27,7 +27,7 @@ class UserFactory extends Factory
             'nama' => fake()->name(),
             // 'username' => fake()->unique()->name(),
             'email' => fake()->unique()->safeEmail(),
-            'NIP' => fake()->unique()->randomDigit(),
+            'NIP' => fake()->unique()->randomNumber(5, true),
             'jenis_kelamin' => fake()->randomElement(['Perempuan', 'Laki-Laki']),
             'alamat' => fake()->address(),
             'no_tlp' => fake()->phoneNumber(),

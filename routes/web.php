@@ -23,11 +23,17 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::patch('dataAnggota/update/{id_user}', [AdminController::class, 'updateUser'])->name('dataAnggota.update');
     Route::delete('dataAnggota/delete/{id_user}', [AdminController::class, 'destroyUser'])->name('dataAnggota.delete');
 
-    Route::get('dataPinjaman', [AdminController::class, 'dataPinjaman']);
-    Route::post('updatePinjamanStatus/{id_pinjaman}', [AdminController::class, 'updatePinjamanStatus'])->name('pinjaman.updateStatus');
-    
     Route::get('dataTanggungan', [AdminController::class, 'dataTanggungan']);
     Route::get('dataSimpananPokok', [AdminController::class, 'dataSimpananPokok']);
+    Route::post('buatTransaksiSimpanan', [AdminController::class, 'buatTransaksiSimpanan']);
+    Route::get('checkSimpananStatus', [AdminController::class, 'checkSimpananStatus']);
+    Route::post('/transaksi/{id}/update', [AdminController::class, 'updateTransaksiPokok'])->name('transaksi.update');
+
+    Route::get('dataPinjaman', [AdminController::class, 'dataPinjaman']);
+    Route::post('updatePinjamanStatus/{id_pinjaman}', [AdminController::class, 'updatePinjamanStatus'])->name('pinjaman.updateStatus');
+
+    Route::get('transaksiSimpanan', [AdminController::class, 'viewTransaksiSimpanan'])->name('viewTransaksiSimpanan.view');
+    Route::get('transaksiPinjaman', [AdminController::class, 'viewTransaksiPinjaman'])->name('viewTransaksiPinjaman.view');
 });
 
 // Routes Role Anggota
@@ -39,6 +45,7 @@ Route::middleware(['auth', 'user'])->group(function () {
 
     Route::get('tanggungan', [AnggotaController::class, 'tanggungan'])->name('tanggungan.view');
     Route::post('/updatePinjaman/{id_transaksiPinjaman}', [AnggotaController::class, 'updatePinjaman'])->name('pinjaman.update');
+    Route::post('/updateSimpanan/{id_transaksiPokok}', [AnggotaController::class, 'updateSimpanan'])->name('simpanan.update');
 
     Route::get('history', [AnggotaController::class, 'history']);
     Route::get('historyTransaksi', [AnggotaController::class, 'history']);

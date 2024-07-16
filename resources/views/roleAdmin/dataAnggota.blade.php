@@ -34,11 +34,17 @@
                             <div class="card">
                                 <div class="card-header">
                                     <div class="d-flex align-items-center">
-                                        <button class="btn btn-primary btn-round ms-auto" data-bs-toggle="modal"
+                                        <button class="btn btn-primary btn-round justify-content-start" data-bs-toggle="modal"
                                             data-bs-target="#addAnggotaModal">
                                             <i class="fa fa-plus"></i>
                                             Tambah Anggota
                                         </button>
+                                        {{-- <a href="#" class="btn btn-success btn-round ms-auto">
+                                            <i class="fa fa-file-excel"></i> Export Excel
+                                        </a>
+                                        <a href="#" class="btn btn-danger btn-round ms-3">
+                                            <i class="fa fa-file-pdf"></i> Export PDF
+                                        </a> --}}
                                     </div>
                                 </div>
                                 <div class="card-body">
@@ -154,17 +160,17 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-10">
-                                        <div class="form-group form-group-default">
-                                            <label>Alamat</label>
-                                            <textarea name="alamat" id="add-alamat" class="form-control" rows="3"></textarea>
-                                        </div>
-                                    </div>
                                     <div class="col-md-6">
                                         <div class="form-group form-group-default">
                                             <label>NO. HP</label>
                                             <input name="no_tlp" id="add-no_tlp" type="text"
                                                 class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <div class="form-group form-group-default" style="width: 475px;">
+                                            <label>Alamat</label>
+                                            <textarea name="alamat" id="add-alamat" class="form-control" rows="2"></textarea>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -306,7 +312,7 @@
         document.addEventListener("DOMContentLoaded", function() {
             // Initialize datatable
             $('#add-row').DataTable({
-                "pageLength": 5,
+                "pageLength": 25,
             });
 
             // Handle add button click

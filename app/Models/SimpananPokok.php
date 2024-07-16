@@ -12,7 +12,7 @@ class SimpananPokok extends Model
 {
     use HasFactory;
 
-    protected $primarKey = 'id_simpanan_pokok';
+    protected $primaryKey = 'id_simpanan_pokok';
     protected $fillable = ['id_user', 'iuran', 'total_simpanan', 'status_simpanan'];
 
     public function user(): BelongsTo

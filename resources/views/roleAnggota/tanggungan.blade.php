@@ -53,12 +53,17 @@
                                                     <tr>
                                                         <td>{{ $loop->iteration }}</td>
                                                         <td>{{ $t->jatuh_tempo }}</td>
-                                                        <td>Rp{{ number_format($t->simpanan_pokoks->iuran, 0, ',', '.') }}</td>
-                                                        <td style="text-align: center; vertical-align: middle;">
+                                                        <td>Rp{{ number_format($t->simpananPokok->iuran, 0, ',', '.') }}</td>
+                                                        <td id="aksi_{{ $t->id_transaksiPokok }}" style="text-align: center;">
                                                             @if ($t->keterangan == 'Lunas')
                                                                 <button class="btn btn-dark" disabled>{{ $t->keterangan }}</button>
                                                             @else
-                                                                <button class="btn btn-primary">{{ $t->keterangan }}</button>
+                                                                <form class="form-update-status" action="{{ route('simpanan.update', $t->id_transaksiPokok) }}" 
+                                                                    method="post" data-id="{{ $t->id_transaksiPokok }}" >
+                                                                    @csrf
+                                                                    <input type="hidden" name="status" value="Lunas">
+                                                                    <button type="submit" class="btn btn-primary btn-setujui pay-buttonSimpanan" data-snap-token="{{ $t->snap_token }}">{{ $t->keterangan }}</button>
+                                                                </form>
                                                             @endif
                                                         </td>
                                                     </tr>
@@ -166,6 +171,51 @@
         });
 
         document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.pay-buttonSimpanan').forEach(function(button) {
+                button.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    var snapToken = button.getAttribute('data-snap-token');
+                    var form = button.closest('form');
+
+                    snap.pay(snapToken, {
+                        // Optional
+                        onSuccess: function(result) {
+                            Swal.fire({
+                                title: "Pembayaran Berhasil!",
+                                text: "Terima kasih telah membayar tepat waktu.",
+                                icon: "success",
+                                buttons: {
+                                    confirm: {
+                                        className: "btn btn-success",
+                                    },
+                                },
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    form.submit();
+                                }
+                            });
+                        },
+                        // Optional
+                        onPending: function(result) {
+                            Swal.fire({
+                                title: "Pembayaran Tertunda",
+                                icon: "info"
+                            });
+                        },
+                        // Optional
+                        onError: function(result) {
+                            Swal.fire({
+                                title: "Pembayaran Gagal",
+                                text: "Terjadi kesalahan saat memproses pembayaran.",
+                                icon: "error"
+                            });
+                        }
+                    });
+                });
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
             document.querySelectorAll('.pay-button').forEach(function(button) {
                 button.addEventListener('click', function(event) {
                     event.preventDefault();
@@ -210,4 +260,5 @@
             });
         });
     </script>
+
 </x-layout>
