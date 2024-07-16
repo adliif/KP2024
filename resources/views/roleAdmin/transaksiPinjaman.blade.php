@@ -49,7 +49,7 @@
                                                 <tr>
                                                     <th>No.</th>
                                                     <th>Nama</th>
-                                                    <th>Total Pembayaran</th>
+                                                    <th>Iuran Cicilan</th>
                                                     <th>Jatuh Tempo</th>
                                                     <th>Tanggal Pembayaran</th>
                                                     <th>Keterangan</th>
@@ -60,7 +60,7 @@
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
                                                     <td>{{ $tp->tanggungan->pinjaman->user->nama }}</td>
-                                                    <td>{{ 'Rp. ' . number_format($tp->tanggungan->total_pinjaman, 0, ',', '.') }}</td>
+                                                    <td>{{ 'Rp. ' . number_format($tp->tanggungan->iuran_perBulan, 0, ',', '.') }}</td>
                                                     <td>{{ $tp->jatuh_tempo }}</td>
                                                     <td>{{ $tp->tanggal_pembayaran }}</td>
                                                     <td>{{ $tp->keterangan }}</td>

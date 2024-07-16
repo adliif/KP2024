@@ -15,9 +15,11 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // Create 15 users, each with Simpanan Pokok and Pinjaman
-        User::factory(15)->create()->each(function ($user) {
-            SimpananPokok::factory()->create(['id_user' => $user->id_user]);
-            Pinjaman::factory()->create(['id_user' => $user->id_user]);
-        });
+        // User::factory(15)->create()->each(function ($user) {
+        //     SimpananPokok::factory()->create(['id_user' => $user->id_user]);
+        //     Pinjaman::factory()->create(['id_user' => $user->id_user]);
+        // });
+
+        User::factory(3)->create();
     }
 }

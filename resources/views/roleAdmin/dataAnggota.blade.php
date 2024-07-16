@@ -160,17 +160,17 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-10">
-                                        <div class="form-group form-group-default">
-                                            <label>Alamat</label>
-                                            <textarea name="alamat" id="add-alamat" class="form-control" rows="3"></textarea>
-                                        </div>
-                                    </div>
                                     <div class="col-md-6">
                                         <div class="form-group form-group-default">
                                             <label>NO. HP</label>
                                             <input name="no_tlp" id="add-no_tlp" type="text"
                                                 class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <div class="form-group form-group-default" style="width: 475px;">
+                                            <label>Alamat</label>
+                                            <textarea name="alamat" id="add-alamat" class="form-control" rows="2"></textarea>
                                         </div>
                                     </div>
                                     <div class="col-md-6">

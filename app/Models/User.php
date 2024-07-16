@@ -53,7 +53,8 @@ class User extends Authenticatable
         ];
     }
 
-    public function simpananPokok(): HasMany{
+    public function simpananPokok(): HasMany
+    {
         return $this->hasMany(SimpananPokok::class, 'id_simpanan_pokok');
     }
 

@@ -7,7 +7,6 @@ use App\Models\Pinjaman;
 use App\Models\Tanggungan;
 use App\Models\TransaksiPinjaman;
 use App\Models\TransaksiPokok;
-use App\Rules\MatchOldPassword;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -64,8 +63,11 @@ class AnggotaController extends Controller
 
     public function tanggungan()
     {
-        $transaksiPokok = TransaksiPokok::with('simpananPokok')
-            ->whereHas('simpananPokok')->where('id_user', Auth::user()->id);
+        $transaksiPokok = TransaksiPokok::with('simpananPokok.user')
+            ->whereHas('simpananPokok', function ($query) {
+                $query->where('keterangan', 'Belum Lunas')
+                    ->where('id_user', Auth::user()->id_user);
+            })->get();
 
         $transaksiPinjaman = TransaksiPinjaman::with('tanggungan.pinjaman.user')
             ->whereHas('tanggungan.pinjaman', function ($query) {
@@ -78,6 +80,28 @@ class AnggotaController extends Controller
         ];
 
         return view('roleAnggota.tanggungan', $data, compact('transaksiPinjaman', 'transaksiPokok'));
+    }
+
+    public function updateSimpanan(Request $request, $id_transaksiPokok)
+    {
+        $transaksiPokok = TransaksiPokok::findOrFail($id_transaksiPokok);
+        $tanggungan = $transaksiPokok->simpananPokok;
+    
+        // Periksa apakah status pembayarannya adalah "lunas" atau semacamnya
+        $statusPembayaran = $request->input('status');
+        if ($statusPembayaran == 'Lunas') {
+            $tanggungan->total_simpanan += $tanggungan->iuran;
+            $tanggungan->status_simpanan = 'Lunas';
+
+            $tanggungan->save();
+        }
+    
+        // Update keterangan dan tanggal pembayaran di transaksi pinjaman
+        $transaksiPokok->keterangan = $statusPembayaran;
+        $transaksiPokok->tanggal_pembayaran = now()->timezone('Asia/Jakarta');
+        $transaksiPokok->save();
+    
+        return redirect()->route('tanggungan.view');
     }
 
     public function updatePinjaman(Request $request, $id_transaksiPinjaman)

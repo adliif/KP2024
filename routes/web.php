@@ -45,6 +45,7 @@ Route::middleware(['auth', 'user'])->group(function () {
 
     Route::get('tanggungan', [AnggotaController::class, 'tanggungan'])->name('tanggungan.view');
     Route::post('/updatePinjaman/{id_transaksiPinjaman}', [AnggotaController::class, 'updatePinjaman'])->name('pinjaman.update');
+    Route::post('/updateSimpanan/{id_transaksiPokok}', [AnggotaController::class, 'updateSimpanan'])->name('simpanan.update');
 
     Route::get('history', [AnggotaController::class, 'history']);
     Route::get('historyTransaksi', [AnggotaController::class, 'history']);
