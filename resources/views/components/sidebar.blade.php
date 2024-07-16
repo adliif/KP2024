@@ -53,18 +53,33 @@
                         <p>Riwayat Pinjaman</p>
                     </a>
                 </li>
-                <li class="{{request()->is('historyTransaksi') ? 'nav-item active' : 'nav-item'}}">
+                <li class="nav-item {{ request()->is('transaksiSimpananUser', 'transaksiPinjamanUser') ? 'active' : '' }}">
+                    <a href="#" data-bs-toggle="collapse" data-bs-target="#submenuTransaksi" aria-expanded="{{ request()->is('transaksiSimpanan', 'transaksiPinjaman') ? 'true' : 'false' }}" aria-controls="submenuTransaksi">
+                        <i class="fas fa-history"></i>
+                        <p>Data Transaksi</p>
+                        <span class="caret"></span>
+                    </a>
+                    <div class="collapse {{ request()->is('transaksiSimpananUser', 'transaksiPinjamanUser') ? 'show' : '' }}" id="submenuTransaksi">
+                        <ul class="nav nav-collapse">
+                            <li class="{{ request()->is('transaksiSimpananUser') ? 'active' : '' }}">
+                                <a href="/transaksiSimpananUser">
+                                    <span class="sub-item">Transaksi Simpanan</span>
+                                </a>
+                            </li>
+                            <li class="{{ request()->is('transaksiPinjamanUser') ? 'active' : '' }}">
+                                <a href="/transaksiPinjamanUser">
+                                    <span class="sub-item">Transaksi Pinjaman</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <!-- <li class="{{request()->is('historyTransaksi') ? 'nav-item active' : 'nav-item'}}">
                     <a href="/historyTransaksi">
                         <i class="fas fa-history"></i>
                         <p>Riwayat Transaksi</p>
                     </a>
-                </li>
-                <li class="{{request()->is('helpdesk') ? 'nav-item active' : 'nav-item'}}">
-                    <a href="/helpdesk">
-                        <i class="fas fa-address-book"></i>
-                        <p>Kontak</p>
-                    </a>
-                </li>
+                </li> -->
                 <li class="{{request()->is('logout') ? 'nav-item active' : 'nav-item'}}">
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf

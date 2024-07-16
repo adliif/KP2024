@@ -18,8 +18,8 @@ return new class extends Migration
             $table->foreign('id_user')->references('id_user')->on('users')->onDelete('cascade');
 
             $table->timestamp('tgl_pengajuan');
-            $table->integer('besar_pinjaman');
-            $table->integer('tenor_pinjaman');
+            $table->float('besar_pinjaman');
+            $table->float('tenor_pinjaman');
             $table->string('keterangan')->default('Diproses');
         });
     }

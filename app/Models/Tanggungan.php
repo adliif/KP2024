@@ -20,7 +20,6 @@ class Tanggungan extends Model
         return $this->belongsTo(Pinjaman::class, 'id_pinjaman');
     }
 
-    // Relasi dengan TransaksiPinjaman
     public function transaksiPinjaman(): HasMany
     {
         return $this->hasMany(TransaksiPinjaman::class, 'id_tanggungan');

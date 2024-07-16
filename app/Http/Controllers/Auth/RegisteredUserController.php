@@ -56,6 +56,7 @@ class RegisteredUserController extends Controller
         $this->createSimpananPokok($user->id_user);
 
         return response()->json(['success' => true]);
+
     }
 
     protected function createSimpananPokok($id_user)
@@ -66,5 +67,7 @@ class RegisteredUserController extends Controller
             'total_simpanan' => 0,
             'status_simpanan' => 'Lunas'
         ]);
+
+        return redirect()->route('dataAnggota');
     }
 }

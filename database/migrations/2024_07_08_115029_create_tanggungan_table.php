@@ -19,8 +19,8 @@ return new class extends Migration
 
             $table->float('bunga_pinjaman')->default(0.08);
             $table->float('total_pinjaman');
-            $table->integer('iuran_perBulan');
-            $table->integer('sisa_pinjaman');
+            $table->float('iuran_perBulan');
+            $table->float('sisa_pinjaman');
             $table->string('status_pinjaman');
             $table->timestamps();
         });

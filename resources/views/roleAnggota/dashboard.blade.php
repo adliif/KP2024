@@ -50,7 +50,7 @@
                     <div class="col col-stats ms-3 ms-sm-0">
                       <div class="numbers">
                         <p class="card-category">Total Anggota</p>
-                        <h4 class="card-title">50</h4>
+                        <h4 class="card-title">{{ $user }}</h4>
                       </div>
                     </div>
                   </div>
@@ -68,8 +68,8 @@
                     </div>
                     <div class="col col-stats ms-3 ms-sm-0">
                       <div class="numbers">
-                        <p class="card-category">Ekuitas</p>
-                        <h4 class="card-title">Rp 150,000,000</h4>
+                        <p class="card-category">Total Simpanan</p>
+                        <h4 class="card-title">-</h4>
                       </div>
                     </div>
                   </div>

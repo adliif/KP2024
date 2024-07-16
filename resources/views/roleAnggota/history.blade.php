@@ -59,10 +59,10 @@
                                                         <td>{{ $loop->iteration }}</td>
                                                         <td>{{ $t->pinjaman->tgl_pengajuan }}</td>
                                                         <td>Rp{{ number_format($t->pinjaman->besar_pinjaman, 0, ',', '.') }}</td>
-                                                        <td>Rp{{ number_format($t->bunga_pinjaman, 0, ',', '.') }}</td>
-                                                        <td>Rp{{ number_format($t->total_pinjaman, 0, ',', '.') }}</td>
-                                                        <td>Rp{{ number_format($t->iuran_perBulan, 0, ',', '.') }}</td>
-                                                        <td>Rp{{ number_format($t->sisa_pinjaman, 0, ',', '.') }}</td>
+                                                        <td>Rp{{ number_format(ceil($t->bunga_pinjaman), 0, ',', '.') }}</td>
+                                                        <td>Rp{{ number_format(ceil($t->total_pinjaman), 0, ',', '.') }}</td>
+                                                        <td>Rp{{ number_format(ceil($t->iuran_perBulan), 0, ',', '.') }}</td>
+                                                        <td>Rp{{ number_format(ceil($t->sisa_pinjaman), 0, ',', '.') }}</td>
                                                         <td>
                                                             @if ($t->sisa_pinjaman == 0)
                                                                 Lunas
