@@ -71,18 +71,53 @@ class AnggotaController extends Controller
                 $query->where('keterangan', 'Belum Lunas')
                     ->where('id_user', Auth::user()->id_user);
             })->get();
-
+    
         $transaksiPinjaman = TransaksiPinjaman::with('tanggungan.pinjaman.user')
             ->whereHas('tanggungan.pinjaman', function ($query) {
                 $query->where('status_pinjaman', 'Belum Lunas')
                     ->where('id_user', Auth::user()->id_user);
             })->get(); 
-
+    
+        $tanggungan = Tanggungan::with('pinjaman.user')
+            ->whereHas('pinjaman', function ($query) {
+                $query->where('id_user', Auth::user()->id_user);
+            })
+            ->where('status_pinjaman', 'Belum Lunas')
+            ->first();
+        
+        if ($tanggungan) {
+            \Midtrans\Config::$serverKey = config('midtrans.serverKey');
+            \Midtrans\Config::$isProduction = config('midtrans.isProduction');
+            \Midtrans\Config::$isSanitized = config('midtrans.isSanitized');
+            \Midtrans\Config::$is3ds = config('midtrans.is3ds');
+        
+            $besar_pinjaman = $tanggungan->sisa_pinjaman - (($tanggungan->bunga_pinjaman / $tanggungan->pinjaman->tenor_pinjaman) * $tanggungan->sisa_tenor);
+        
+            $paramsLunas = array(
+                'transaction_details' => array(
+                    'order_id' => rand(),
+                    'gross_amount' => ceil($besar_pinjaman),
+                ),
+                'customer_details' => array(
+                    'first_name' => $tanggungan->pinjaman->user->nama,
+                    'email' => $tanggungan->pinjaman->user->email,
+                ),
+            );
+            $snapTokenLunas = \Midtrans\Snap::getSnapToken($paramsLunas);
+        
+            // Update snapTokenLunas attribute
+            $tanggungan->snap_tokenLunas = $snapTokenLunas;
+            $tanggungan->save();
+        }
+    
         $data = [
             'title' => 'Tanggungan',
+            'transaksiPinjaman' => $transaksiPinjaman,
+            'transaksiPokok' => $transaksiPokok,
+            'tanggungan' => $tanggungan,
         ];
-
-        return view('roleAnggota.tanggungan', $data, compact('transaksiPinjaman', 'transaksiPokok'));
+    
+        return view('roleAnggota.tanggungan', $data);
     }
 
     public function updateSimpanan(Request $request, $id_transaksiPokok)
@@ -116,6 +151,7 @@ class AnggotaController extends Controller
         $statusPembayaran = $request->input('status');
         if ($statusPembayaran == 'Lunas') {
             $tanggungan->sisa_pinjaman -= $tanggungan->iuran_perBulan;
+            $tanggungan->sisa_tenor -= 1;
             
             // Periksa apakah sisa pinjaman menjadi 0 atau kurang, jika iya maka set status ke "Lunas"
             if ($tanggungan->sisa_pinjaman <= 0) {
@@ -129,6 +165,36 @@ class AnggotaController extends Controller
         $transaksiPinjaman->keterangan = $statusPembayaran;
         $transaksiPinjaman->tanggal_pembayaran = now()->timezone('Asia/Jakarta');
         $transaksiPinjaman->save();
+    
+        return redirect()->route('tanggungan.view');
+    }
+
+    public function updatePinjamanLunas(Request $request)
+    {
+        $tanggungan = Tanggungan::with('pinjaman.user')
+            ->whereHas('pinjaman', function ($query) {
+                $query->where('id_user', Auth::user()->id_user);
+            })->where('status_pinjaman', 'Belum Lunas')->firstOrFail();
+    
+        $statusPembayaran = $request->input('status');
+        if ($statusPembayaran == 'Lunas') {
+            $tanggungan->sisa_pinjaman = 0;
+            $tanggungan->sisa_tenor = 0;
+            $tanggungan->status_pinjaman = 'Lunas';
+    
+            $tanggungan->save();
+        }
+    
+        // Mengupdate semua transaksi yang berkaitan dengan tanggungan ini
+        $transaksiPinjaman = $tanggungan->transaksiPinjaman()->get();
+        foreach ($transaksiPinjaman as $transaksi) {
+            // Perbarui keterangan dan tanggal pembayaran jika tanggal_pembayaran kosong
+            if (is_null($transaksi->tanggal_pembayaran)) {
+                $transaksi->keterangan = $statusPembayaran;
+                $transaksi->tanggal_pembayaran = now()->timezone('Asia/Jakarta');
+                $transaksi->save();
+            }
+        }
     
         return redirect()->route('tanggungan.view');
     }

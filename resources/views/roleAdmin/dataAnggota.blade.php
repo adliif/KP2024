@@ -102,9 +102,7 @@
                                                         </td>
                                                     </tr>
                                                 @empty
-                                                    <tr>
-                                                        <td colspan="8">Tidak ada data</td>
-                                                    </tr>
+
                                                 @endforelse
                                             </tbody>
                                         </table>

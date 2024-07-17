@@ -62,7 +62,7 @@
                                                                     method="post" data-id="{{ $t->id_transaksiPokok }}" >
                                                                     @csrf
                                                                     <input type="hidden" name="status" value="Lunas">
-                                                                    <button type="submit" class="btn btn-primary btn-setujui pay-buttonSimpanan" data-snap-token="{{ $t->snap_token }}">{{ $t->keterangan }}</button>
+                                                                    <button type="submit" class="btn btn-primary btn-setujui pay-buttonSimpanan" data-snap-token="{{ $t->snap_token }}">Bayar</button>
                                                                 </form>
                                                             @endif
                                                         </td>
@@ -84,6 +84,15 @@
                                 <div class="card-header">
                                     <div class="d-flex align-items-center">
                                         <h4 class="card-title">Tanggungan Pinjaman</h4>
+                                        @if ($tanggungan)
+                                            <form class="form-update-status ms-auto" action="{{ route('pinjamanLunas.update') }}" method="post">
+                                                @csrf
+                                                <input type="hidden" name="status" value="Lunas">
+                                                <button type="submit" class="btn btn-warning btn-round btn-setujui pay-buttonLunas" data-snap-token="{{ $tanggungan->snap_tokenLunas }}">Bayar Lunas</button>
+                                            </form>
+                                        @else
+                                            
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="card-body">
@@ -168,6 +177,48 @@
 
         $("#add-row2").DataTable({
             pageLength: 5,
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.pay-buttonLunas').forEach(function(button) {
+                button.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    var snapToken = button.getAttribute('data-snap-token');
+                    var form = button.closest('form');
+
+                    snap.pay(snapToken, {
+                        onSuccess: function(result) {
+                            Swal.fire({
+                                title: "Pembayaran Berhasil!",
+                                text: "Terima kasih telah membayar tepat waktu.",
+                                icon: "success",
+                                buttons: {
+                                    confirm: {
+                                        className: "btn btn-success",
+                                    },
+                                },
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    form.submit();
+                                }
+                            });
+                        },
+                        onPending: function(result) {
+                            Swal.fire({
+                                title: "Pembayaran Tertunda",
+                                icon: "info"
+                            });
+                        },
+                        onError: function(result) {
+                            Swal.fire({
+                                title: "Pembayaran Gagal",
+                                text: "Terjadi kesalahan saat memproses pembayaran.",
+                                icon: "error"
+                            });
+                        }
+                    });
+                });
+            });
         });
 
         document.addEventListener('DOMContentLoaded', function () {
@@ -259,6 +310,7 @@
                 });
             });
         });
+
     </script>
 
 </x-layout>

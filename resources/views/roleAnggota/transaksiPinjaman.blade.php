@@ -60,44 +60,51 @@
                                                 @php
                                                     $loanInstallmentCounts = []; // To track the installment counts for each loan
                                                 @endphp
-                                                @foreach ( $transaksiPinjaman as $tp)
-                                                @php
-                                                    $loanId = $tp->tanggungan->pinjaman->id;
-                                                    $tenor = $tp->tanggungan->pinjaman->tenor_pinjaman;
+                                                @foreach ($transaksiPinjaman as $tp)
+                                                    @php
+                                                        $loanId = $tp->tanggungan->pinjaman->id;
+                                                        $tenor = $tp->tanggungan->pinjaman->tenor_pinjaman;
 
-                                                    // Initialize the count for this loan if not already set
-                                                    if (!isset($loanInstallmentCounts[$loanId])) {
-                                                        $loanInstallmentCounts[$loanId] = 0;
-                                                    }
+                                                        // Initialize the count for this loan if not already set
+                                                        if (!isset($loanInstallmentCounts[$loanId])) {
+                                                            $loanInstallmentCounts[$loanId] = 0;
+                                                        }
 
-                                                    // Increment the installment count
-                                                    $loanInstallmentCounts[$loanId]++;
-                                                    
-                                                    // Calculate the installment number
-                                                    $installmentNumber = $loanInstallmentCounts[$loanId] % $tenor;
-                                                    if ($installmentNumber == 0) {
-                                                        $installmentNumber = $tenor;
-                                                    }
-                                                @endphp
-                                                <tr>
-                                                    <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ $tp->tanggungan->pinjaman->tenor_pinjaman }}x</td>
-                                                    <td>Cicilan ke-{{ $installmentNumber }}</td>
-                                                    <td>{{ 'Rp. ' . number_format(ceil($tp->tanggungan->iuran_perBulan), 0, ',', '.') }}</td>
-                                                    <td>{{ $tp->jatuh_tempo }}</td>
-                                                    <td>{{ $tp->tanggal_pembayaran }}</td>
-                                                    <td>
-                                                        <div class="d-flex justify-content-between">
-                                                            <button
-                                                                class="btn btn-{{ $tp->keterangan == 'Belum Lunas' ? 'danger' : 'success' }}"
-                                                                disabled>
-                                                                {{ $tp->keterangan }}
+                                                        // Increment the installment count
+                                                        $loanInstallmentCounts[$loanId]++;
+
+                                                        // Calculate the installment number
+                                                        $installmentNumber = $loanInstallmentCounts[$loanId] % $tenor;
+                                                        if ($installmentNumber == 0) {
+                                                            $installmentNumber = $tenor;
+                                                        }
+
+                                                        // Check if the tenor has changed and reset the count
+                                                        if ($loop->first || $transaksiPinjaman[$loop->index - 1]->tanggungan->pinjaman->tenor_pinjaman != $tenor) {
+                                                            $loanInstallmentCounts[$loanId] = 1;
+                                                            $installmentNumber = 1;
+                                                        }
+                                                    @endphp
+                                                    <tr>
+                                                        <td>{{ $loop->iteration }}</td>
+                                                        <td>{{ $tp->tanggungan->pinjaman->tenor_pinjaman }}x</td>
+                                                        <td>Cicilan ke-{{ $installmentNumber }}</td>
+                                                        <td>{{ 'Rp. ' . number_format(ceil($tp->tanggungan->iuran_perBulan), 0, ',', '.') }}</td>
+                                                        <td>{{ $tp->jatuh_tempo }}</td>
+                                                        <td>{{ $tp->tanggal_pembayaran }}</td>
+                                                        <td>
+                                                            <div class="d-flex justify-content-between">
+                                                                <button
+                                                                    class="btn btn-{{ $tp->keterangan == 'Belum Lunas' ? 'danger' : 'success' }}"
+                                                                    disabled>
+                                                                    {{ $tp->keterangan }}
                                                                 </button>
-                                                        </div>
-                                                    </td>
-                                                </tr>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
                                                 @endforeach
                                             </tbody>
+
                                         </table>
                                     </div>
                                 </div>

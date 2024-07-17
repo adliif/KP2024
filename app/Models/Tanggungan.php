@@ -13,7 +13,7 @@ class Tanggungan extends Model
 
     protected $table = 'tanggungan';
     protected $primaryKey = 'id_tanggungan';
-    protected $fillable = ['id_pinjaman', 'bunga_pinjaman', 'iuran_perBulan', 'total_pinjaman', 'sisa_pinjaman', 'status_pinjaman'];
+    protected $fillable = ['id_pinjaman', 'bunga_pinjaman', 'iuran_perBulan', 'total_pinjaman', 'sisa_pinjaman', 'sisa_tenor', 'status_pinjaman', 'snap_tokenLunas'];
 
     public function pinjaman(): BelongsTo
     {
