@@ -21,7 +21,9 @@ return new class extends Migration
             $table->float('total_pinjaman');
             $table->float('iuran_perBulan');
             $table->float('sisa_pinjaman');
+            $table->float('sisa_tenor');
             $table->string('status_pinjaman');
+            $table->string('snap_tokenLunas')->nullable();
             $table->timestamps();
         });
     }

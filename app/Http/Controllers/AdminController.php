@@ -170,16 +170,6 @@ class AdminController extends Controller
         //pembayaran bulanan
         $pembayaran_bulanan = $total_pembayaran / $tenor;
 
-        // Buat data tanggungan
-        $tanggungan = Tanggungan::create([
-            'id_pinjaman' => $pinjaman->id_pinjaman,
-            'total_pinjaman' => $total_pembayaran,
-            'bunga_pinjaman' => $jumlah_bunga,
-            'iuran_perBulan' => $pembayaran_bulanan,
-            'sisa_pinjaman' => $total_pembayaran,
-            'status_pinjaman' => 'Belum Lunas'
-        ]);
-
         // Set your Merchant Server Key
         \Midtrans\Config::$serverKey = config('midtrans.serverKey');
         // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
@@ -188,6 +178,31 @@ class AdminController extends Controller
         \Midtrans\Config::$isSanitized = config('midtrans.isSanitized');
         // Set 3DS transaction for credit card to true
         \Midtrans\Config::$is3ds = config('midtrans.is3ds');
+
+        // Pembayaran Lunas
+        $paramsLunas = array(
+            'transaction_details' => array(
+                'order_id' => rand(),
+                'gross_amount' => ceil($besar_pinjaman),
+            ),
+            'customer_details' => array(
+                'first_name' => $pinjaman->user->nama,
+                'email' => $pinjaman->user->email,
+            ),
+        );
+        $snapTokenLunas = \Midtrans\Snap::getSnapToken($paramsLunas);
+
+         // Buat data tanggungan
+         $tanggungan = Tanggungan::create([
+            'id_pinjaman' => $pinjaman->id_pinjaman,
+            'total_pinjaman' => $total_pembayaran,
+            'bunga_pinjaman' => $jumlah_bunga,
+            'iuran_perBulan' => $pembayaran_bulanan,
+            'sisa_pinjaman' => $total_pembayaran,
+            'sisa_tenor' => $pinjaman->tenor_pinjaman,
+            'status_pinjaman' => 'Belum Lunas',
+            'snap_tokenLunas' => $snapTokenLunas,
+        ]);
 
         // Pastikan tanggungan berhasil dibuat
         if ($tanggungan) {
