@@ -9,11 +9,12 @@ require __DIR__ . '/auth.php';
 
 Route::get('/', function () {
     return view('auth.login',  ['title' => 'Login']);
-});
+})->middleware('guest');
 
 // Routes Role Admin
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('adminDashboard', [AdminController::class, 'index']);
+    Route::get('/admin/chart-data', [AdminController::class, 'getChartData']);
 
     Route::get('register', [RegisteredUserController::class, 'create'])->name('register.view');
     Route::post('/register/store', [RegisteredUserController::class, 'store'])->name('register.store');
@@ -39,6 +40,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
 // Routes Role Anggota
 Route::middleware(['auth', 'user'])->group(function () {
     Route::get('dashboard', [AnggotaController::class, 'index'])->name('dashboard');
+    Route::get('/anggota/chart-data', [AnggotaController::class, 'getChartData']);
 
     Route::get('pengajuan', [AnggotaController::class, 'pengajuan'])->name('pengajuan.view');
     Route::post('pengajuan', [AnggotaController::class, 'createPengajuan'])->name('pengajuan.create');

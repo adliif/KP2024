@@ -7,7 +7,7 @@
 
             <div class="main-panel">
                 <!-- Navbar -->
-                <x-nav-admin></x-nav-admin>
+            <x-main-header-admin></x-main-header>
 
                 <!-- Content -->
                 <div class="container">
@@ -63,17 +63,21 @@
                                                         <tr>
                                                             <td>{{ $loop->iteration }}</td>
                                                             <td>{{ $t->pinjaman->user->nama }}</td>
-                                                            <td>{{ 'Rp. ' . number_format($t->pinjaman->besar_pinjaman, 0, ',', '.') }}</td>
+                                                            <td>{{ 'Rp. ' . number_format(ceil($t->pinjaman->besar_pinjaman), 0, ',', '.') }}</td>
                                                             <td>{{ $t->pinjaman->tenor_pinjaman }}</td>
-                                                            <td>{{ 'Rp. ' . number_format($t->bunga_pinjaman, 0, ',', '.') }}</td>
-                                                            <td>{{ 'Rp. ' . number_format($t->total_pinjaman, 0, ',', '.') }}</td>
-                                                            <td>{{ 'Rp. ' . number_format($t->iuran_perBulan, 0, ',', '.') }}</td>
-                                                            <td>{{ 'Rp. ' . number_format($t->sisa_pinjaman, 0, ',', '.') }}</td>
+                                                            <td>{{ 'Rp. ' . number_format(ceil($t->bunga_pinjaman), 0, ',', '.') }}</td>
+                                                            <td>{{ 'Rp. ' . number_format(ceil($t->total_pinjaman), 0, ',', '.') }}</td>
+                                                            <td>{{ 'Rp. ' . number_format(ceil($t->iuran_perBulan), 0, ',', '.') }}</td>
+                                                            <td>{{ 'Rp. ' . number_format(ceil($t->sisa_pinjaman), 0, ',', '.') }}</td>
                                                             <td id="aksi_{{ $t->sisa_pinjaman }}">
                                                                 @if ($t->sisa_pinjaman > 0)
+                                                                <div class="d-flex justify-content-between">
                                                                     <button class="btn btn-danger" disabled>Belum Lunas</button>
+                                                                </div>
                                                                 @else
+                                                                <div class="d-flex justify-content-beetwen">
                                                                     <button class="btn btn-success" disabled>Lunas</button>
+                                                                </div>
                                                                 @endif
                                                             </td>
                                                         </tr>
