@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('jenis_kelamin');
             $table->string('alamat');
             $table->string('no_tlp');
-            $table->string('usertype')->default('user');
+            $table->string('usertype');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

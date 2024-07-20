@@ -1,4 +1,4 @@
-<div class="main-header">
+
     <nav class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom">
         <div class="container-fluid">
             {{-- <nav class="navbar navbar-header-left navbar-expand-lg navbar-form nav-search p-0 d-none d-lg-flex">
@@ -98,4 +98,3 @@
             </ul>
         </div>
     </nav>
-</div>

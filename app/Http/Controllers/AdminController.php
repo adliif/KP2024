@@ -16,11 +16,49 @@ class AdminController extends Controller
     public function index()
     {
         $totalUsers = User::where('usertype', 'user')->count();
-        $totalBesarPinjaman = Pinjaman::sum('besar_pinjaman');
+        $totalBesarPinjaman = Pinjaman::where('keterangan', 'Disetujui')->sum('besar_pinjaman');
+        $totalSimpanan = SimpananPokok::sum('total_simpanan');
+
+        $totalKeseluruhan = $totalBesarPinjaman + $totalSimpanan;
+
         $data = [
             'title' => 'Dashboard',
         ];
-        return view('roleAdmin.dashboard', $data, compact('totalUsers', 'totalBesarPinjaman'));
+        return view('roleAdmin.dashboard', $data, compact('totalUsers', 'totalKeseluruhan'));
+    }
+
+    public function getChartData()
+    {
+        // Fetch total pinjaman per month for 'lunas' records
+        $totalPinjaman = DB::table('pinjaman')
+        ->select(DB::raw('MONTH(tgl_pengajuan) as month'), DB::raw('SUM(besar_pinjaman) as total'))
+        ->where('keterangan', 'Disetujui')
+        ->groupBy(DB::raw('MONTH(tgl_pengajuan)'))
+        ->pluck('total', 'month');
+
+        // Fetch total simpanan pokok per month
+        $totalSimpanan = DB::table('simpanan_pokoks')
+        ->select(DB::raw('MONTH(created_at) as month'), DB::raw('SUM(total_simpanan) as total'))
+        ->groupBy(DB::raw('MONTH(created_at)'))
+        ->pluck('total', 'month');
+
+        // Initialize arrays with 0 for each month
+        $pinjamanData = array_fill(1, 12, 0);
+        $simpananData = array_fill(1, 12, 0);
+
+        // Populate arrays with data from queries
+        foreach ($totalPinjaman as $month => $total) {
+            $pinjamanData[$month] = $total;
+        }
+
+        foreach ($totalSimpanan as $month => $total) {
+            $simpananData[$month] = $total;
+        }
+
+        return response()->json([
+            'pinjaman' => array_values($pinjamanData),
+            'simpanan' => array_values($simpananData)
+        ]);
     }
 
     public function dataAnggota()
@@ -66,20 +104,7 @@ class AdminController extends Controller
 
     public function buatTransaksiSimpanan(Request $request)
     {
-        $simpananList = SimpananPokok::all();
-        $allLunas = true;
-
-        // Periksa apakah semua SimpananPokok berstatus Lunas
-        foreach ($simpananList as $simpanan) {
-            if ($simpanan->status_simpanan !== 'Lunas') {
-                $allLunas = false;
-                break;
-            }
-        }
-
-        if (!$allLunas) {
-            return response()->json(['message' => 'Beberapa pengguna belum melunasi transaksi sebelumnya'], 400);
-        }
+        $simpananList = SimpananPokok::where('status_simpanan', 'Lunas')->get();
 
         // Set your Merchant Server Key
         \Midtrans\Config::$serverKey = config('midtrans.serverKey');
@@ -116,39 +141,19 @@ class AdminController extends Controller
             $simpanan->save();
         }
 
-        return response()->json(['message' => 'Semua transaksi berhasil dibuat']);
+        return response()->json(['message' => 'Transaksi berhasil dibuat untuk pengguna dengan status Lunas']);
     }
 
-    // public function updateTransaksiPokok(Request $request, $id)
-    // {
-    //     $transaksi = TransaksiPokok::find($id);
-    //     if ($transaksi) {
-    //         $transaksi->keterangan = $request->input('keterangan');
-    //         $transaksi->save();
-
-    //         // Update the corresponding SimpananPokok status if needed
-    //         if ($transaksi->keterangan == 'Lunas') {
-    //             $simpananPokok = SimpananPokok::find($transaksi->id_simpanan_pokok);
-    //             if ($simpananPokok) {
-    //                 $simpananPokok->status_simpanan = 'Lunas';
-    //                 $simpananPokok->save();
-    //             }
-    //         }
-
-    //         return response()->json(['message' => 'Transaksi Pokok updated successfully']);
-    //     } else {
-    //         return response()->json(['message' => 'Transaksi Pokok not found'], 404);
-    //     }
-    // }
-
+    // Fungsi untuk memeriksa status simpanan
     public function checkSimpananStatus()
     {
         $simpananList = SimpananPokok::all();
-        $disableButton = false;
+        $disableButton = true;
 
+        // Periksa apakah ada pengguna yang berstatus Lunas
         foreach ($simpananList as $simpanan) {
-            if ($simpanan->status_simpanan === 'Belum Lunas') {
-                $disableButton = true;
+            if ($simpanan->status_simpanan === 'Lunas') {
+                $disableButton = false;
                 break;
             }
         }
@@ -193,7 +198,7 @@ class AdminController extends Controller
         $snapTokenLunas = \Midtrans\Snap::getSnapToken($paramsLunas);
 
          // Buat data tanggungan
-         $tanggungan = Tanggungan::create([
+        $tanggungan = Tanggungan::create([
             'id_pinjaman' => $pinjaman->id_pinjaman,
             'total_pinjaman' => $total_pembayaran,
             'bunga_pinjaman' => $jumlah_bunga,

@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\User;
 use App\Models\Pinjaman;
-use App\Models\Tanggungan;
-use App\Models\TransaksiPinjaman;
-use App\Models\TransaksiPokok;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use App\Models\Tanggungan;
+use Illuminate\Http\Request;
+use App\Models\TransaksiPokok;
+use App\Models\TransaksiPinjaman;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Redirect;
+use App\Http\Requests\ProfileUpdateRequest;
 
 class AnggotaController extends Controller
 {
@@ -20,10 +21,48 @@ class AnggotaController extends Controller
     {
         $totalUser = User::where('usertype', 'user')->count();
         $data = [
-            'title' => 'Dahboard',
+            'title' => 'Dashboard',
             'user' => $totalUser,
         ];
         return view('roleAnggota.dashboard', $data);
+    }
+
+    public function getChartData()
+    {
+        $userId = Auth::id();
+
+        // Ambil dan proses data total pinjaman untuk user yang sedang login
+        $totalPinjaman = DB::table('pinjaman')
+        ->select(DB::raw('MONTH(tgl_pengajuan) as month'), DB::raw('SUM(besar_pinjaman) as total'))
+        ->where('id_user', $userId)
+            ->where('keterangan', 'Disetujui')
+            ->groupBy(DB::raw('MONTH(tgl_pengajuan)'))
+            ->pluck('total', 'month');
+
+        // Ambil dan proses data total simpanan pokok untuk user yang sedang login
+        $totalSimpanan = DB::table('simpanan_pokoks')
+        ->select(DB::raw('MONTH(created_at) as month'), DB::raw('SUM(total_simpanan) as total'))
+        ->where('id_user', $userId)
+            ->groupBy(DB::raw('MONTH(created_at)'))
+            ->pluck('total', 'month');
+
+        // Inisialisasi array data dengan 0 untuk setiap bulan
+        $pinjamanData = array_fill(1, 12, 0);
+        $simpananData = array_fill(1, 12, 0);
+
+        // Isi array dengan data yang didapat dari query
+        foreach ($totalPinjaman as $month => $total) {
+            $pinjamanData[$month] = $total;
+        }
+
+        foreach ($totalSimpanan as $month => $total) {
+            $simpananData[$month] = $total;
+        }
+
+        return response()->json([
+            'pinjaman' => array_values($pinjamanData),
+            'simpanan' => array_values($simpananData)
+        ]);
     }
     public function pengajuan(Request $request)
     {

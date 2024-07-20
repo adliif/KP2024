@@ -2,8 +2,8 @@
     <div class="sidebar-logo">
         <!-- Logo Header -->
         <div class="logo-header" data-background-color="dark">
-            <a href="/" class="logo">
-                <img src="assets/img/kaiadmin/logo_light.svg" alt="navbar brand" class="navbar-brand" height="20" />
+            <a href="#" class="logo">
+                <img src="assets/img/sideBarLogo.png" alt="navbar brand" class="navbar-brand" height="150" />
             </a>
             <div class="nav-toggle">
                 <button class="btn btn-toggle toggle-sidebar">
@@ -33,7 +33,7 @@
                     <span class="sidebar-mini-icon">
                         <i class="fa fa-ellipsis-h"></i>
                     </span>
-                    <h4 class="text-section">Components</h4>
+                    <h4 class="text-section">Menu</h4>
                 </li>
                 <li class="{{request()->is('pengajuan') ? 'nav-item active' : 'nav-item'}}">
                     <a href="/pengajuan">

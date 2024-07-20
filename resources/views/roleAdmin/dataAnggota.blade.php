@@ -7,7 +7,7 @@
 
         <div class="main-panel">
             <!-- Navbar -->
-            <x-nav-admin></x-nav-admin>
+            <x-main-header-admin></x-main-header>
 
             <!-- Content -->
             <div class="container">
@@ -131,13 +131,22 @@
                             <form id="form-tambahanggota" method="POST" action="{{ route('register.store') }}">
                                 @csrf
                                 <div class="row">
-                                    <div class="col-sm-12">
+                                    <div class="col-sm-6">
                                         <div class="form-group form-group-default">
                                             <label>Nama</label>
                                             <input name="nama" id="add-nama" type="text" class="form-control" />
                                         </div>
                                     </div>
-                                    <div class="col-md-6 pe-0">
+                                    <div class="col-md-6">
+                                        <div class="form-group form-group-default">
+                                            <label>Role</label>
+                                            <select class="form-select" name="usertype" id="add-usertype">
+                                                <option value="user">Anggota</option>
+                                                <option value="admin">Admin</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
                                         <div class="form-group form-group-default">
                                             <label>Email</label>
                                             <input name="email" id="add-email" type="email" class="form-control" />
@@ -165,8 +174,8 @@
                                                 class="form-control" />
                                         </div>
                                     </div>
-                                    <div class="col-md-10">
-                                        <div class="form-group form-group-default" style="width: 475px;">
+                                    <div class="col-md-12">
+                                        <div class="form-group form-group-default">
                                             <label>Alamat</label>
                                             <textarea name="alamat" id="add-alamat" class="form-control" rows="2"></textarea>
                                         </div>
@@ -427,13 +436,6 @@
                         this.submit();
                     }
                 });
-            });
-
-            $('#addAnggotaModal').on('show.bs.modal', function() {
-                var currentDateTime = new Date();
-                currentDateTime.setHours(currentDateTime.getHours() + 7); // Adjust to WIB (UTC+7)
-                var formattedDateTime = currentDateTime.toISOString().slice(0, 19).replace('T', ' ');
-                $('#addTgl').val(formattedDateTime);
             });
         });
     </script>
