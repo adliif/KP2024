@@ -321,7 +321,7 @@
             });
 
             $("#add-row").DataTable({
-                pageLength: 5,
+                pageLength: 25,
                 columns: [
                     { title: "No." },
                     { title: "Tanggal Pengajuan" },

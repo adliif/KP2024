@@ -1,6 +1,5 @@
 <x-layout>
-    <!-- {{$title = 'Profile';}}
-    <x-slot:title>{{$title}}</x-slot:title> -->
+    <x-slot:title>{{$title}}</x-slot:title>
 
     <div class="wrapper">
         <!-- Sidebar -->
@@ -8,7 +7,7 @@
 
         <div class="main-panel">
             <!-- Navbar -->
-            <x-navbar></x-navbar>
+            <x-main-header></x-main-header>
 
             <!-- Content -->
             <div class="container">
@@ -85,8 +84,8 @@
         </div>
     </div>
 
- <!--   Core JS Files   -->
- <script src="../assets/js/core/jquery-3.7.1.min.js"></script>
+    <!--   Core JS Files   -->
+    <script src="../assets/js/core/jquery-3.7.1.min.js"></script>
     <script src="../assets/js/core/popper.min.js"></script>
     <script src="../assets/js/core/bootstrap.min.js"></script>
 

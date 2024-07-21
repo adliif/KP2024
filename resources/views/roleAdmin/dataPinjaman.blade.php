@@ -126,65 +126,62 @@
     <!-- Kaiadmin DEMO methods, don't include it in your project! -->
     <script src="../assets/js/setting-demo2.js"></script>
     <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        // DataTable initialization
-        $("#basic-datatables").DataTable({});
+        document.addEventListener("DOMContentLoaded", function() {
+            // DataTable initialization
+            $("#basic-datatables").DataTable({});
 
-        $("#add-row").DataTable({
-            pageLength: 25,
-        });
+            $("#add-row").DataTable({
+                pageLength: 25,
+            });
 
-        // Handle form submission and update button status
-        $(document).on('submit', '.form-update-status', function(e) {
-            e.preventDefault();
-            var form = $(this);
-            var id = form.data('id');
-            var status = form.find('input[name="status"]').val();
+            // Handle form submission and update button status
+            $(document).on('submit', '.form-update-status', function(e) {
+                e.preventDefault();
+                var form = $(this);
+                var id = form.data('id');
+                var status = form.find('input[name="status"]').val();
 
-            if (status === 'Disetujui') {
-                Swal.fire({
-                    title: 'Memproses...',
-                    text: 'Mohon tunggu beberapa saat.',
-                    allowOutsideClick: false,
-                    didOpen: () => {
-                        Swal.showLoading()
-                    }
-                });
-            }
-
-            // Disable the submit button to prevent multiple clicks
-            form.find('button[type="submit"]').prop('disabled', true);
-
-            $.ajax({
-                type: "POST",
-                url: form.attr('action'),
-                data: form.serialize(),
-                success: function(response) {
-                    Swal.close(); // Close the loading alert
+                if (status === 'Disetujui') {
                     Swal.fire({
-                        title: status === "Disetujui" ? "Pinjaman disetujui" : "Pinjaman ditolak",
-                        icon: 'success',
-                        confirmButtonText: 'OK'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            location.reload();
+                        title: 'Memproses...',
+                        text: 'Mohon tunggu beberapa saat.',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading()
                         }
                     });
-                },
-                error: function(response) {
-                    Swal.close(); // Close the loading alert
-                    Swal.fire({
-                        title: "Gagal memperbarui status",
-                        text: response.responseJSON.message || 'Terjadi kesalahan saat memproses permintaan.',
-                        icon: 'error'
-                    });
-                    form.find('button[type="submit"]').prop('disabled', false);
                 }
+
+                // Disable the submit button to prevent multiple clicks
+                form.find('button[type="submit"]').prop('disabled', true);
+
+                $.ajax({
+                    type: "POST",
+                    url: form.attr('action'),
+                    data: form.serialize(),
+                    success: function(response) {
+                        Swal.close(); // Close the loading alert
+                        Swal.fire({
+                            title: status === "Disetujui" ? "Pinjaman disetujui" : "Pinjaman ditolak",
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                location.reload();
+                            }
+                        });
+                    },
+                    error: function(response) {
+                        Swal.close(); // Close the loading alert
+                        Swal.fire({
+                            title: "Gagal memperbarui status",
+                            text: response.responseJSON.message || 'Terjadi kesalahan saat memproses permintaan.',
+                            icon: 'error'
+                        });
+                        form.find('button[type="submit"]').prop('disabled', false);
+                    }
+                });
             });
         });
-    });
-</script>
-
-
-
+    </script>
 </x-layout>

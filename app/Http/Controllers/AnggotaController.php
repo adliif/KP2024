@@ -286,9 +286,8 @@ class AnggotaController extends Controller
         $data = [
             'title' => 'Profile',
         ];
-        return view('roleAnggota.profile.view', [
-            'user' => $request->user(), $data,
-        ]);
+        return view('roleAnggota.profile.view', $data, [
+            'user' => $request->user()]);
     }
     public function updateUser(ProfileUpdateRequest $request): RedirectResponse
     {

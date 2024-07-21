@@ -74,12 +74,6 @@
                         </ul>
                     </div>
                 </li>
-                <!-- <li class="{{request()->is('historyTransaksi') ? 'nav-item active' : 'nav-item'}}">
-                    <a href="/historyTransaksi">
-                        <i class="fas fa-history"></i>
-                        <p>Riwayat Transaksi</p>
-                    </a>
-                </li> -->
                 <li class="{{request()->is('logout') ? 'nav-item active' : 'nav-item'}}">
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf

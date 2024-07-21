@@ -1,12 +1,12 @@
-    <x-layout>
-        <x-slot:title>{{ $title }}</x-slot:title>
+<x-layout>
+    <x-slot:title>{{ $title }}</x-slot:title>
 
-        <div class="wrapper">
-            <!-- Sidebar -->
-            <x-sidebar-admin></x-sidebar-admin>
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <x-sidebar-admin></x-sidebar-admin>
 
-            <div class="main-panel">
-                <!-- Navbar -->
+        <div class="main-panel">
+            <!-- Navbar -->
             <x-main-header-admin></x-main-header>
 
                 <!-- Content -->
@@ -33,15 +33,7 @@
                             <div class="col-md-12">
                                 <div class="card">
                                     <div class="card-header">
-                                    {{-- <div class="d-flex align-items-center">
-                                        <a href="#" class="btn btn-success btn-round ms-auto">
-                                            <i class="fa fa-file-excel"></i> Export Excel
-                                        </a>
-                                        <a href="#" class="btn btn-danger btn-round ms-3">
-                                            <i class="fa fa-file-pdf"></i> Export PDF
-                                        </a>
-                                    </div> --}}
-                                </div>
+                                    </div>
                                     <div class="card-body">
                                         <div class="table-responsive">
                                             <table id="add-row" class="display table table-striped table-hover">
@@ -63,21 +55,27 @@
                                                         <tr>
                                                             <td>{{ $loop->iteration }}</td>
                                                             <td>{{ $t->pinjaman->user->nama }}</td>
-                                                            <td>{{ 'Rp. ' . number_format(ceil($t->pinjaman->besar_pinjaman), 0, ',', '.') }}</td>
+                                                            <td>{{ 'Rp. ' . number_format(ceil($t->pinjaman->besar_pinjaman), 0, ',', '.') }}
+                                                            </td>
                                                             <td>{{ $t->pinjaman->tenor_pinjaman }}</td>
-                                                            <td>{{ 'Rp. ' . number_format(ceil($t->bunga_pinjaman), 0, ',', '.') }}</td>
-                                                            <td>{{ 'Rp. ' . number_format(ceil($t->total_pinjaman), 0, ',', '.') }}</td>
-                                                            <td>{{ 'Rp. ' . number_format(ceil($t->iuran_perBulan), 0, ',', '.') }}</td>
-                                                            <td>{{ 'Rp. ' . number_format(ceil($t->sisa_pinjaman), 0, ',', '.') }}</td>
+                                                            <td>{{ 'Rp. ' . number_format(ceil($t->bunga_pinjaman), 0, ',', '.') }}
+                                                            </td>
+                                                            <td>{{ 'Rp. ' . number_format(ceil($t->total_pinjaman), 0, ',', '.') }}
+                                                            </td>
+                                                            <td>{{ 'Rp. ' . number_format(ceil($t->iuran_perBulan), 0, ',', '.') }}
+                                                            </td>
+                                                            <td>{{ 'Rp. ' . number_format(ceil($t->sisa_pinjaman), 0, ',', '.') }}
+                                                            </td>
                                                             <td id="aksi_{{ $t->sisa_pinjaman }}">
                                                                 @if ($t->sisa_pinjaman > 0)
-                                                                <div class="d-flex justify-content-between">
-                                                                    <button class="btn btn-danger" disabled>Belum Lunas</button>
-                                                                </div>
+                                                                    <div class="d-flex justify-content-between">
+                                                                        <button class="btn btn-danger" disabled>Belum
+                                                                            Lunas</button>
+                                                                    </div>
                                                                 @else
-                                                                <div class="d-flex justify-content-beetwen">
-                                                                    <button class="btn btn-success" disabled>Lunas</button>
-                                                                </div>
+                                                                    <div class="d-flex justify-content-beetwen">
+                                                                        <button class="btn btn-success" disabled>Lunas</button>
+                                                                    </div>
                                                                 @endif
                                                             </td>
                                                         </tr>
@@ -94,30 +92,30 @@
 
                 <!-- Footer -->
                 <x-footer></x-footer>
-            </div>
         </div>
+    </div>
 
-        <!--   Core JS Files   -->
-        <script src="../assets/js/core/jquery-3.7.1.min.js"></script>
-        <script src="../assets/js/core/popper.min.js"></script>
-        <script src="../assets/js/core/bootstrap.min.js"></script>
+    <!--   Core JS Files   -->
+    <script src="../assets/js/core/jquery-3.7.1.min.js"></script>
+    <script src="../assets/js/core/popper.min.js"></script>
+    <script src="../assets/js/core/bootstrap.min.js"></script>
 
-        <!-- jQuery Scrollbar -->
-        <script src="../assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
-        <!-- Datatables -->
-        <script src="../assets/js/plugin/datatables/datatables.min.js"></script>
-        <!-- Kaiadmin JS -->
-        <script src="../assets/js/kaiadmin.min.js"></script>
-        <!-- Kaiadmin DEMO methods, don't include it in your project! -->
-        <script src="../assets/js/setting-demo2.js"></script>
-        <script>
-            $(document).ready(function() {
-                $("#basic-datatables").DataTable({});
+    <!-- jQuery Scrollbar -->
+    <script src="../assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
+    <!-- Datatables -->
+    <script src="../assets/js/plugin/datatables/datatables.min.js"></script>
+    <!-- Kaiadmin JS -->
+    <script src="../assets/js/kaiadmin.min.js"></script>
+    <!-- Kaiadmin DEMO methods, don't include it in your project! -->
+    <script src="../assets/js/setting-demo2.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#basic-datatables").DataTable({});
 
-                // Add Row
-                $("#add-row").DataTable({
-                    pageLength: 25,
-                });
+            // Add Row
+            $("#add-row").DataTable({
+                pageLength: 25,
             });
-        </script>
-    </x-layout>
+        });
+    </script>
+</x-layout>

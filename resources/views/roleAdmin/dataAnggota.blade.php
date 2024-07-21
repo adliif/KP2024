@@ -39,12 +39,6 @@
                                             <i class="fa fa-plus"></i>
                                             Tambah Anggota
                                         </button>
-                                        {{-- <a href="#" class="btn btn-success btn-round ms-auto">
-                                            <i class="fa fa-file-excel"></i> Export Excel
-                                        </a>
-                                        <a href="#" class="btn btn-danger btn-round ms-3">
-                                            <i class="fa fa-file-pdf"></i> Export PDF
-                                        </a> --}}
                                     </div>
                                 </div>
                                 <div class="card-body">
