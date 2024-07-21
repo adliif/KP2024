@@ -35,6 +35,7 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'nama' => 'required|string|max:255',
+            'usertype' => 'required|string|max:15',
             'email' => 'required|string|email|max:255|unique:users',
             'NIP' => 'required|string|max:255|unique:users',
             'jenis_kelamin' => 'required|string',
@@ -45,6 +46,7 @@ class RegisteredUserController extends Controller
 
         $user = User::create([
             'nama' => $request->nama,
+            'usertype' => $request->usertype,
             'email' => $request->email,
             'NIP' => $request->NIP,
             'jenis_kelamin' => $request->jenis_kelamin,
@@ -63,7 +65,7 @@ class RegisteredUserController extends Controller
     {
         SimpananPokok::create([
             'id_user' => $id_user,
-            'iuran' => 100000,
+            'iuran' => 1,
             'total_simpanan' => 0,
             'status_simpanan' => 'Lunas'
         ]);

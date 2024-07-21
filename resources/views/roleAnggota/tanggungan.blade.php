@@ -7,7 +7,7 @@
 
         <div class="main-panel">
             <!-- Navbar -->
-            <x-navbar></x-navbar>
+        <x-main-header></x-main-header>
 
             <!-- Content -->
             <div class="container">
@@ -172,11 +172,11 @@
     <script src="https://app.midtrans.com/snap/snap.js" data-client-key="{{ env('MIDTRANS_CLIENT_KEY') }}"></script>
     <script type="text/javascript">
         $("#add-row").DataTable({
-            pageLength: 5,
+            pageLength: 25,
         });
 
         $("#add-row2").DataTable({
-            pageLength: 5,
+            pageLength: 10,
         });
 
         document.addEventListener('DOMContentLoaded', function () {

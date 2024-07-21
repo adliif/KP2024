@@ -7,7 +7,7 @@
 
         <div class="main-panel">
             <!-- Navbar -->
-            <x-nav-admin></x-nav-admin>
+            <x-main-header-admin></x-main-header>
 
             <!-- Content -->
             <div class="container">
@@ -33,14 +33,6 @@
                         <div class="col-md-12">
                             <div class="card">
                                 <div class="card-header">
-                                    {{-- <div class="d-flex align-items-center">
-                                        <a href="#" class="btn btn-success btn-round ms-auto">
-                                            <i class="fa fa-file-excel"></i> Export Excel
-                                        </a>
-                                        <a href="#" class="btn btn-danger btn-round ms-3">
-                                            <i class="fa fa-file-pdf"></i> Export PDF
-                                        </a>
-                                    </div> --}}
                                 </div>
                                 <div class="card-body">
                                     <div class="table-responsive">
@@ -69,7 +61,7 @@
                                                                 class="btn btn-{{ $tk->keterangan == 'Belum Lunas' ? 'danger' : 'success' }}"
                                                                 disabled>
                                                                 {{ $tk->keterangan }}
-                                                                </button>
+                                                            </button>
                                                         </div>
                                                     </td>
                                                 </tr>

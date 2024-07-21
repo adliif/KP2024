@@ -7,7 +7,7 @@
 
         <div class="main-panel">
             <!-- Navbar -->
-            <x-navbar></x-navbar>
+        <x-main-header></x-main-header>
 
             <!-- Content -->
             <div class="container">
@@ -321,7 +321,7 @@
             });
 
             $("#add-row").DataTable({
-                pageLength: 5,
+                pageLength: 25,
                 columns: [
                     { title: "No." },
                     { title: "Tanggal Pengajuan" },
