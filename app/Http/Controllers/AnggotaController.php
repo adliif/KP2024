@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\SimpananPokok;
 use App\Models\User;
 use App\Models\Pinjaman;
 use Illuminate\View\View;
@@ -19,10 +20,12 @@ class AnggotaController extends Controller
 {
     public function index()
     {
-        $totalUser = User::where('usertype', 'user')->count();
+        $totalSimpanan = SimpananPokok::where('id_user', Auth::user()->id_user)->sum('total_simpanan');
+        $totalSHU = User::where('id_user', Auth::user()->id_user)->sum('shu');
         $data = [
             'title' => 'Dashboard',
-            'user' => $totalUser,
+            'simpanan' => $totalSimpanan,
+            'shu' => $totalSHU,
         ];
         return view('roleAnggota.dashboard', $data);
     }
@@ -78,11 +81,23 @@ class AnggotaController extends Controller
         $pengajuanDiproses = Pinjaman::where('id_user', Auth::user()->id_user)
             ->where('keterangan', 'Diproses')
             ->exists();
+
+        // Cek apakah ada tanggungan yang masih 'Belum Lunas'
+        $tanggungan = Tanggungan::with('pinjaman.user')
+            ->whereHas('pinjaman', function ($query) {
+                $query->where('id_user', Auth::user()->id_user);
+            })
+            ->where('status_pinjaman', 'Belum Lunas')->exists();
     
         if ($pengajuanDiproses) {
             return response()->json([
                 'status' => 'warning',
-                'message' => 'Anda memiliki pengajuan yang sedang diproses.',
+                'message' => 'Anda memiliki pengajuan yang sedang <b>DIPROSES</b>.',
+            ]);
+        } else if ($tanggungan) {
+            return response()->json([
+                'status' => 'warning',
+                'message' => 'Anda memiliki tanggungan pinjaman yang <b>BELUM LUNAS</b>.',
             ]);
         }
     
@@ -116,6 +131,11 @@ class AnggotaController extends Controller
                 $query->where('status_pinjaman', 'Belum Lunas')
                     ->where('id_user', Auth::user()->id_user);
             })->get(); 
+
+        $cekPinjaman = TransaksiPinjaman::with('tanggungan.pinjaman.user')
+            ->whereHas('tanggungan.pinjaman', function ($query) {
+                $query->where('id_user', Auth::user()->id_user);
+            })->where('keterangan', '!=', 'Lunas')->get(); 
     
         $tanggungan = Tanggungan::with('pinjaman.user')
             ->whereHas('pinjaman', function ($query) {
@@ -154,6 +174,7 @@ class AnggotaController extends Controller
             'transaksiPinjaman' => $transaksiPinjaman,
             'transaksiPokok' => $transaksiPokok,
             'tanggungan' => $tanggungan,
+            'cekPinjaman' => $cekPinjaman,
         ];
     
         return view('roleAnggota.tanggungan', $data);
@@ -185,12 +206,19 @@ class AnggotaController extends Controller
     {
         $transaksiPinjaman = TransaksiPinjaman::findOrFail($id_transaksiPinjaman);
         $tanggungan = $transaksiPinjaman->tanggungan;
+
+        $shuPeminjam = 0.1 * ($tanggungan->bunga_pinjaman / $tanggungan->pinjaman->tenor_pinjaman);
+        $sisaShu = 0.9 * ($tanggungan->bunga_pinjaman / $tanggungan->pinjaman->tenor_pinjaman);
     
         // Periksa apakah status pembayarannya adalah "lunas" atau semacamnya
         $statusPembayaran = $request->input('status');
         if ($statusPembayaran == 'Lunas') {
             $tanggungan->sisa_pinjaman -= $tanggungan->iuran_perBulan;
             $tanggungan->sisa_tenor -= 1;
+
+            // Shu Peminjam
+            $tanggungan->pinjaman->user->shu += $shuPeminjam;
+            $tanggungan->pinjaman->user->save();
             
             // Periksa apakah sisa pinjaman menjadi 0 atau kurang, jika iya maka set status ke "Lunas"
             if ($tanggungan->sisa_pinjaman <= 0) {
@@ -198,6 +226,18 @@ class AnggotaController extends Controller
                 $tanggungan->status_pinjaman = 'Lunas';
             }
             $tanggungan->save();
+
+            // Distribusikan 90% SHU ke seluruh user kecuali user yang melakukan pembayaran
+            $users = User::where('id_user', '!=', $tanggungan->pinjaman->user->id_user)
+                            ->where('usertype', '!=', 'admin')->get();
+            
+            if ($users->count() > 0) {
+                $shuPerUser = $sisaShu / $users->count();
+                foreach ($users as $user) {
+                    $user->shu += $shuPerUser;
+                    $user->save();
+                }
+            }
         }
     
         // Update keterangan dan tanggal pembayaran di transaksi pinjaman

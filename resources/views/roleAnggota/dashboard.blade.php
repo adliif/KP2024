@@ -44,13 +44,13 @@
                                     <div class="row align-items-center">
                                         <div class="col-icon">
                                             <div class="icon-big text-center icon-primary bubble-shadow-small">
-                                                <i class="fas fa-users"></i>
+                                                <i class="fas fa-chart-pie"></i>
                                             </div>
                                         </div>
                                         <div class="col col-stats ms-3 ms-sm-0">
                                             <div class="numbers">
-                                                <p class="card-category">Total Anggota</p>
-                                                <h4 class="card-title">{{ $user }}</h4>
+                                                <p class="card-category">Perolehan SHU</p>
+                                                <h4 class="card-title">Rp{{ number_format(floor($shu), 0, ',', '.') }}</h4>
                                             </div>
                                         </div>
                                     </div>
@@ -68,8 +68,8 @@
                                         </div>
                                         <div class="col col-stats ms-3 ms-sm-0">
                                             <div class="numbers">
-                                                <p class="card-category">Total Simpanan</p>
-                                                <h4 class="card-title">-</h4>
+                                                <p class="card-category">Total Simpanan Pokok</p>
+                                                <h4 class="card-title">Rp{{ number_format(ceil($simpanan), 0, ',', '.') }}</h4>
                                             </div>
                                         </div>
                                     </div>
@@ -81,7 +81,7 @@
                         <div class="col-md-8">
                             <div class="card">
                                 <div class="card-header">
-                                    <div class="card-title">Grafik Keuangan Anggota Koperasi</div>
+                                    <div class="card-title">Grafik Keuangan Anda</div>
                                 </div>
                                 <div class="card-body">
                                     <div class="chart-container">
@@ -91,29 +91,51 @@
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="card card-primary card-round" style="height: 400px;">
-                                <div class="card-header">
-                                    <div class="card-head-row">
-                                        <div class="card-title">
-                                            <h1>Info Cuaca Hari Ini</h1>
+                            <div class="card card-round" style="height: 395px; position: relative; overflow: hidden;">
+                                <div style="height: 100%; width: 100%; 
+                                    background-image: url('assets/img/weather/bg-cuaca.jpg'); 
+                                    background-size: cover; 
+                                    position: absolute; 
+                                    top: 0; 
+                                    left: 0; 
+                                    filter: blur(1px); 
+                                    z-index: 1;">
+                                </div>
+                                <div style="position: relative; z-index: 2; padding: 15px;">
+                                    <div class="card-header" style="padding-bottom: 0;">
+                                        <div class="card-head-row">
+                                            <div class="card-title">
+                                                <h6 id="currentDate"></h6>
+                                                <h3>Kota Bandar Lampung</h3>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="card-category">
-                                        <h2 id="currentDate"></h2>
-                                    </div>
-                                </div>
-                                <div class="card-body text-center">
-                                    <div class="mb-2">
-                                        <h4 id="temperature"></h4>
-                                    </div>
-                                    <div class="pull-in mb-2">
-                                        <img id="weatherIcon" alt="Weather Icon" style="height: 100px; width:100px;" />
-                                    </div>
-                                    <div>
-                                        <h4 id="weatherDescription"></h4>
-                                    </div>
-                                    <div>
-                                        <h4 id="currentTime"></h4>
+
+                                    <div class="card-body text-center" style="padding-top: 15px;">
+                                    <div class="d-flex align-items-center justify-content-center">
+                                        <img id="weatherIcon" alt="Weather Icon" style="width:150px;" />
+                                        <div class="text-left" style="margin-left: 15px;">
+                                            <h1 id="temperature"></h1>
+                                            <h3 id="weatherDescription" class="text-center"></h3>
+                                        </div>
+                                    </div>             
+                                    <div class="d-flex flex-column align-items-center justify-content-center" style="padding-top: 20px;">
+                                        <div class="d-flex justify-content-between" style="width: 250px;">
+                                            <div class="d-flex align-items-center">
+                                                <img src="assets/img/weather/humidity.png" alt="" style="width:40px;">
+                                                <div class="d-flex flex-column align-items-center" style="margin-left: 5px;">
+                                                    <h5 id="weatherHumidity" class="text-center" style="margin: 0;"></h5>
+                                                    <p class="text-center" style="margin: 0;">Humidity</p>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex align-items-center">
+                                                <img src="assets/img/weather/wind.png" alt="" style="width:40px;">
+                                                <div class="d-flex flex-column align-items-center" style="margin-left: 5px;">
+                                                    <h5 id="weatherWind" class="text-center" style="margin: 0;"></h5>
+                                                    <p class="text-center" style="margin: 0;">Wind</p>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -178,46 +200,72 @@
     <script>
         function translateWeatherDescription(description) {
             const translations = {
-                'clear sky': 'langit cerah',
-                'few clouds': 'sedikit awan',
-                'scattered clouds': 'awan tersebar',
-                'broken clouds': 'awan terpecah',
-                'shower rain': 'hujan ringan',
+                'clear sky': 'cerah',
+                'partly sunny': 'sebagian cerah',
+                'scattered clouds': 'berawan',
+                'partly cloudy': 'sebagian berawan',
+                'broken clouds': 'berawan tebal',
+                'overcast clouds': 'mendung',
+                'light rain': 'gerimis',
                 'rain': 'hujan',
-                'thunderstorm': 'badai petir',
-                'snow': 'salju',
+                'shower rain': 'hujan ringan',
+                'heavy rain': 'hujan lebat',
+                'thunderstorm': 'badai',
                 'mist': 'kabut',
-                'patchy rain nearby': 'hujan merata disekitar',
+                'haze': 'berkabut asap',
+                'fog': 'kabut tebal',
             };
 
-            // Capitalize first letter and translate
+            // Mengubah deskripsi menjadi huruf kecil dan menerjemahkannya
             const lowerCaseDescription = description.toLowerCase();
             return translations[lowerCaseDescription] || description;
         }
 
+        function getCustomIcon(description) {
+            const iconMapping = {
+                'cerah': 'assets/img/weather/clear-sky.png',
+                'sebagian cerah': 'assets/img/weather/partly-sunny.png',
+                'berawan': 'assets/img/weather/scattered-clouds.png',
+                'sebagian berawan': 'assets/img/weather/partly-cloudy.png',
+                'berawan tebal': 'assets/img/weather/broken-cloud.png',
+                'mendung': 'assets/img/weather/overcast.png',
+                'gerimis': 'assets/img/weather/light-rain.png',
+                'hujan': 'assets/img/weather/rain.png',
+                'hujan ringan': 'assets/img/weather/shower-rain.png',
+                'hujan lebat': 'assets/img/weather/heavy-rain.png',
+                'badai': 'assets/img/weather/thunderstorm.png',
+                'kabut': 'assets/img/weather/mist.png',
+                'berkabut asap': 'assets/img/weather/haze.png',
+                'kabut tebal': 'assets/img/weather/fog.png',
+            };
+            return iconMapping[description] || 'default-icon.png';
+        }
+
         function fetchWeatherData() {
-            // Use a weather API of your choice. Example uses OpenWeatherMap.
-            const apiKey = '6888cc216e194454a3f34604241807';
+            const apiKey = '98740f4ebc0d63bc0f8ba70090e5a091';
             const city = 'Bandar Lampung';
-            const apiUrl = `http://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}`;
+            const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
 
             fetch(apiUrl)
                 .then(response => response.json())
                 .then(data => {
+                    const weatherIconElement = document.getElementById('weatherIcon');
                     const temperatureElement = document.getElementById('temperature');
                     const weatherDescriptionElement = document.getElementById('weatherDescription');
-                    const weatherIconElement = document.getElementById('weatherIcon');
+                    const weatherHumidityElement = document.getElementById('weatherHumidity');
+                    const weatherWindElement = document.getElementById('weatherWind');
 
-                    const temperature = data.current.temp_c;
-                    const weatherDescription = translateWeatherDescription(data.current.condition.text.toLowerCase());
-                    const weatherIcon = data.current.condition.icon;
+                    const temperature = data.main.temp;
+                    const translatedDescription = translateWeatherDescription(data.weather[0].description.toLowerCase());
+                    const weatherHumidity = data.main.humidity;
+                    const weatherWind = data.wind.speed;
+                    const customIcon = getCustomIcon(translatedDescription);
 
-                    temperatureElement.innerHTML = `${temperature}°C`;
-                    weatherDescriptionElement.innerHTML = weatherDescription;
-
-                    // Tampilkan ikon cuaca
-                    weatherIconElement.src = `https:${weatherIcon}`;
-                    weatherIconElement.alt = weatherDescription; // Teks alternatif untuk aksesibilitas
+                    weatherIconElement.src = customIcon;
+                    temperatureElement.innerHTML = `${parseInt(temperature)}°C`;
+                    weatherDescriptionElement.innerHTML = translatedDescription;
+                    weatherHumidityElement.innerHTML = `${weatherHumidity}%`;
+                    weatherWindElement.innerHTML = `${parseInt(weatherWind)}Km/h`;
                 })
                 .catch(error => {
                     console.error('Error fetching weather data:', error);
@@ -242,18 +290,15 @@
             const minutes = String(now.getMinutes()).padStart(2, '0');
             const seconds = String(now.getSeconds()).padStart(2, '0');
 
-            const currentDate = `${dayName}, ${day} ${month} ${year}`;
-            const currentTime = `${hours}:${minutes}:${seconds}`;
-
+            const currentDate = `${day} ${month}, ${hours}:${minutes} WIB`;
             document.getElementById('currentDate').textContent = currentDate;
-            document.getElementById('currentTime').textContent = currentTime;
         }
 
         function capitalizeFirstLetter(string) {
             return string.charAt(0).toUpperCase() + string.slice(1);
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // Fetch weather data from an API
             fetchWeatherData();
 
@@ -272,33 +317,33 @@
                                 "Oct", "Nov", "Dec"
                             ],
                             datasets: [{
-                                    label: "Total Pinjaman",
-                                    borderColor: "#1d7af3",
-                                    pointBorderColor: "#FFF",
-                                    pointBackgroundColor: "#1d7af3",
-                                    pointBorderWidth: 2,
-                                    pointHoverRadius: 4,
-                                    pointHoverBorderWidth: 1,
-                                    pointRadius: 4,
-                                    backgroundColor: "transparent",
-                                    fill: false,
-                                    borderWidth: 2,
-                                    data: data.pinjaman
-                                },
-                                {
-                                    label: "Total Simpanan Pokok",
-                                    borderColor: "#59d05d",
-                                    pointBorderColor: "#FFF",
-                                    pointBackgroundColor: "#59d05d",
-                                    pointBorderWidth: 2,
-                                    pointHoverRadius: 4,
-                                    pointHoverBorderWidth: 1,
-                                    pointRadius: 4,
-                                    backgroundColor: "transparent",
-                                    fill: false,
-                                    borderWidth: 2,
-                                    data: data.simpanan
-                                }
+                                label: "Total Pinjaman",
+                                borderColor: "#1d7af3",
+                                pointBorderColor: "#FFF",
+                                pointBackgroundColor: "#1d7af3",
+                                pointBorderWidth: 2,
+                                pointHoverRadius: 4,
+                                pointHoverBorderWidth: 1,
+                                pointRadius: 4,
+                                backgroundColor: "transparent",
+                                fill: false,
+                                borderWidth: 2,
+                                data: data.pinjaman
+                            },
+                            {
+                                label: "Total Simpanan Pokok",
+                                borderColor: "#59d05d",
+                                pointBorderColor: "#FFF",
+                                pointBackgroundColor: "#59d05d",
+                                pointBorderWidth: 2,
+                                pointHoverRadius: 4,
+                                pointHoverBorderWidth: 1,
+                                pointRadius: 4,
+                                backgroundColor: "transparent",
+                                fill: false,
+                                borderWidth: 2,
+                                data: data.simpanan
+                            }
                             ]
                         },
                         options: {

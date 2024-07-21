@@ -23,11 +23,11 @@ class User extends Authenticatable
         'nama',
         'usertype',
         'email',
-        // 'username',
         'NIP',
         'jenis_kelamin',
         'alamat',
         'no_tlp',
+        'shu',
         'password',
     ];
 
