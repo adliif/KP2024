@@ -84,7 +84,7 @@
                                 <div class="card-header">
                                     <div class="d-flex align-items-center">
                                         <h4 class="card-title">Tanggungan Pinjaman</h4>
-                                        @if ($tanggungan)
+                                        @if ($cekPinjaman->count() > 1)
                                             <form class="form-update-status ms-auto" action="{{ route('pinjamanLunas.update') }}" method="post">
                                                 @csrf
                                                 <input type="hidden" name="status" value="Lunas">

@@ -4,16 +4,23 @@
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
     <body
-        style="background-image: url(assets/img/background.png); background-color: #060606f1; background-repeat: no-repeat; background-size: cover; background-position: center;">
+        style="background-image: url(assets/img/kaiadmin/bg-login.jpg); background-repeat: no-repeat; background-size: cover; background-position: center;">
         <div id="layoutAuthentication" class="d-flex align-items-center justify-content-center min-vh-100">
-            <div id="layoutAuthentication_content" class="w-100">
+            <div id="layoutAuthentication_content" class="w-100 position-relative">
+                <div class="position-absolute" style="top: -170px; left: 40px;">
+                    <div class="d-flex justify-content-center">
+                        <img src="{{ asset('assets/img/kaiadmin/SMKN2.png') }}" alt="Logo SMKN2" style="height: 80px; margin-right: 10px;">
+                        <img src="{{ asset('assets/img/kaiadmin/UNILA.png') }}" alt="Logo UNILA" style="height: 75px;">
+                    </div>
+                    <p class="text-center mt-3">KP UNILA 2024</p>
+                </div>
                 <main>
                     <div class="container">
                         <div class="row justify-content-center">
                             <div class="col-lg-5">
                                 <div class="card shadow-lg border-0 rounded-lg">
-                                    <div class="card-header">
-                                        <h3 class="text-center font-weight-light my-4">Sign in</h3>
+                                    <div class="card-header text-center" style="padding: 0;">
+                                        <img src="assets/img/kaiadmin/sideBarLogo.png" alt="Logo" style="width: 200px;">
                                     </div>
                                     <div class="card-body">
                                         <form method="POST" action="{{ route('login') }}">
@@ -35,16 +42,11 @@
                                                 <x-input-error :messages="$errors->get('password')" class="mt-2" />
                                             </div>
 
-                                            <div class="flex items-center justify-end mt-4">
-                                                {{-- @if (Route::has('password.request'))
-                                                    <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                                                        href="{{ route('password.request') }}">
-                                                        {{ __('Forgot your password?') }}
-                                                    </a>
-                                                @endif --}}
+                                            <div class="d-flex justify-content-end w-100 mt-4">
+
 
                                                 <x-primary-button class="btn btn-primary">
-                                                    {{ __('Log in') }}
+                                                    {{ __('Masuk') }}
                                                 </x-primary-button>
                                             </div>
                                         </form>

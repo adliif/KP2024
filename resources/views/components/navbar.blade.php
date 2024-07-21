@@ -4,7 +4,11 @@
             <li class="nav-item topbar-user dropdown hidden-caret">
                 <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#" aria-expanded="false">
                     <div class="avatar-sm">
-                        <img src="../assets/img/profile.jpg" alt="..." class="avatar-img rounded-circle" />
+                        @if (Auth::user()->jenis_kelamin == "Laki-Laki")
+                            <img src="../assets/img/kaiadmin/man.png" alt="..." class="avatar-img rounded-circle" />
+                        @else
+                            <img src="../assets/img/kaiadmin/women.png" alt="..." class="avatar-img rounded-circle" />
+                        @endif
                     </div>
                     <span class="profile-username">
                         <span class="op-7">Hi,</span>
@@ -16,8 +20,11 @@
                         <li>
                             <div class="user-box">
                                 <div class="avatar-lg">
-                                    <img src="../assets/img/profile.jpg" alt="image profile"
-                                        class="avatar-img rounded" />
+                                    @if (Auth::user()->jenis_kelamin == "Laki-Laki")
+                                        <img src="../assets/img/kaiadmin/man.png" alt="..." class="avatar-img rounded-circle" />
+                                    @else
+                                        <img src="../assets/img/kaiadmin/women.png" alt="..." class="avatar-img rounded-circle" />
+                                    @endif
                                 </div>
                                 <div class="u-text">
                                     <h4>{{ Auth::user()->nama }}</h4>

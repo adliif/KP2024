@@ -232,7 +232,7 @@
                             if (response.status === 'warning') {
                                 swal({
                                     title: "Peringatan!",
-                                    text: response.message,
+                                    content: $('<div>').html(response.message)[0],
                                     icon: "warning",
                                     buttons: {
                                         confirm: {

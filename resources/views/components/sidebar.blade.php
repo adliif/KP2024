@@ -1,9 +1,9 @@
 <div class="sidebar" data-background-color="dark">
     <div class="sidebar-logo">
         <!-- Logo Header -->
-        <div class="logo-header" data-background-color="dark">
+        <div class="logo-header" data-background-color="dark" style="display: flex; justify-content: center; align-items: center; height: 70px;">
             <a href="#" class="logo">
-                <img src="assets/img/sideBarLogo.png" alt="navbar brand" class="navbar-brand" height="150" />
+                <img src="assets/img/kaiadmin/sideBarLogo.png" alt="navbar brand" class="navbar-brand" height="160" />
             </a>
             <div class="nav-toggle">
                 <button class="btn btn-toggle toggle-sidebar">
