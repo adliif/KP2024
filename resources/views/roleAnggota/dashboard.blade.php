@@ -214,6 +214,7 @@
                 'mist': 'kabut',
                 'haze': 'berkabut asap',
                 'fog': 'kabut tebal',
+                'few clouds': 'sedikit awan'
             };
 
             // Mengubah deskripsi menjadi huruf kecil dan menerjemahkannya
@@ -237,6 +238,7 @@
                 'kabut': 'assets/img/weather/mist.png',
                 'berkabut asap': 'assets/img/weather/haze.png',
                 'kabut tebal': 'assets/img/weather/fog.png',
+                'sedikit awan': 'assets/img/weather/few-clouds.png',
             };
             return iconMapping[description] || 'default-icon.png';
         }

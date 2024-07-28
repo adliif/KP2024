@@ -33,6 +33,11 @@
                         <div class="col-md-12">
                             <div class="card">
                                 <div class="card-header">
+                                    <div class="d-flex align-items-center">
+                                        <a href="{{ 'export-transaksi-pinjaman' }}" class="btn btn-success btn-round ms-auto">
+                                            <i class="fa fa-file-excel"></i> Ekspor Excel
+                                        </a>
+                                    </div>
                                 </div>
                                 <div class="card-body">
                                     <div class="table-responsive">
@@ -89,7 +94,7 @@
                                                             <button
                                                                 class="btn btn-{{ $tp->keterangan == 'Lunas' ? 'success' : 'danger' }}"
                                                                 disabled>
-                                                                {{ $tp->keterangan }}                                                            
+                                                                {{ str_replace('Bayar ', '', $tp->keterangan) }}                                                          
                                                             </button>
                                                         </div>
                                                     </td>

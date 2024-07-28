@@ -23,6 +23,6 @@ class Pinjaman extends Model
 
     public function tanggungan(): HasMany
     {
-        return $this->hasMany(Tanggungan::class, 'id_Pinjaman');
+        return $this->hasMany(Tanggungan::class, 'id_pinjaman');
     }
 }

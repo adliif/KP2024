@@ -37,6 +37,15 @@ class UserFactory extends Factory
         ];
     }
 
+    public function admin()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'usertype' => 'admin',
+            ];
+        });
+    }
+
     /**
      * Indicate that the model's email address should be unverified.
      */

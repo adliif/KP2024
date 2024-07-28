@@ -7,9 +7,14 @@ use App\Models\Pinjaman;
 use App\Models\Tanggungan;
 use Illuminate\Http\Request;
 use App\Models\SimpananPokok;
+use App\Exports\ExportAnggota;
 use App\Models\TransaksiPokok;
+use App\Exports\ExportTanggungan;
 use App\Models\TransaksiPinjaman;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ExportTransaksiPinjaman;
+use App\Exports\ExportTransaksiSimpanan;
 
 class AdminController extends Controller
 {
@@ -79,6 +84,39 @@ class AdminController extends Controller
     public function updateUser(Request $request, $id_user)
     {
         $user = User::findOrFail($id_user);
+
+        $request->validate([
+            'nama' => 'required|string|max:255',
+            'usertype' => 'required|string|max:15',
+            'email' => 'required|string|email|max:255|unique:users' . $id_user,
+            'NIP' => 'required|digits_between:1,17|max:255|unique:users' . $id_user,
+            'jenis_kelamin' => 'required|string',
+            'alamat' => 'required|string|max:255',
+            'no_tlp' => 'required|digits_between:1,15',
+        ], [
+            'nama.required' => 'Nama wajib diisi.',
+            'nama.string' => 'Nama harus berupa teks.',
+            'nama.max' => 'Nama tidak boleh lebih dari 255 karakter.',
+            'usertype.required' => 'Jenis pengguna wajib diisi.',
+            'usertype.string' => 'Jenis pengguna harus berupa teks.',
+            'usertype.max' => 'Jenis pengguna tidak boleh lebih dari 15 karakter.',
+            'email.required' => 'Email wajib diisi, wajib menggunakan @.',
+            'email.string' => 'Email harus berupa teks.',
+            'email.email' => 'Format email tidak valid.',
+            'email.max' => 'Email tidak boleh lebih dari 255 karakter.',
+            'email.unique' => 'Email sudah terdaftar.',
+            'NIP.required' => 'NIP wajib diisi.',
+            'NIP.digits_between' => 'NIP wajib diisi dengan angka dan maksimal 17 angka.',
+            'NIP.unique' => 'NIP sudah terdaftar.',
+            'jenis_kelamin.required' => 'Jenis kelamin wajib diisi.',
+            'jenis_kelamin.string' => 'Jenis kelamin harus berupa teks.',
+            'alamat.required' => 'Alamat wajib diisi.',
+            'alamat.string' => 'Alamat harus berupa teks.',
+            'alamat.max' => 'Alamat tidak boleh lebih dari 255 karakter.',
+            'no_tlp.required' => 'Nomor telepon wajib diisi.',
+            'no_tlp.digits_between' => 'Nomor telepon wajib diisi dengan angka',
+        ]);
+
         $user->update($request->all());
 
         return redirect()->route('dataAnggota')->with('success', 'Data anggota berhasil diperbarui.');
@@ -275,8 +313,13 @@ class AdminController extends Controller
 
     public function destroyUser(Request $request, $id)
     {
-        $user = User::findOrFail($id)->delete();
-        return redirect(route('dataAnggota'));
+        try {
+            $user = User::findOrFail($id);
+            $user->delete();
+            return response()->json(['success' => 'Anggota berhasil dihapus.']);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Gagal menghapus anggota.'], 500);
+        }
     }
 
     public function viewTransaksiSimpanan(){
@@ -293,9 +336,26 @@ class AdminController extends Controller
         $transaksiPinjaman = TransaksiPinjaman::orderBy('id_transaksiPinjaman', 'asc')->get();
 
         $data = [
-            'title' => 'Transaksi Simpanan'
+            'title' => 'Transaksi Pinjaman'
         ];
 
         return view('roleAdmin.transaksiPinjaman', $data, compact('transaksiPinjaman'));
+    }
+
+    public function exportExcelAnggota(){
+        return Excel::download(new ExportAnggota, 'DataAnggota.xlsx');
+    }
+
+    public function exportExcelTransaksiSimpanan(){
+        return Excel::download(new ExportTransaksiSimpanan, 'TransaksiSimpanan.xlsx');
+    }
+
+    public function exportExcelTanggungan()
+    {
+        return Excel::download(new ExportTanggungan, 'Tanggungan.xlsx');
+    }
+
+    public function exportExcelTransaksiPinjaman(){
+        return Excel::download(new ExportTransaksiPinjaman, 'TransaksiPinjaman.xlsx');
     }
 }

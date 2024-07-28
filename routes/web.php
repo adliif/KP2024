@@ -35,6 +35,11 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     Route::get('transaksiSimpanan', [AdminController::class, 'viewTransaksiSimpanan'])->name('viewTransaksiSimpanan.view');
     Route::get('transaksiPinjaman', [AdminController::class, 'viewTransaksiPinjaman'])->name('viewTransaksiPinjaman.view');
+
+    Route::get('export-anggota', [AdminController::class, 'exportExcelAnggota']);
+    Route::get('export-transaksi-simpanan', [AdminController::class, 'exportExcelTransaksiSimpanan']);
+    Route::get('export-tanggungan', [AdminController::class, 'exportExcelTanggungan']);
+    Route::get('export-transaksi-pinjaman', [AdminController::class, 'exportExcelTransaksiPinjaman']);
 });
 
 // Routes Role Anggota
@@ -56,4 +61,7 @@ Route::middleware(['auth', 'user'])->group(function () {
 
     Route::get('/profile', [AnggotaController::class, 'viewUser'])->name('profile.view');
     Route::patch('/profile', [AnggotaController::class, 'updateUser'])->name('profile.update');
+
+    Route::get('export-transaksi-simpananAnggota', [AnggotaController::class, 'exportExcelTransaksiSimpananAnggota']);
+    Route::get('export-transaksi-pinjamanAnggota', [AnggotaController::class, 'exportExcelTransaksipinjamanAnggota']);
 });
