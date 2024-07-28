@@ -1,4 +1,4 @@
-<nav class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom">
+<nav class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom bg-secondary-subtle">
     <div class="container-fluid">
         <ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
             <li class="nav-item topbar-user dropdown hidden-caret">

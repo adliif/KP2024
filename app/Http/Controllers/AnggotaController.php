@@ -2,19 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\SimpananPokok;
 use App\Models\User;
 use App\Models\Pinjaman;
 use Illuminate\View\View;
 use App\Models\Tanggungan;
 use Illuminate\Http\Request;
+use App\Models\SimpananPokok;
 use App\Models\TransaksiPokok;
 use App\Models\TransaksiPinjaman;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Exports\ExportTransaksiPinjamanAnggota;
+use App\Exports\ExportTransaksiSimpananAnggota;
 
 class AnggotaController extends Controller
 {
@@ -340,5 +343,15 @@ class AnggotaController extends Controller
         $request->user()->save();
 
         return Redirect::route('profile.view')->with('status', 'profile-updated');
+    }
+
+    public function exportExcelTransaksiSimpananAnggota(){
+        $userId = Auth::id(); // Ambil ID pengguna yang sedang login
+        return Excel::download(new ExportTransaksiSimpananAnggota($userId), 'TransaksiSimpananAnggota.xlsx');
+    }
+
+    public function exportExcelTransaksiPinjamanAnggota(){
+        $userId = Auth::id();
+        return Excel::download(new ExportTransaksiPinjamanAnggota($userId), 'TransaksiPinjamanAnggota.xlsx');
     }
 }

@@ -62,7 +62,7 @@
                                                         <td>{{ $p->user->nama }}</td>
                                                         <td>{{ $p->tgl_pengajuan }}</td>
                                                         <td>{{ 'Rp. ' . number_format($p->besar_pinjaman, 0, ',', '.') }}</td>
-                                                        <td>{{ $p->tenor_pinjaman }}</td>
+                                                        <td>{{ $p->tenor_pinjaman }}x</td>
                                                         <td id="aksi_{{ $p->id_pinjaman }}">
                                                             @if ($p->keterangan == 'Diproses')
                                                                 <div class="d-flex justify-content-between">
