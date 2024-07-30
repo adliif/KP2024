@@ -20,9 +20,9 @@ class PinjamanFactory extends Factory
         return [
             'id_user' => User::factory(),
             'tgl_pengajuan' => $this->faker->dateTimeBetween('2023-01-01', '2024-01-31'),
-            'tenor_pinjaman' => $this->faker->numberBetween(6, 24), // Random tenor pinjaman (months)
+            'tenor_pinjaman' => $this->faker->numberBetween(6, 24),
             'besar_pinjaman' => $this->faker->numberBetween(1000000, 10000000),
-            'keterangan' => 'Disetujui', // Atau nilai default lainnya
+            'keterangan' => 'Disetujui',
         ];
     }
 }

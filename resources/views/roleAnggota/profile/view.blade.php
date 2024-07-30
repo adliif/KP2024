@@ -24,7 +24,7 @@
                                 <i class="icon-arrow-right"></i>
                             </li>
                             <li class="nav-item">
-                                <a href="#">Profile</a>
+                                <a href="#">My Profile</a>
                             </li>
                         </ul>
                     </div>

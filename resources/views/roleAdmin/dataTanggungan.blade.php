@@ -13,7 +13,7 @@
                 <div class="container">
                     <div class="page-inner">
                         <div class="page-header">
-                            <h3 class="fw-bold mb-3">Data Tanggungan</h3>
+                            <h3 class="fw-bold mb-3">Tanggungan</h3>
                             <ul class="breadcrumbs mb-3">
                                 <li class="nav-home">
                                     <a href="#">
@@ -24,7 +24,7 @@
                                     <i class="icon-arrow-right"></i>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="#">Tanggungan</a>
+                                    <a href="#">Data Tanggungan</a>
                                 </li>
                             </ul>
                         </div>

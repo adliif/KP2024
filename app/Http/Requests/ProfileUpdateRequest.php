@@ -16,10 +16,7 @@ class ProfileUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            // 'nama' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255'],
-            // 'NIP' => ['required', 'string', 'max:255'],
-            // 'jenis_kelamin' => ['required', 'string', 'max:255'],
             'alamat' => ['required', 'string', 'max:255'],
             'no_tlp' => ['required', 'digits_between:1,15'],
         ];
@@ -33,23 +30,11 @@ class ProfileUpdateRequest extends FormRequest
     public function messages(): array
     {
         return [
-            // 'nama.required' => 'Nama wajib diisi.',
-            // 'nama.string' => 'Nama harus berupa string.',
-            // 'nama.max' => 'Nama tidak boleh lebih dari 255 karakter.',
-
             'email.required' => 'Email wajib diisi.',
             'email.string' => 'Email harus berupa string.',
             'email.lowercase' => 'Email harus menggunakan huruf kecil.',
             'email.email' => 'Email harus berupa alamat email yang valid.',
             'email.max' => 'Email tidak boleh lebih dari 255 karakter.',
-
-            // 'NIP.required' => 'NIP wajib diisi.',
-            // 'NIP.string' => 'NIP harus berupa string.',
-            // 'NIP.max' => 'NIP tidak boleh lebih dari 255 karakter.',
-
-            // 'jenis_kelamin.required' => 'Jenis kelamin wajib diisi.',
-            // 'jenis_kelamin.string' => 'Jenis kelamin harus berupa string.',
-            // 'jenis_kelamin.max' => 'Jenis kelamin tidak boleh lebih dari 255 karakter.',
 
             'alamat.required' => 'Alamat wajib diisi.',
             'alamat.string' => 'Alamat harus berupa string.',

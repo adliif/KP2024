@@ -1,4 +1,4 @@
-<footer class="footer bg-secondary-subtle">
+<footer class="footer" style="backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(6px); background-color: rgba(174, 178, 182, 0.1);">
     <div class="container-fluid">
         <div class="d-flex justify-content-between" style="top: -70px; left: 40px;">
             <div class="">
@@ -14,5 +14,4 @@
             </h6>
         </div>
     </div>
-
 </footer>

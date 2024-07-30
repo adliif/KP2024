@@ -3,8 +3,6 @@
 namespace App\Exports;
 
 use App\Models\User;
-use App\Models\SimpananPokok;
-use App\Models\TransaksiPokok;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithEvents;

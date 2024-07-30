@@ -254,7 +254,7 @@ class AdminController extends Controller
 
         // Pastikan tanggungan berhasil dibuat
         if ($tanggungan) {
-            $jatuh_tempo_awal = now()->endOfDay(); // Menggunakan tanggal saat ini sebagai jatuh tempo awal, dan mengatur jam ke 00:00:00
+            $jatuh_tempo_awal = now()->endOfDay();
             for ($i = 1; $i <= $tenor; $i++) {
                 $params = array(
                     'transaction_details' => array(
@@ -272,7 +272,7 @@ class AdminController extends Controller
                 TransaksiPinjaman::create([
                     'id_tanggungan' => $tanggungan->id_tanggungan,
                     'jatuh_tempo' => $jatuh_tempo,
-                    'tanggal_pembayaran' => null, // Set tanggal pembayaran ke null karena belum dibayar
+                    'tanggal_pembayaran' => null,
                     'snap_token' => $snapToken,
                     'keterangan' => 'Bayar cicilan ke-' . $i
                 ]);

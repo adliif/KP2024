@@ -24,7 +24,7 @@
                                 <i class="icon-arrow-right"></i>
                             </li>
                             <li class="nav-item">
-                                <a href="#">Pengajuan</a>
+                                <a href="#">Pengajuan Pinjaman</a>
                             </li>
                         </ul>
                     </div>
