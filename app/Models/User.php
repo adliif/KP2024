@@ -61,11 +61,11 @@ class User extends Authenticatable
 
     public function pinjaman(): HasMany
     {
-        return $this->hasMany(Pinjaman::class, 'id_pinjaman');
+        return $this->hasMany(Pinjaman::class, 'id_user');
     }
 
     public function tanggungan(): HasOne{
-        return $this->hasOne(Tanggungan::class, 'id_tanggungan');
+        return $this->hasOne(Tanggungan::class, 'id_tanggungan');   
     }
 
     public function transaksiPokok(): HasOne{

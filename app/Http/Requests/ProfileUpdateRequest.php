@@ -16,15 +16,32 @@ class ProfileUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            // 'nama' => ['required', 'string', 'max:255'],
-            // 'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)],
-
-            'nama' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255'],
-            'NIP' => ['required', 'string', 'max:255'],
-            'jenis_kelamin' => ['required', 'string', 'max:255'],
             'alamat' => ['required', 'string', 'max:255'],
-            'no_tlp' => ['required', 'string', 'max:255'],
+            'no_tlp' => ['required', 'digits_between:1,15'],
+        ];
+    }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'email.required' => 'Email wajib diisi.',
+            'email.string' => 'Email harus berupa string.',
+            'email.lowercase' => 'Email harus menggunakan huruf kecil.',
+            'email.email' => 'Email harus berupa alamat email yang valid.',
+            'email.max' => 'Email tidak boleh lebih dari 255 karakter.',
+
+            'alamat.required' => 'Alamat wajib diisi.',
+            'alamat.string' => 'Alamat harus berupa string.',
+            'alamat.max' => 'Alamat tidak boleh lebih dari 255 karakter.',
+
+            'no_tlp.required' => 'Nomor telepon wajib diisi.',
+            'no_tlp.digits_between' => 'Nomor telepon harus berupa angka',
         ];
     }
 }

@@ -13,8 +13,7 @@ return new class extends Migration
     {
         Schema::create('transaksi_pokoks', function (Blueprint $table) {
             $table->id('id_transaksiPokok');
-
-            //FK
+            //foreign key
             $table->unsignedBigInteger('id_simpanan_pokok');
             $table->foreign('id_simpanan_pokok')->references('id_simpanan_pokok')->on('simpanan_pokoks')->onDelete('cascade');
 

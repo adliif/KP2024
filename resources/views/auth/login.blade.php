@@ -7,13 +7,6 @@
         style="background-image: url(assets/img/kaiadmin/bg-login.jpg); background-repeat: no-repeat; background-size: cover; background-position: center;">
         <div id="layoutAuthentication" class="d-flex align-items-center justify-content-center min-vh-100">
             <div id="layoutAuthentication_content" class="w-100 position-relative">
-                <div class="position-absolute" style="top: -170px; left: 40px;">
-                    <div class="d-flex justify-content-center">
-                        <img src="{{ asset('assets/img/kaiadmin/SMKN2.png') }}" alt="Logo SMKN2" style="height: 80px; margin-right: 10px;">
-                        <img src="{{ asset('assets/img/kaiadmin/UNILA.png') }}" alt="Logo UNILA" style="height: 75px;">
-                    </div>
-                    <p class="text-center mt-3">KP UNILA 2024</p>
-                </div>
                 <main>
                     <div class="container">
                         <div class="row justify-content-center">

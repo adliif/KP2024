@@ -2,7 +2,7 @@
     <div class="sidebar-logo">
         <!-- Logo Header -->
         <div class="logo-header" data-background-color="dark" style="display: flex; justify-content: center; align-items: center; height: 70px;">
-            <a href="#" class="logo">
+            <a href="/adminDashboard" class="logo">
                 <img src="assets/img/kaiadmin/sideBarLogo.png" alt="navbar brand" class="navbar-brand" height="160" />
             </a>
             <div class="nav-toggle">
@@ -85,7 +85,7 @@
                         @csrf
                         <a href="logout" onclick="event.preventDefault(); this.closest('form').submit();">
                             <i class="fas fa-sign-out-alt"></i>
-                            <p>Logout</p>
+                            <p>Keluar</p>
                         </a>
                     </form>
                 </li>

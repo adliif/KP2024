@@ -24,7 +24,7 @@
                                 <i class="icon-arrow-right"></i>
                             </li>
                             <li class="nav-item">
-                                <a href="#">Tanggungan</a>
+                                <a href="#">Tanggungan Anggota</a>
                             </li>
                         </ul>
                     </div>

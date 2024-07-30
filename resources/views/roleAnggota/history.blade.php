@@ -13,7 +13,7 @@
             <div class="container">
                 <div class="page-inner">
                     <div class="page-header">
-                        <h3 class="fw-bold mb-3">History</h3>
+                        <h3 class="fw-bold mb-3">Riwayat</h3>
                         <ul class="breadcrumbs mb-3">
                             <li class="nav-home">
                                 <a href="#">
@@ -24,7 +24,7 @@
                                 <i class="icon-arrow-right"></i>
                             </li>
                             <li class="nav-item">
-                                <a href="#">History</a>
+                                <a href="#">Riwayat Pinjaman</a>
                             </li>
                         </ul>
                     </div>
@@ -33,9 +33,7 @@
                         <div class="col-md-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <div class="d-flex align-items-center">
-                                        <h4 class="card-title">History Pinjaman</h4>
-                                    </div>
+
                                 </div>
                                 <div class="card-body">
                                     <div class="table-responsive">

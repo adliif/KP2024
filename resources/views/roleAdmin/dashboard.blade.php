@@ -14,7 +14,7 @@
                     <div class="page-inner">
                         <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
                             <div>
-                                <h3 class="fw-bold mb-3">Dashboard</h3>
+                                <h3 class="fw-bold mb-3">Dashboard Admin</h3>
                                 <h6 class="op-7 mb-2">Koperasi SMKN 2 Bandar Lampung</h6>
                             </div>
                         </div>
@@ -154,8 +154,8 @@
                             </div>
                             <div class="card">
                                 <div class="card-header">
-                                    <div class="card-title">Our Location</div>
-                                    <p>Map of the distribution of users around the world</p>
+                                    <div class="card-title">Lokasi Koperasi</div>
+                                    <p>SMKN 2 Bandar Lampung</p>
                                 </div>
                                 <div class="card-body">
                                     <iframe
@@ -225,6 +225,7 @@
                     'mist': 'kabut',
                     'haze': 'berkabut asap',
                     'fog': 'kabut tebal',
+                    'few clouds': 'sedikit awan'
                 };
 
                 // Mengubah deskripsi menjadi huruf kecil dan menerjemahkannya
@@ -248,6 +249,7 @@
                     'kabut': 'assets/img/weather/mist.png',
                     'berkabut asap': 'assets/img/weather/haze.png',
                     'kabut tebal': 'assets/img/weather/fog.png',
+                    'sedikit awan': 'assets/img/weather/few-clouds.png',
                 };
                 return iconMapping[description] || 'default-icon.png';
             }

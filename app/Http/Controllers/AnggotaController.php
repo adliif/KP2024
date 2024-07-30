@@ -2,22 +2,28 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\SimpananPokok;
 use App\Models\User;
 use App\Models\Pinjaman;
 use Illuminate\View\View;
 use App\Models\Tanggungan;
 use Illuminate\Http\Request;
+use App\Models\SimpananPokok;
 use App\Models\TransaksiPokok;
 use App\Models\TransaksiPinjaman;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests\ProfileUpdateRequest;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
+use App\Exports\ExportTransaksiPinjamanAnggota;
+use App\Exports\ExportTransaksiSimpananAnggota;
 
 class AnggotaController extends Controller
 {
+    // ------------------------------------- DASHBOARD ----------------------------------------
     public function index()
     {
         $totalSimpanan = SimpananPokok::where('id_user', Auth::user()->id_user)->sum('total_simpanan');
@@ -67,6 +73,8 @@ class AnggotaController extends Controller
             'simpanan' => array_values($simpananData)
         ]);
     }
+
+    // --------------------------------- PENGAJUAN PINJAMAN -----------------------------------
     public function pengajuan(Request $request)
     {
         $pinjaman = Pinjaman::where('id_user', Auth::user()->id_user)->orderBy('id_pinjaman', 'asc')->get();
@@ -116,8 +124,9 @@ class AnggotaController extends Controller
             'status' => 'success',
             'message' => 'Pengajuan berhasil ditambahkan.',
         ]);
-    }     
+    }  
 
+    // --------------------------------- TANGGUNGAN ANGGOTA -----------------------------------
     public function tanggungan()
     {
         $transaksiPokok = TransaksiPokok::with('simpananPokok.user')
@@ -278,6 +287,7 @@ class AnggotaController extends Controller
         return redirect()->route('tanggungan.view');
     }
 
+    // --------------------------------- RIWAYAT PEMINJAMAN -----------------------------------
     public function history()
     {
         $history = Tanggungan::with('pinjaman.user')
@@ -320,6 +330,18 @@ class AnggotaController extends Controller
         return view('roleAnggota.transaksiPinjaman', $data, compact('transaksiPinjaman'));
     }
 
+    public function exportExcelTransaksiSimpananAnggota()
+    {
+        $userId = Auth::id(); // Ambil ID pengguna yang sedang login
+        return Excel::download(new ExportTransaksiSimpananAnggota($userId), 'TransaksiSimpananAnggota.xlsx');
+    }
+
+    public function exportExcelTransaksiPinjamanAnggota()
+    {
+        $userId = Auth::id();
+        return Excel::download(new ExportTransaksiPinjamanAnggota($userId), 'TransaksiPinjamanAnggota.xlsx');
+    }
+
     // --------------------------------------- PROFILE ----------------------------------------
     public function viewUser(Request $request): View
     {
@@ -340,5 +362,25 @@ class AnggotaController extends Controller
         $request->user()->save();
 
         return Redirect::route('profile.view')->with('status', 'profile-updated');
+    }
+    public function updatePassword(Request $request): RedirectResponse
+    {
+        $messages = [
+            'current_password.required' => 'Password saat ini wajib diisi.',
+            'current_password.current_password' => 'Password saat ini tidak sesuai.',
+            'password.required' => 'Password baru wajib diisi.',
+            'password.confirmed' => 'Konfirmasi password baru tidak cocok.',
+        ];
+
+        $validated = $request->validateWithBag('updatePassword', [
+            'current_password' => ['required', 'current_password'],
+            'password' => ['required', Password::defaults(), 'confirmed'],
+        ], $messages);
+
+        $request->user()->update([
+            'password' => Hash::make($validated['password']),
+        ]);
+
+        return back()->with('status', 'password-updated');
     }
 }
