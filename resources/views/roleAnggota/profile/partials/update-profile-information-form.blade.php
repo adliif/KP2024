@@ -17,7 +17,7 @@
 
         <div class="mb-3">
             <x-input-label class="form-label" for="email" :value="__('Email')" />
-            <x-text-input id="email" name="email" type="email" class="form-control" :value="old('email', $user->email)" required autocomplete="username" style="width: 600px;" />
+            <x-text-input id="email" name="email" type="email" class="form-control" :value="old('email', $user->email)" autofocus autocomplete="username" style="width: 600px;" />
             <x-input-error class="mt-2" :messages="$errors->get('email')" />
 
             @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && !$user->hasVerifiedEmail())
@@ -58,7 +58,7 @@
 
         <div class="mb-3">
             <x-input-label class="form-label" for="alamat" :value="__('Alamat')" />
-            <textarea id="alamat" name="alamat" class="form-control" required autofocus autocomplete="alamat" style="width: 600px;" 
+            <textarea id="alamat" name="alamat" class="form-control" autofocus autocomplete="alamat" style="width: 600px;" 
                 aria-label="With textarea">{{ old('alamat', $user->alamat) }}</textarea>
             <x-input-error class="mt-2" :messages="$errors->get('alamat')" />
         </div>
@@ -66,7 +66,7 @@
         <div class="mb-3">
             <x-input-label class="form-label" for="no_tlp" :value="__('No. Telepon')" />
             <x-text-input id="no_tlp" name="no_tlp" type="text" class="form-control" :value="old('no_tlp', $user->no_tlp)"
-                required autofocus autocomplete="no_tlp" style="width: 600px;" />
+                autofocus autocomplete="no_tlp" style="width: 600px;" />
             <x-input-error class="mt-2" :messages="$errors->get('no_tlp')" />
         </div>
 

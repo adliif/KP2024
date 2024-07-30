@@ -21,6 +21,7 @@ use App\Exports\ExportTransaksiSimpananAnggota;
 
 class AnggotaController extends Controller
 {
+    // ------------------------------------- DASHBOARD ----------------------------------------
     public function index()
     {
         $totalSimpanan = SimpananPokok::where('id_user', Auth::user()->id_user)->sum('total_simpanan');
@@ -70,6 +71,8 @@ class AnggotaController extends Controller
             'simpanan' => array_values($simpananData)
         ]);
     }
+
+    // --------------------------------- PENGAJUAN PINJAMAN -----------------------------------
     public function pengajuan(Request $request)
     {
         $pinjaman = Pinjaman::where('id_user', Auth::user()->id_user)->orderBy('id_pinjaman', 'asc')->get();
@@ -119,8 +122,9 @@ class AnggotaController extends Controller
             'status' => 'success',
             'message' => 'Pengajuan berhasil ditambahkan.',
         ]);
-    }     
+    }  
 
+    // --------------------------------- TANGGUNGAN ANGGOTA -----------------------------------
     public function tanggungan()
     {
         $transaksiPokok = TransaksiPokok::with('simpananPokok.user')
@@ -281,6 +285,7 @@ class AnggotaController extends Controller
         return redirect()->route('tanggungan.view');
     }
 
+    // --------------------------------- RIWAYAT PEMINJAMAN -----------------------------------
     public function history()
     {
         $history = Tanggungan::with('pinjaman.user')
@@ -323,6 +328,18 @@ class AnggotaController extends Controller
         return view('roleAnggota.transaksiPinjaman', $data, compact('transaksiPinjaman'));
     }
 
+    public function exportExcelTransaksiSimpananAnggota()
+    {
+        $userId = Auth::id(); // Ambil ID pengguna yang sedang login
+        return Excel::download(new ExportTransaksiSimpananAnggota($userId), 'TransaksiSimpananAnggota.xlsx');
+    }
+
+    public function exportExcelTransaksiPinjamanAnggota()
+    {
+        $userId = Auth::id();
+        return Excel::download(new ExportTransaksiPinjamanAnggota($userId), 'TransaksiPinjamanAnggota.xlsx');
+    }
+
     // --------------------------------------- PROFILE ----------------------------------------
     public function viewUser(Request $request): View
     {
@@ -343,15 +360,5 @@ class AnggotaController extends Controller
         $request->user()->save();
 
         return Redirect::route('profile.view')->with('status', 'profile-updated');
-    }
-
-    public function exportExcelTransaksiSimpananAnggota(){
-        $userId = Auth::id(); // Ambil ID pengguna yang sedang login
-        return Excel::download(new ExportTransaksiSimpananAnggota($userId), 'TransaksiSimpananAnggota.xlsx');
-    }
-
-    public function exportExcelTransaksiPinjamanAnggota(){
-        $userId = Auth::id();
-        return Excel::download(new ExportTransaksiPinjamanAnggota($userId), 'TransaksiPinjamanAnggota.xlsx');
     }
 }

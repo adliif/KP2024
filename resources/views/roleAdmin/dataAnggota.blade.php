@@ -318,20 +318,20 @@
     <script src="../assets/js/setting-demo2.js"></script>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // Initialize datatable
-            $('#add-row').DataTable({
-                "pageLength": 25,
-            });
+    document.addEventListener("DOMContentLoaded", function() {
+        // Initialize datatable
+        $('#add-row').DataTable({
+            "pageLength": 25,
+        });
 
-            // Handle add button click
-            $('button[data-bs-target="#addUserModal"]').on('click', function(e) {
-                e.preventDefault(); // Mencegah tindakan default dari klik
-                $('#addUserModal').modal('show');
-            });
+        // Handle add button click
+        $('button[data-bs-target="#addUserModal"]').on('click', function(e) {
+            e.preventDefault(); // Mencegah tindakan default dari klik
+            $('#addUserModal').modal('show');
+        });
 
-            // Handle add anggota form submit
-            $('#form-tambahanggota').on('submit', function(e) {
+        // Handle add anggota form submit
+        $('#form-tambahanggota').on('submit', function(e) {
                 e.preventDefault(); // Mencegah tindakan default dari klik
                 var form = $(this);
                 var formData = form.serialize();
@@ -370,106 +370,195 @@
                 });
             });
 
-            // Handle edit button click
-            $('#editUserModal').on('show.bs.modal', function(event) {
-                var button = $(event.relatedTarget);
-                var modal = $(this);
+        // Handle edit button click
+        $('#editUserModal').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget);
+            var modal = $(this);
 
-                var id_user = button.data('id');
-                var nama = button.data('nama');
-                var email = button.data('email');
-                var nip = button.data('nip');
-                var jenis_kelamin = button.data('jenis_kelamin');
-                var alamat = button.data('alamat');
-                var no_tlp = button.data('no_tlp');
+            var id_user = button.data('id');
+            var nama = button.data('nama');
+            var email = button.data('email');
+            var nip = button.data('nip');
+            var jenis_kelamin = button.data('jenis_kelamin');
+            var alamat = button.data('alamat');
+            var no_tlp = button.data('no_tlp');
 
-                modal.find('.modal-body #nama').val(nama);
-                modal.find('.modal-body #email').val(email);
-                modal.find('.modal-body #NIP').val(nip);
-                modal.find('.modal-body #jenis_kelamin').val(jenis_kelamin);
-                modal.find('.modal-body #alamat').val(alamat);
-                modal.find('.modal-body #no_tlp').val(no_tlp);
+            modal.find('.modal-body #nama').val(nama);
+            modal.find('.modal-body #email').val(email);
+            modal.find('.modal-body #NIP').val(nip);
+            modal.find('.modal-body #jenis_kelamin').val(jenis_kelamin);
+            modal.find('.modal-body #alamat').val(alamat);
+            modal.find('.modal-body #no_tlp').val(no_tlp);
 
-                $('#form-edit').attr('action', '/dataAnggota/update/' + id_user);
+            $('#form-edit').attr('action', '/dataAnggota/update/' + id_user);
+
+            // Menyimpan data asli di form untuk perbandingan
+            var form = $('#form-edit');
+            var originalData = {};
+            form.serializeArray().forEach(function(item) {
+                originalData[item.name] = item.value;
+            });
+            form.data('original', originalData);
+        });
+
+        $('#addUserModal').on('hidden.bs.modal', function() {
+            $('#form-tambahanggota')[0].reset();
+        });
+
+        $('#editUserModal').on('hidden.bs.modal', function() {
+            $('#form-edit')[0].reset();
+        });
+
+        // Handle edit button click inside modal
+        $('#form-edit').on('submit', function(e) {
+            e.preventDefault(); // Mencegah tindakan default dari klik
+
+            var form = $(this);
+            var formData = form.serializeArray();
+            var originalData = form.data('original'); // Data asli yang disimpan sebelumnya
+
+            var hasChanges = false;
+
+            // Periksa perubahan data
+            formData.forEach(function(item) {
+                if (originalData[item.name] !== item.value) {
+                    hasChanges = true;
+                }
             });
 
-            $('#addAnggotaModal').on('hidden.bs.modal', function() {
-                $('#form-tambahanggota')[0].reset();
-            });
-
-            $('#editUserModal').on('hidden.bs.modal', function() {
-                $('#form-edit')[0].reset();
-            });
-
-            // Handle edit button click inside modal
-            $('#form-edit').on('submit', function(e) {
-                e.preventDefault(); // Mencegah tindakan default dari klik
+            if (!hasChanges) {
                 Swal.fire({
-                    title: "Yakin mengubah data?",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'Ya',
-                    cancelButtonColor: '#d33',
-                    cancelButtonText: "Batal"
-                }).then(result => {
-                    // Jika pengguna mengklik "Ya"
-                    if (result.isConfirmed) {
-                        this.submit();
-                    }
+                    title: "Tidak ada perubahan data",
+                    icon: "info",
+                    confirmButtonText: 'OK'
                 });
-            });
+                return;
+            }
 
-            // Event delegation for delete buttons
-            $(document).on('click', '.alert_notif', function(e) {
-                e.preventDefault(); // Mencegah tindakan default dari klik
-                var form = $(this).closest('form');
-                Swal.fire({
-                    title: "Yakin hapus data?",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'Ya',
-                    cancelButtonColor: '#d33',
-                    cancelButtonText: "Batal"
-                }).then(result => {
-                    // Jika pengguna mengklik "Ya"
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            type: "POST",
-                            url: form.attr('action'),
-                            data: form.serialize(),
-                            success: function(response) {
-                                if (response.success) {
-                                    Swal.fire({
-                                        title: "Anggota Berhasil Dihapus",
-                                        icon: "success",
-                                        confirmButtonText: 'OK',
-                                    }).then((result) => {
-                                        if (result.isConfirmed) {
-                                            location
-                                        .reload(); // Reload the page to reflect the changes
+            // Lakukan validasi awal dengan AJAX
+            $.ajax({
+                type: "POST",
+                url: form.attr('action'),
+                data: form.serialize(),
+                success: function(response) {
+                    // Jika validasi server lulus, tampilkan konfirmasi SweetAlert
+                    Swal.fire({
+                        title: "Yakin mengubah data?",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ya',
+                        cancelButtonColor: '#d33',
+                        cancelButtonText: "Batal"
+                    }).then(result => {
+                        // Jika pengguna mengklik "Ya"
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                type: "PATCH",
+                                url: form.attr('action'),
+                                data: form.serialize(),
+                                success: function(response) {
+                                    if (response.success) {
+                                        Swal.fire({
+                                            title: "Data Anggota Berhasil Diperbarui",
+                                            icon: "success",
+                                            confirmButtonText: 'OK',
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                location.reload(); // Reload the page to reflect the changes
+                                            }
+                                        });
+                                    } else {
+                                        // Tampilkan pesan error jika gagal
+                                        var errors = response.errors;
+                                        for (var error in errors) {
+                                            Swal.fire({
+                                                title: "Gagal Memperbarui Data",
+                                                text: errors[error][0],
+                                                icon: "error"
+                                            });
                                         }
-                                    });
-                                } else {
-                                    Swal.fire({
-                                        title: "Gagal Menghapus Anggota",
-                                        text: response.message,
-                                        icon: "error"
-                                    });
+                                    }
+                                },
+                                error: function(response) {
+                                    // Tampilkan pesan error jika gagal
+                                    var errors = response.responseJSON.errors;
+                                    for (var error in errors) {
+                                        Swal.fire({
+                                            title: "Gagal Memperbarui Data",
+                                            text: errors[error][0],
+                                            icon: "error"
+                                        });
+                                    }
                                 }
-                            },
-                            error: function(response) {
+                            });
+                        }
+                    });
+                },
+                error: function(response) {
+                    // Tampilkan pesan error validasi langsung
+                    var errors = response.responseJSON.errors;
+                    for (var error in errors) {
+                        Swal.fire({
+                            title: "Gagal Memperbarui Data",
+                            text: errors[error][0],
+                            icon: "error"
+                        });
+                    }
+                }
+            });
+        });
+
+        // Event delegation for delete buttons
+        $(document).on('click', '.alert_notif', function(e) {
+            e.preventDefault(); // Mencegah tindakan default dari klik
+            var form = $(this).closest('form');
+            Swal.fire({
+                title: "Yakin hapus data?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Ya',
+                cancelButtonColor: '#d33',
+                cancelButtonText: "Batal"
+            }).then(result => {
+                // Jika pengguna mengklik "Ya"
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "POST",
+                        url: form.attr('action'),
+                        data: form.serialize(),
+                        success: function(response) {
+                            if (response.success) {
+                                Swal.fire({
+                                    title: "Anggota Berhasil Dihapus",
+                                    icon: "success",
+                                    confirmButtonText: 'OK',
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        location.reload(); // Reload the page to reflect the changes
+                                    }
+                                });
+                            } else {
                                 Swal.fire({
                                     title: "Gagal Menghapus Anggota",
-                                    text: response.responseJSON.message,
+                                    text: response.message,
                                     icon: "error"
                                 });
                             }
-                        });
-                    }
-                });
+                        },
+                        error: function(response) {
+                            Swal.fire({
+                                title: "Gagal Menghapus Anggota",
+                                text: response.responseJSON.message,
+                                icon: "error"
+                            });
+                        }
+                    });
+                }
             });
         });
-    </script>
+    });
+</script>
+
 </x-layout>

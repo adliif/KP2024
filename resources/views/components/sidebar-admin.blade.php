@@ -85,7 +85,7 @@
                         @csrf
                         <a href="logout" onclick="event.preventDefault(); this.closest('form').submit();">
                             <i class="fas fa-sign-out-alt"></i>
-                            <p>Logout</p>
+                            <p>Keluar</p>
                         </a>
                     </form>
                 </li>
