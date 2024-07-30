@@ -154,8 +154,8 @@
                             </div>
                             <div class="card">
                                 <div class="card-header">
-                                    <div class="card-title">Our Location</div>
-                                    <p>Map of the distribution of users around the world</p>
+                                    <div class="card-title">Lokasi Koperasi</div>
+                                    <p>SMKN 2 Bandar Lampung</p>
                                 </div>
                                 <div class="card-body">
                                     <iframe
